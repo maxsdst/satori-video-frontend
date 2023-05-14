@@ -1,7 +1,7 @@
-import { Heading } from "@chakra-ui/react";
+import AuthBox from "./auth/components/AuthBox";
 
 function App() {
-    return <Heading>123</Heading>;
+    return <AuthBox />;
 }
 
 export default App;
