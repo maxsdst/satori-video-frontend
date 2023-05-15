@@ -1,5 +1,8 @@
 import { Box, Button, Divider, HStack } from "@chakra-ui/react";
 import { useState } from "react";
+import LoginForm from "./LoginForm";
+import SignupForm from "./SignupForm";
+import ForgotPasswordForm from "./ForgotPasswordForm";
 
 enum Mode {
     Login,
@@ -17,6 +20,15 @@ function AuthBox() {
             borderRadius={6}
             padding={6}
         >
+            {mode === Mode.Login && <LoginForm />}
+            {mode === Mode.Signup && (
+                <SignupForm onSignupSubmit={(data) => console.log(data)} />
+            )}
+            {mode === Mode.ForgotPassword && (
+                <ForgotPasswordForm
+                    onForgotPasswordSubmit={(data) => console.log(data)}
+                />
+            )}
             <Divider orientation="horizontal" paddingY={2} />
             <HStack justifyContent="space-evenly" gap={10} marginTop={4}>
                 {mode !== Mode.Login && (

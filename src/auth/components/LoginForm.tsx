@@ -1,13 +1,17 @@
 import {
+    Alert,
+    AlertIcon,
     Button,
     FormControl,
     FormErrorMessage,
     FormLabel,
     Input,
+    Stack,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
+import useLogin from "../hooks/useLogin";
 
 const schema = z.object({
     username: z.string().nonempty("Username or email is required."),
@@ -16,11 +20,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-interface Props {
-    onLoginSubmit: (data: FieldValues) => void;
-}
-
-function LoginForm({ onLoginSubmit }: Props) {
+function LoginForm() {
     const {
         register,
         handleSubmit,
@@ -29,29 +29,40 @@ function LoginForm({ onLoginSubmit }: Props) {
         resolver: zodResolver(schema),
     });
 
+    const login = useLogin(() => console.log("Logged in"));
+
     return (
-        <form onSubmit={handleSubmit(onLoginSubmit)}>
-            <FormControl marginBottom={2} isInvalid={!!errors.username}>
-                <FormLabel>Username or email</FormLabel>
-                <Input {...register("username")} type="text" />
-                {errors.username && (
-                    <FormErrorMessage>
-                        {errors.username.message}
-                    </FormErrorMessage>
+        <form onSubmit={handleSubmit((data) => login.mutate(data))}>
+            <Stack spacing={2}>
+                {login.error && (
+                    <Alert status="error">
+                        <AlertIcon />
+                        {login.error.response?.data.detail ||
+                            login.error.message}
+                    </Alert>
                 )}
-            </FormControl>
-            <FormControl marginBottom={2} isInvalid={!!errors.password}>
-                <FormLabel>Password</FormLabel>
-                <Input {...register("password")} type="password" />
-                {errors.password && (
-                    <FormErrorMessage>
-                        {errors.password.message}
-                    </FormErrorMessage>
-                )}
-            </FormControl>
-            <Button type="submit" width="100%">
-                Log in
-            </Button>
+                <FormControl isInvalid={!!errors.username}>
+                    <FormLabel>Username or email</FormLabel>
+                    <Input {...register("username")} type="text" />
+                    {errors.username && (
+                        <FormErrorMessage>
+                            {errors.username.message}
+                        </FormErrorMessage>
+                    )}
+                </FormControl>
+                <FormControl isInvalid={!!errors.password}>
+                    <FormLabel>Password</FormLabel>
+                    <Input {...register("password")} type="password" />
+                    {errors.password && (
+                        <FormErrorMessage>
+                            {errors.password.message}
+                        </FormErrorMessage>
+                    )}
+                </FormControl>
+                <Button isDisabled={login.isLoading} type="submit" width="100%">
+                    Log in
+                </Button>
+            </Stack>
         </form>
     );
 }
