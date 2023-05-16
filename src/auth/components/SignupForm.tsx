@@ -6,8 +6,9 @@ import {
     Input,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
+import useSignup from "../hooks/useSignup";
 
 const schema = z.object({
     email: z.string().email("Enter valid email."),
@@ -18,21 +19,32 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-interface Props {
-    onSignupSubmit: (data: FieldValues) => void;
-}
-
-function SignupForm({ onSignupSubmit }: Props) {
+function SignupForm() {
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors },
     } = useForm<FormData>({
         resolver: zodResolver(schema),
     });
 
+    const signup = useSignup({
+        onSignup: (data) => console.log(data),
+        onError: (data) => {
+            if (data.email)
+                setError("email", { message: data.email.join(" ") });
+            if (data.full_name)
+                setError("full_name", { message: data.full_name.join(" ") });
+            if (data.username)
+                setError("username", { message: data.username.join(" ") });
+            if (data.password)
+                setError("password", { message: data.password.join(" ") });
+        },
+    });
+
     return (
-        <form onSubmit={handleSubmit(onSignupSubmit)}>
+        <form onSubmit={handleSubmit((data) => signup.mutate(data))}>
             <FormControl marginBottom={2} isInvalid={!!errors.email}>
                 <FormLabel>Email</FormLabel>
                 <Input {...register("email")} type="text" />
@@ -67,7 +79,7 @@ function SignupForm({ onSignupSubmit }: Props) {
                     </FormErrorMessage>
                 )}
             </FormControl>
-            <Button type="submit" width="100%">
+            <Button isDisabled={signup.isLoading} type="submit" width="100%">
                 Sign up
             </Button>
         </form>
