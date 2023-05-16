@@ -1,4 +1,5 @@
 import { Grid, GridItem, Show } from "@chakra-ui/react";
+import TopNav from "./components/TopNav";
 
 function App() {
     return (
@@ -12,7 +13,9 @@ function App() {
                 lg: "200px 1fr",
             }}
         >
-            <GridItem area="topnav"></GridItem>
+            <GridItem area="topnav">
+                <TopNav />
+            </GridItem>
             <Show above="lg">
                 <GridItem area="sidenav"></GridItem>
             </Show>
