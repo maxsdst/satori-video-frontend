@@ -1,0 +1,24 @@
+.player-wrapper {
+    --video-player-height: calc(100vh - var(--topnav-height));
+    width: calc(var(--video-player-height) / 16 * 9); /* 9:16 aspect ratio */
+    height: var(--video-player-height);
+}
+
+.player-wrapper video {
+    object-fit: cover;
+}
+
+/* mobile devices in portrait mode */
+@media (max-aspect-ratio: 5/6) {
+    .player-wrapper {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding-bottom: 0;
+        overflow: hidden;
+    }
+}

@@ -1,3 +1,7 @@
+:root {
+    --topnav-height: 56px;
+}
+
 form {
     width: 100%;
 }

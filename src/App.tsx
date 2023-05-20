@@ -1,6 +1,7 @@
 import { Grid, GridItem, Show } from "@chakra-ui/react";
-import TopNav from "./components/TopNav";
 import SideNav from "./components/SideNav";
+import TopNav from "./components/TopNav";
+import VideoPlayer from "./components/VideoPlayer/VideoPlayer";
 
 function App() {
     return (
@@ -13,6 +14,8 @@ function App() {
                 base: "1fr",
                 lg: "240px 1fr",
             }}
+            templateRows={"56px 1fr"}
+            height="100vh"
         >
             <GridItem area="topnav">
                 <TopNav />
@@ -22,7 +25,9 @@ function App() {
                     <SideNav />
                 </GridItem>
             </Show>
-            <GridItem area="main"></GridItem>
+            <GridItem area="main">
+                <VideoPlayer url="https://i.imgur.com/6LSoWIo.mp4" />
+            </GridItem>
         </Grid>
     );
 }
