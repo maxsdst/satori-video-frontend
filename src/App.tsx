@@ -1,7 +1,7 @@
 import { Grid, GridItem, Show } from "@chakra-ui/react";
 import SideNav from "./components/SideNav";
 import TopNav from "./components/TopNav";
-import VideoPlayer from "./components/VideoPlayer/VideoPlayer";
+import Player from "./components/Player";
 
 function App() {
     return (
@@ -26,7 +26,7 @@ function App() {
                 </GridItem>
             </Show>
             <GridItem area="main">
-                <VideoPlayer url="https://i.imgur.com/6LSoWIo.mp4" />
+                <Player url="https://i.imgur.com/6LSoWIo.mp4" />
             </GridItem>
         </Grid>
     );

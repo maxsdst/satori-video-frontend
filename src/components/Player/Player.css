@@ -1,4 +1,5 @@
 .player-wrapper {
+    position: relative;
     --video-player-height: calc(100vh - var(--topnav-height));
     width: calc(var(--video-player-height) / 16 * 9); /* 9:16 aspect ratio */
     height: var(--video-player-height);
