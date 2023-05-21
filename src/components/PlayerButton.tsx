@@ -22,7 +22,7 @@ function PlayerButton({ icon, children, onClick }: Props) {
             onTouchStartCapture={(e) => e.stopPropagation()}
         >
             <VStack spacing={0}>
-                <Icon as={icon} boxSize="22px" filter={shadow} />
+                <Icon as={icon} boxSize="28px" filter={shadow} />
                 {children && (
                     <Text fontSize="sm" filter={shadow} fontWeight="normal">
                         {children}
