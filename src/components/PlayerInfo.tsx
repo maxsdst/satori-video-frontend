@@ -1,15 +1,13 @@
 import { Avatar, HStack, Heading, VStack, Text } from "@chakra-ui/react";
 
 function PlayerInfo() {
-    const shadow = "drop-shadow( 0px 0px 4px rgba(0, 0, 0))";
-
     return (
         <VStack
-            filter={shadow}
             paddingX={4}
             paddingBottom={4}
             alignItems="flex-start"
             spacing={1}
+            filter="var(--player-drop-shadow)"
         >
             <HStack>
                 <Avatar size="xs" />

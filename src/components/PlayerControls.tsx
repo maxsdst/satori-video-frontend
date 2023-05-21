@@ -22,8 +22,6 @@ function PlayerControls({
     onMute,
     onUnmute,
 }: Props) {
-    const shadow = "drop-shadow( 0px 0px 4px rgba(0, 0, 0))";
-
     return (
         <Box
             position="relative"
@@ -37,7 +35,7 @@ function PlayerControls({
                     <Icon
                         as={CiPause1}
                         boxSize="50px"
-                        filter={shadow}
+                        filter="var(--player-drop-shadow)"
                         opacity={0.8}
                     />
                 </AbsoluteCenter>

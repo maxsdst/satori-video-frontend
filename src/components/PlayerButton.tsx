@@ -7,8 +7,6 @@ interface Props {
 }
 
 function PlayerButton({ icon, children, onClick }: Props) {
-    const shadow = "drop-shadow( 0px 0px 4px rgba(0, 0, 0))";
-
     return (
         <Button
             variant="ghost"
@@ -22,9 +20,17 @@ function PlayerButton({ icon, children, onClick }: Props) {
             onTouchStartCapture={(e) => e.stopPropagation()}
         >
             <VStack spacing={0}>
-                <Icon as={icon} boxSize="28px" filter={shadow} />
+                <Icon
+                    as={icon}
+                    boxSize="28px"
+                    filter="var(--player-drop-shadow)"
+                />
                 {children && (
-                    <Text fontSize="sm" filter={shadow} fontWeight="normal">
+                    <Text
+                        fontSize="sm"
+                        filter="var(--player-drop-shadow)"
+                        fontWeight="normal"
+                    >
                         {children}
                     </Text>
                 )}
