@@ -1,7 +1,7 @@
 import { Grid, GridItem, Show } from "@chakra-ui/react";
 import SideNav from "./components/SideNav";
 import TopNav from "./components/TopNav";
-import Player from "./components/Player";
+import AuthBox from "./auth/components/AuthBox";
 
 function App() {
     return (
@@ -26,7 +26,7 @@ function App() {
                 </GridItem>
             </Show>
             <GridItem area="main">
-                <Player url="https://i.imgur.com/6LSoWIo.mp4" />
+                <AuthBox />
             </GridItem>
         </Grid>
     );

@@ -21,9 +21,7 @@ function AuthBox() {
             padding={6}
         >
             {mode === Mode.Login && <LoginForm />}
-            {mode === Mode.Signup && (
-                <SignupForm onSignupSubmit={(data) => console.log(data)} />
-            )}
+            {mode === Mode.Signup && <SignupForm />}
             {mode === Mode.ForgotPassword && (
                 <ForgotPasswordForm
                     onForgotPasswordSubmit={(data) => console.log(data)}

@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import useSignup from "../hooks/useSignup";
+import useLogin from "../hooks/useLogin";
 
 const schema = z.object({
     email: z.string().email("Enter valid email."),
@@ -43,8 +44,21 @@ function SignupForm() {
         },
     });
 
+    const login = useLogin(() => {});
+
     return (
-        <form onSubmit={handleSubmit((data) => signup.mutate(data))}>
+        <form
+            onSubmit={handleSubmit((data) =>
+                signup.mutate(data, {
+                    onSuccess: () => {
+                        login.mutate({
+                            username: data.username,
+                            password: data.password,
+                        });
+                    },
+                })
+            )}
+        >
             <FormControl marginBottom={2} isInvalid={!!errors.email}>
                 <FormLabel>Email</FormLabel>
                 <Input {...register("email")} type="text" />
