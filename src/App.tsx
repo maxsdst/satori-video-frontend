@@ -2,6 +2,8 @@ import { Grid, GridItem, Show } from "@chakra-ui/react";
 import SideNav from "./components/SideNav";
 import TopNav from "./components/TopNav";
 import AuthBox from "./auth/components/AuthBox";
+import Player from "./components/Player";
+import Profile from "./components/Profile";
 
 function App() {
     return (
@@ -25,8 +27,8 @@ function App() {
                     <SideNav />
                 </GridItem>
             </Show>
-            <GridItem area="main">
-                <AuthBox />
+            <GridItem area="main" padding={5}>
+                <Profile />
             </GridItem>
         </Grid>
     );
