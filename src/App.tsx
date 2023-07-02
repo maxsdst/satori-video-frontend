@@ -1,10 +1,9 @@
 import { Grid, GridItem, Show } from "@chakra-ui/react";
 import SideNav from "./components/SideNav";
 import TopNav from "./components/TopNav";
-import AuthBox from "./auth/components/AuthBox";
-import Player from "./components/Player";
 import Profile from "./components/Profile";
 import UserVideosSection from "./components/UserVideosSection";
+import VideoGrid from "./components/VideoGrid";
 
 function App() {
     return (
@@ -31,6 +30,7 @@ function App() {
             <GridItem area="main" padding={5}>
                 <Profile />
                 <UserVideosSection />
+                <VideoGrid />
             </GridItem>
         </Grid>
     );
