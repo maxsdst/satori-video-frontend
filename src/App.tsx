@@ -4,6 +4,7 @@ import TopNav from "./components/TopNav";
 import AuthBox from "./auth/components/AuthBox";
 import Player from "./components/Player";
 import Profile from "./components/Profile";
+import UserVideosSection from "./components/UserVideosSection";
 
 function App() {
     return (
@@ -29,6 +30,7 @@ function App() {
             </Show>
             <GridItem area="main" padding={5}>
                 <Profile />
+                <UserVideosSection />
             </GridItem>
         </Grid>
     );
