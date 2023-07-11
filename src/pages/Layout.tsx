@@ -1,11 +1,9 @@
 import { Grid, GridItem, Show } from "@chakra-ui/react";
-import SideNav from "./components/SideNav";
-import TopNav from "./components/TopNav";
-import Profile from "./components/Profile";
-import UserVideosSection from "./components/UserVideosSection";
-import VideoGrid from "./components/VideoGrid";
+import { Outlet } from "react-router-dom";
+import SideNav from "../components/SideNav";
+import TopNav from "../components/TopNav";
 
-function App() {
+function Layout() {
     return (
         <Grid
             templateAreas={{
@@ -28,12 +26,10 @@ function App() {
                 </GridItem>
             </Show>
             <GridItem area="main" padding={5}>
-                <Profile />
-                <UserVideosSection />
-                <VideoGrid />
+                <Outlet />
             </GridItem>
         </Grid>
     );
 }
 
-export default App;
+export default Layout;
