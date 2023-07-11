@@ -1,22 +1,29 @@
 import {
     Button,
+    ChakraProps,
     Divider,
     Icon,
     Input,
     InputGroup,
     InputRightElement,
+    chakra,
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 
-function SearchInput() {
+interface Props {
+    styles?: ChakraProps;
+}
+
+function SearchInput({ styles }: Props) {
     const ref = useRef<HTMLInputElement>(null);
 
     const borderRadius = 20;
 
     return (
-        <form
-            style={{ maxWidth: "600px" }}
+        <chakra.form
+            maxWidth="600px"
+            {...styles}
             onSubmit={(event) => {
                 event.preventDefault();
                 if (ref.current) console.log(ref.current.value);
@@ -42,7 +49,7 @@ function SearchInput() {
                     </Button>
                 </InputRightElement>
             </InputGroup>
-        </form>
+        </chakra.form>
     );
 }
 
