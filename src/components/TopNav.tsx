@@ -9,7 +9,11 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import SearchInput from "./SearchInput";
 import TopNavButton from "./TopNavButton";
 
-function TopNav() {
+interface Props {
+    toggleSidenav: () => void;
+}
+
+function TopNav({ toggleSidenav }: Props) {
     const [isSearchModeOn, { on: setSearchModeOn, off: setSearchModeOff }] =
         useBoolean(false);
 
@@ -29,7 +33,10 @@ function TopNav() {
     return (
         <HStack padding={padding} justifyContent="space-between">
             <HStack>
-                <TopNavButton icon={RxHamburgerMenu} />
+                <TopNavButton
+                    icon={RxHamburgerMenu}
+                    onClick={() => toggleSidenav()}
+                />
                 <Image src={""} boxSize="40px" />
             </HStack>
             <SearchInput

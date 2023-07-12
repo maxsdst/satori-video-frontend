@@ -1,32 +1,41 @@
-import { Grid, GridItem, Show } from "@chakra-ui/react";
+import {
+    Box,
+    Flex,
+    Grid,
+    GridItem,
+    useBoolean,
+    useBreakpointValue,
+} from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import SideNav from "../components/SideNav";
 import TopNav from "../components/TopNav";
 
 function Layout() {
+    const shouldOpenSidenav = useBreakpointValue(
+        { md: false, lg: true },
+        { ssr: false, fallback: "md" }
+    );
+
+    const [isSidenavOpened, { toggle: toggleSidenav }] =
+        useBoolean(shouldOpenSidenav);
+
     return (
         <Grid
-            templateAreas={{
-                base: `"topnav" "main"`,
-                lg: `"topnav topnav" "sidenav main"`,
-            }}
-            templateColumns={{
-                base: "1fr",
-                lg: "240px 1fr",
-            }}
+            templateAreas={`"topnav" "main"`}
+            templateColumns="1fr"
             templateRows={"56px 1fr"}
             height="100vh"
         >
             <GridItem area="topnav">
-                <TopNav />
+                <TopNav toggleSidenav={toggleSidenav} />
             </GridItem>
-            <Show above="lg">
-                <GridItem area="sidenav">
-                    <SideNav />
-                </GridItem>
-            </Show>
-            <GridItem area="main" padding={5}>
-                <Outlet />
+            <GridItem area="main">
+                <Flex direction="row">
+                    {isSidenavOpened && <SideNav />}
+                    <Box padding={5}>
+                        <Outlet />
+                    </Box>
+                </Flex>
             </GridItem>
         </Grid>
     );

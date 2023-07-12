@@ -28,7 +28,14 @@ function SideNav() {
     const iconProps: IconProps = { boxSize: 6 };
 
     return (
-        <VStack alignItems="start" padding={2}>
+        <VStack
+            alignItems="start"
+            padding={2}
+            position={{ base: "absolute", md: "static" }}
+            width="100%"
+            maxWidth={{ base: "100%", md: "240px" }}
+            backgroundColor="var(--chakra-colors-chakra-body-bg);"
+        >
             <Button
                 {...buttonProps}
                 leftIcon={<Icon as={AiOutlineHome} {...iconProps} />}
