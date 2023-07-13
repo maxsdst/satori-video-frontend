@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import {
     IAuthTokens,
     TokenRefreshRequest,
@@ -26,4 +26,18 @@ applyAuthTokenInterceptor(axiosInstance, {
     headerPrefix: "JWT ",
 });
 
-export default axiosInstance;
+class ApiClient<T> {
+    endpoint: string;
+
+    constructor(endpoint: string) {
+        this.endpoint = endpoint;
+    }
+
+    post = (data: any, requestConfig?: AxiosRequestConfig) => {
+        return axiosInstance
+            .post<T>(this.endpoint, data, requestConfig)
+            .then((res) => res.data);
+    };
+}
+
+export default ApiClient;

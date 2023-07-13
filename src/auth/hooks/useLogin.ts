@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { setAuthTokens } from "axios-jwt";
-import apiClient from "../../services/apiClient";
+import ApiClient from "../../services/ApiClient";
 
 interface LoginData {
     username: string;
@@ -17,12 +17,11 @@ interface ErrorData {
     detail: string;
 }
 
+const apiClient = new ApiClient<JwtTokenPair>("/auth/jwt/create");
+
 function useLogin(onLogin: () => void) {
     return useMutation<JwtTokenPair, AxiosError<ErrorData>, LoginData>({
-        mutationFn: (data) =>
-            apiClient
-                .post<JwtTokenPair>("/auth/jwt/create", data)
-                .then((res) => res.data),
+        mutationFn: apiClient.post,
         onSuccess: (data) => {
             setAuthTokens({
                 refreshToken: data.refresh,
