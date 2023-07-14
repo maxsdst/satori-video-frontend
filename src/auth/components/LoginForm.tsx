@@ -29,7 +29,7 @@ function LoginForm() {
         resolver: zodResolver(schema),
     });
 
-    const login = useLogin(() => console.log("Logged in"));
+    const login = useLogin(() => window.location.replace("/"));
 
     return (
         <form onSubmit={handleSubmit((data) => login.mutate(data))}>
