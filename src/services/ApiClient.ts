@@ -13,7 +13,7 @@ const axiosInstance = axios.create({ baseURL: BASE_URL });
 const requestRefresh: TokenRefreshRequest = async (
     refreshToken: string
 ): Promise<IAuthTokens | string> => {
-    const response = await axios.post(`${BASE_URL}/auth/jwt/create/`, {
+    const response = await axios.post(`${BASE_URL}/auth/jwt/refresh/`, {
         refresh: refreshToken,
     });
 
