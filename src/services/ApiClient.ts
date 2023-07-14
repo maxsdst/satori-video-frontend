@@ -30,8 +30,18 @@ class ApiClient<T> {
     endpoint: string;
 
     constructor(endpoint: string) {
+        if (!endpoint.endsWith("/")) endpoint += "/";
         this.endpoint = endpoint;
     }
+
+    get = (id?: number | string, requestConfig?: AxiosRequestConfig) => {
+        const url =
+            typeof id === "undefined"
+                ? this.endpoint
+                : this.endpoint + id + "/";
+
+        return axiosInstance.get<T>(url, requestConfig).then((res) => res.data);
+    };
 
     post = (data: any, requestConfig?: AxiosRequestConfig) => {
         return axiosInstance

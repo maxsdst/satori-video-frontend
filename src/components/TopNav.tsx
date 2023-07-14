@@ -1,4 +1,4 @@
-import { Avatar, HStack, Hide, Image, useBoolean } from "@chakra-ui/react";
+import { HStack, Hide, Image, useBoolean } from "@chakra-ui/react";
 import {
     AiOutlineArrowLeft,
     AiOutlineBell,
@@ -8,6 +8,7 @@ import {
 import { RxHamburgerMenu } from "react-icons/rx";
 import SearchInput from "./SearchInput";
 import TopNavButton from "./TopNavButton";
+import UserMenu from "./UserMenu";
 
 interface Props {
     toggleSidenav: () => void;
@@ -65,7 +66,7 @@ function TopNav({ toggleSidenav }: Props) {
                         icon={AiOutlineBell}
                     />
                 </HStack>
-                <Avatar size="sm" _hover={{ cursor: "pointer" }} />
+                <UserMenu />
             </HStack>
         </HStack>
     );
