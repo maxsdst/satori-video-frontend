@@ -1,8 +1,9 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import VideoGrid from "./VideoGrid";
 
 function UserVideosSection() {
     return (
-        <Tabs isLazy>
+        <Tabs isLazy width="100%">
             <TabList>
                 <Tab width="100%" maxWidth="200px">
                     Videos
@@ -12,11 +13,11 @@ function UserVideosSection() {
                 </Tab>
             </TabList>
             <TabPanels>
-                <TabPanel>
-                    <p>Videos</p>
+                <TabPanel padding={0} marginTop={4}>
+                    <VideoGrid />
                 </TabPanel>
-                <TabPanel>
-                    <p>Liked</p>
+                <TabPanel padding={0} marginTop={4}>
+                    <VideoGrid />
                 </TabPanel>
             </TabPanels>
         </Tabs>

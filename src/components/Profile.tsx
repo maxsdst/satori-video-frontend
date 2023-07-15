@@ -4,13 +4,24 @@ import {
     Flex,
     HStack,
     Heading,
+    Spinner,
     Text,
     VStack,
 } from "@chakra-ui/react";
+import useProfile from "../hooks/useProfile";
 
-function Profile() {
+interface Props {
+    username: string;
+}
+
+function Profile({ username }: Props) {
+    const { data: profile, isLoading, error } = useProfile(username);
+
+    if (isLoading) return <Spinner />;
+    if (error) throw error;
+
     return (
-        <VStack alignItems="start" maxWidth="800px" spacing={5}>
+        <VStack alignItems="start" width="100%" maxWidth="800px" spacing={5}>
             <Flex
                 direction="row"
                 width="100%"
@@ -20,7 +31,7 @@ function Profile() {
                 <Avatar
                     size="2xl"
                     marginX={3}
-                    src="https://i.pinimg.com/originals/9f/c9/8d/9fc98dfd612fe1eb13a6ae083444a4f6.jpg"
+                    src={profile.avatar || undefined}
                 />
                 <Button
                     size="md"
@@ -32,15 +43,10 @@ function Profile() {
                 </Button>
             </Flex>
             <VStack alignItems="start" spacing={1}>
-                <Heading size="md">Full Name</Heading>
-                <Text fontSize="md">@username</Text>
+                <Heading size="md">{profile.full_name}</Heading>
+                <Text fontSize="md">@{profile.user.username}</Text>
             </VStack>
-            <Text>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odio
-                facilis ipsa et distinctio illo exercitationem ab saepe
-                expedita, sint esse incidunt ullam laborum, quasi nihil,
-                assumenda natus totam laudantium provident?
-            </Text>
+            {profile.description && <Text>{profile.description}</Text>}
             <HStack spacing={5} fontSize="sm">
                 <Text>
                     <b>123</b> Following
