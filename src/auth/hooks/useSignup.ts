@@ -23,16 +23,14 @@ interface ErrorData {
 }
 
 interface UseSignupOptions {
-    onSignup: (data: SignupResponse) => void;
     onError: (data: ErrorData) => void;
 }
 
 const apiClient = new ApiClient<SignupResponse>("/auth/users/");
 
-function useSignup({ onSignup, onError }: UseSignupOptions) {
+function useSignup({ onError }: UseSignupOptions) {
     return useMutation<SignupResponse, AxiosError<ErrorData>, SignupData>({
         mutationFn: apiClient.post,
-        onSuccess: (data) => onSignup(data),
         onError: (error) => {
             if (error.response?.data) onError(error.response.data);
         },

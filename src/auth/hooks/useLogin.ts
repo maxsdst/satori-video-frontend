@@ -19,7 +19,7 @@ interface ErrorData {
 
 const apiClient = new ApiClient<JwtTokenPair>("/auth/jwt/create");
 
-function useLogin(onLogin: () => void) {
+function useLogin() {
     return useMutation<JwtTokenPair, AxiosError<ErrorData>, LoginData>({
         mutationFn: apiClient.post,
         onSuccess: (data) => {
@@ -27,7 +27,6 @@ function useLogin(onLogin: () => void) {
                 refreshToken: data.refresh,
                 accessToken: data.access,
             });
-            onLogin();
         },
     });
 }

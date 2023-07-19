@@ -8,8 +8,8 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import useSignup from "../hooks/useSignup";
 import useLogin from "../hooks/useLogin";
+import useSignup from "../hooks/useSignup";
 
 const schema = z.object({
     email: z.string().email("Enter valid email."),
@@ -31,7 +31,6 @@ function SignupForm() {
     });
 
     const signup = useSignup({
-        onSignup: (data) => console.log(data),
         onError: (data) => {
             if (data.email)
                 setError("email", { message: data.email.join(" ") });
@@ -44,7 +43,7 @@ function SignupForm() {
         },
     });
 
-    const login = useLogin(() => {});
+    const login = useLogin();
 
     return (
         <form

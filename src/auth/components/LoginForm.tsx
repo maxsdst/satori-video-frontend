@@ -29,10 +29,16 @@ function LoginForm() {
         resolver: zodResolver(schema),
     });
 
-    const login = useLogin(() => window.location.replace("/"));
+    const login = useLogin();
 
     return (
-        <form onSubmit={handleSubmit((data) => login.mutate(data))}>
+        <form
+            onSubmit={handleSubmit((data) =>
+                login.mutate(data, {
+                    onSuccess: () => window.location.replace("/"),
+                })
+            )}
+        >
             <Stack spacing={2}>
                 {login.error && (
                     <Alert status="error">
