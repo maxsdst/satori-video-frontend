@@ -1,13 +1,8 @@
-import {
-    Button,
-    FormControl,
-    FormErrorMessage,
-    FormLabel,
-    Input,
-} from "@chakra-ui/react";
+import { Button, VStack } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Input from "../../forms/Input";
 
 export const schema = z.object({
     email: z.string().email("Enter valid email."),
@@ -26,16 +21,18 @@ function ForgotPasswordForm() {
 
     return (
         <form onSubmit={handleSubmit(() => {})}>
-            <FormControl marginBottom={2} isInvalid={!!errors.email}>
-                <FormLabel>Email</FormLabel>
-                <Input {...register("email")} type="text" />
-                {errors.email && (
-                    <FormErrorMessage>{errors.email.message}</FormErrorMessage>
-                )}
-            </FormControl>
-            <Button type="submit" width="100%">
-                Reset password
-            </Button>
+            <VStack spacing={2}>
+                <Input
+                    type="text"
+                    label="Email"
+                    inputProps={register("email")}
+                    isInvalid={!!errors.email}
+                    errorMessage={errors.email?.message}
+                />
+                <Button type="submit" width="100%">
+                    Reset password
+                </Button>
+            </VStack>
         </form>
     );
 }

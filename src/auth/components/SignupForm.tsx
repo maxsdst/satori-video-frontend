@@ -1,13 +1,8 @@
-import {
-    Button,
-    FormControl,
-    FormErrorMessage,
-    FormLabel,
-    Input,
-} from "@chakra-ui/react";
+import { Button, VStack } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Input from "../../forms/Input";
 import useLogin from "../hooks/useLogin";
 import useSignup from "../hooks/useSignup";
 
@@ -61,43 +56,43 @@ function SignupForm() {
                 })
             )}
         >
-            <FormControl marginBottom={2} isInvalid={!!errors.email}>
-                <FormLabel>Email</FormLabel>
-                <Input {...register("email")} type="text" />
-                {errors.email && (
-                    <FormErrorMessage>{errors.email.message}</FormErrorMessage>
-                )}
-            </FormControl>
-            <FormControl marginBottom={2} isInvalid={!!errors.full_name}>
-                <FormLabel>Full name</FormLabel>
-                <Input {...register("full_name")} type="text" />
-                {errors.full_name && (
-                    <FormErrorMessage>
-                        {errors.full_name.message}
-                    </FormErrorMessage>
-                )}
-            </FormControl>
-            <FormControl marginBottom={2} isInvalid={!!errors.username}>
-                <FormLabel>Username</FormLabel>
-                <Input {...register("username")} type="text" />
-                {errors.username && (
-                    <FormErrorMessage>
-                        {errors.username.message}
-                    </FormErrorMessage>
-                )}
-            </FormControl>
-            <FormControl marginBottom={2} isInvalid={!!errors.password}>
-                <FormLabel>Password</FormLabel>
-                <Input {...register("password")} type="password" />
-                {errors.password && (
-                    <FormErrorMessage>
-                        {errors.password.message}
-                    </FormErrorMessage>
-                )}
-            </FormControl>
-            <Button isDisabled={signup.isLoading} type="submit" width="100%">
-                Sign up
-            </Button>
+            <VStack spacing={2}>
+                <Input
+                    type="text"
+                    label="Email"
+                    inputProps={register("email")}
+                    isInvalid={!!errors.email}
+                    errorMessage={errors.email?.message}
+                />
+                <Input
+                    type="text"
+                    label="Full name"
+                    inputProps={register("full_name")}
+                    isInvalid={!!errors.full_name}
+                    errorMessage={errors.full_name?.message}
+                />
+                <Input
+                    type="text"
+                    label="Username"
+                    inputProps={register("username")}
+                    isInvalid={!!errors.username}
+                    errorMessage={errors.username?.message}
+                />
+                <Input
+                    type="password"
+                    label="Password"
+                    inputProps={register("password")}
+                    isInvalid={!!errors.password}
+                    errorMessage={errors.password?.message}
+                />
+                <Button
+                    isDisabled={signup.isLoading}
+                    type="submit"
+                    width="100%"
+                >
+                    Sign up
+                </Button>
+            </VStack>
         </form>
     );
 }

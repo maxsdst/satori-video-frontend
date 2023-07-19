@@ -1,16 +1,8 @@
-import {
-    Alert,
-    AlertIcon,
-    Button,
-    FormControl,
-    FormErrorMessage,
-    FormLabel,
-    Input,
-    Stack,
-} from "@chakra-ui/react";
+import { Alert, AlertIcon, Button, VStack } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Input from "../../forms/Input";
 import useLogin from "../hooks/useLogin";
 
 const schema = z.object({
@@ -39,7 +31,7 @@ function LoginForm() {
                 })
             )}
         >
-            <Stack spacing={2}>
+            <VStack spacing={2}>
                 {login.error && (
                     <Alert status="error">
                         <AlertIcon />
@@ -47,28 +39,24 @@ function LoginForm() {
                             login.error.message}
                     </Alert>
                 )}
-                <FormControl isInvalid={!!errors.username}>
-                    <FormLabel>Username or email</FormLabel>
-                    <Input {...register("username")} type="text" />
-                    {errors.username && (
-                        <FormErrorMessage>
-                            {errors.username.message}
-                        </FormErrorMessage>
-                    )}
-                </FormControl>
-                <FormControl isInvalid={!!errors.password}>
-                    <FormLabel>Password</FormLabel>
-                    <Input {...register("password")} type="password" />
-                    {errors.password && (
-                        <FormErrorMessage>
-                            {errors.password.message}
-                        </FormErrorMessage>
-                    )}
-                </FormControl>
+                <Input
+                    type="text"
+                    label="Username or email"
+                    inputProps={register("username")}
+                    isInvalid={!!errors.username}
+                    errorMessage={errors.username?.message}
+                />
+                <Input
+                    type="password"
+                    label="Password"
+                    inputProps={register("password")}
+                    isInvalid={!!errors.password}
+                    errorMessage={errors.password?.message}
+                />
                 <Button isDisabled={login.isLoading} type="submit" width="100%">
                     Log in
                 </Button>
-            </Stack>
+            </VStack>
         </form>
     );
 }
