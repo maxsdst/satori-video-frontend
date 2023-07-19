@@ -3,6 +3,7 @@ import HomePage from "./pages/HomePage";
 import Layout from "./pages/Layout";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
+import SignupPage from "./pages/SignupPage";
 
 const router = createBrowserRouter([
     {
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
                 element: <HomePage />,
             },
             { path: "login", element: <LoginPage /> },
+            { path: "signup", element: <SignupPage /> },
             {
                 path: "users/:username",
                 element: <ProfilePage />,
