@@ -26,6 +26,10 @@ applyAuthTokenInterceptor(axiosInstance, {
     headerPrefix: "JWT ",
 });
 
+function appendId(endpoint: string, id?: number | string) {
+    return typeof id === "undefined" ? endpoint : endpoint + id + "/";
+}
+
 class ApiClient<T> {
     endpoint: string;
 
@@ -35,17 +39,24 @@ class ApiClient<T> {
     }
 
     get = (id?: number | string, requestConfig?: AxiosRequestConfig) => {
-        const url =
-            typeof id === "undefined"
-                ? this.endpoint
-                : this.endpoint + id + "/";
-
+        const url = appendId(this.endpoint, id);
         return axiosInstance.get<T>(url, requestConfig).then((res) => res.data);
     };
 
     post = (data: any, requestConfig?: AxiosRequestConfig) => {
         return axiosInstance
             .post<T>(this.endpoint, data, requestConfig)
+            .then((res) => res.data);
+    };
+
+    patch = (
+        id: number | string | undefined,
+        data: any,
+        requestConfig?: AxiosRequestConfig
+    ) => {
+        const url = appendId(this.endpoint, id);
+        return axiosInstance
+            .patch<T>(url, data, requestConfig)
             .then((res) => res.data);
     };
 }
