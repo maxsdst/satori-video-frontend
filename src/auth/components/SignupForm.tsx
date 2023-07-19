@@ -50,10 +50,13 @@ function SignupForm() {
             onSubmit={handleSubmit((data) =>
                 signup.mutate(data, {
                     onSuccess: () => {
-                        login.mutate({
-                            username: data.username,
-                            password: data.password,
-                        });
+                        login.mutate(
+                            {
+                                username: data.username,
+                                password: data.password,
+                            },
+                            { onSuccess: () => window.location.replace("/") }
+                        );
                     },
                 })
             )}
