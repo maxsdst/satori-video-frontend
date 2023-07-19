@@ -6,7 +6,7 @@ import {
     Input,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export const schema = z.object({
@@ -15,11 +15,7 @@ export const schema = z.object({
 
 export type FormData = z.infer<typeof schema>;
 
-interface Props {
-    onForgotPasswordSubmit: (data: FieldValues) => void;
-}
-
-function ForgotPasswordForm({ onForgotPasswordSubmit }: Props) {
+function ForgotPasswordForm() {
     const {
         register,
         handleSubmit,
@@ -29,7 +25,7 @@ function ForgotPasswordForm({ onForgotPasswordSubmit }: Props) {
     });
 
     return (
-        <form onSubmit={handleSubmit(onForgotPasswordSubmit)}>
+        <form onSubmit={handleSubmit(() => {})}>
             <FormControl marginBottom={2} isInvalid={!!errors.email}>
                 <FormLabel>Email</FormLabel>
                 <Input {...register("email")} type="text" />

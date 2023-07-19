@@ -18,11 +18,7 @@ function AuthBox({ mode }: Props) {
         >
             {mode === "login" && <LoginForm />}
             {mode === "signup" && <SignupForm />}
-            {mode === "forgot_password" && (
-                <ForgotPasswordForm
-                    onForgotPasswordSubmit={(data) => console.log(data)}
-                />
-            )}
+            {mode === "forgot_password" && <ForgotPasswordForm />}
             <Divider orientation="horizontal" paddingY={2} />
             <HStack justifyContent="space-evenly" gap={10} marginTop={4}>
                 {mode !== "login" && (
