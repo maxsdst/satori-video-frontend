@@ -4,6 +4,7 @@ import Layout from "./pages/Layout";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 import SignupPage from "./pages/SignupPage";
+import UnauthenticatedRoutes from "./pages/UnauthenticatedRoutes";
 
 const router = createBrowserRouter([
     {
@@ -14,8 +15,13 @@ const router = createBrowserRouter([
                 index: true,
                 element: <HomePage />,
             },
-            { path: "login", element: <LoginPage /> },
-            { path: "signup", element: <SignupPage /> },
+            {
+                element: <UnauthenticatedRoutes />,
+                children: [
+                    { path: "login", element: <LoginPage /> },
+                    { path: "signup", element: <SignupPage /> },
+                ],
+            },
             {
                 path: "users/:username",
                 element: <ProfilePage />,
