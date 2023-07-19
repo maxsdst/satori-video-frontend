@@ -30,9 +30,9 @@ function Layout() {
                 <TopNav toggleSidenav={toggleSidenav} />
             </GridItem>
             <GridItem area="main">
-                <Flex direction="row">
+                <Flex direction="row" width="100%" height="100%">
                     {isSidenavOpened && <SideNav />}
-                    <Box padding={5}>
+                    <Box padding={5} width="100%" height="100%">
                         <Outlet />
                     </Box>
                 </Flex>

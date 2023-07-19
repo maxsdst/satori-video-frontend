@@ -1,12 +1,7 @@
 import { Box } from "@chakra-ui/react";
-import AuthBox from "../auth/components/AuthBox";
 
 function HomePage() {
-    return (
-        <Box>
-            <AuthBox />
-        </Box>
-    );
+    return <Box></Box>;
 }
 
 export default HomePage;

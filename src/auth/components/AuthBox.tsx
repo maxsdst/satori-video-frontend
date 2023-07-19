@@ -1,18 +1,14 @@
 import { Box, Button, Divider, HStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { Link } from "react-router-dom";
+import ForgotPasswordForm from "./ForgotPasswordForm";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
-import ForgotPasswordForm from "./ForgotPasswordForm";
 
-enum Mode {
-    Login,
-    Signup,
-    ForgotPassword,
+interface Props {
+    mode: "login" | "signup" | "forgot_password";
 }
 
-function AuthBox() {
-    const [mode, setMode] = useState(Mode.Login);
-
+function AuthBox({ mode }: Props) {
     return (
         <Box
             borderWidth={{ sm: 0, md: 1 }}
@@ -20,31 +16,28 @@ function AuthBox() {
             borderRadius={6}
             padding={6}
         >
-            {mode === Mode.Login && <LoginForm />}
-            {mode === Mode.Signup && <SignupForm />}
-            {mode === Mode.ForgotPassword && (
+            {mode === "login" && <LoginForm />}
+            {mode === "signup" && <SignupForm />}
+            {mode === "forgot_password" && (
                 <ForgotPasswordForm
                     onForgotPasswordSubmit={(data) => console.log(data)}
                 />
             )}
             <Divider orientation="horizontal" paddingY={2} />
             <HStack justifyContent="space-evenly" gap={10} marginTop={4}>
-                {mode !== Mode.Login && (
-                    <Button variant="link" onClick={() => setMode(Mode.Login)}>
-                        Log in
+                {mode !== "login" && (
+                    <Button variant="link">
+                        <Link to="/login">Log in</Link>
                     </Button>
                 )}
-                {mode !== Mode.Signup && (
-                    <Button variant="link" onClick={() => setMode(Mode.Signup)}>
-                        Sign up
+                {mode !== "signup" && (
+                    <Button variant="link">
+                        <Link to="/signup">Sign up</Link>
                     </Button>
                 )}
-                {mode !== Mode.ForgotPassword && (
-                    <Button
-                        variant="link"
-                        onClick={() => setMode(Mode.ForgotPassword)}
-                    >
-                        Forgot password
+                {mode !== "forgot_password" && (
+                    <Button variant="link">
+                        <Link to="/forgot_password">Forgot password</Link>
                     </Button>
                 )}
             </HStack>
