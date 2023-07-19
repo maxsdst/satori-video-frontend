@@ -1,4 +1,4 @@
-import { HStack, Hide, Image, useBoolean } from "@chakra-ui/react";
+import { Button, HStack, Hide, Image, useBoolean } from "@chakra-ui/react";
 import {
     AiOutlineArrowLeft,
     AiOutlineBell,
@@ -6,6 +6,8 @@ import {
     AiOutlineUpload,
 } from "react-icons/ai";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { Link } from "react-router-dom";
+import useOwnProfile from "../hooks/useOwnProfile";
 import SearchInput from "./SearchInput";
 import TopNavButton from "./TopNavButton";
 import UserMenu from "./UserMenu";
@@ -15,6 +17,8 @@ interface Props {
 }
 
 function TopNav({ toggleSidenav }: Props) {
+    const { data: profile, isLoading } = useOwnProfile();
+
     const [isSearchModeOn, { on: setSearchModeOn, off: setSearchModeOff }] =
         useBoolean(false);
 
@@ -57,16 +61,26 @@ function TopNav({ toggleSidenav }: Props) {
                             onClick={() => setSearchModeOn()}
                         />
                     </Hide>
-                    <TopNavButton
-                        tooltipLabel="Upload"
-                        icon={AiOutlineUpload}
-                    />
-                    <TopNavButton
-                        tooltipLabel="Notifications"
-                        icon={AiOutlineBell}
-                    />
+                    {isLoading || !profile ? null : (
+                        <>
+                            <TopNavButton
+                                tooltipLabel="Upload"
+                                icon={AiOutlineUpload}
+                            />
+                            <TopNavButton
+                                tooltipLabel="Notifications"
+                                icon={AiOutlineBell}
+                            />
+                        </>
+                    )}
                 </HStack>
-                <UserMenu />
+                {isLoading ? null : profile ? (
+                    <UserMenu />
+                ) : (
+                    <Link to="/login">
+                        <Button colorScheme="blue">Log in</Button>
+                    </Link>
+                )}
             </HStack>
         </HStack>
     );
