@@ -1,8 +1,10 @@
 .player-wrapper {
     position: relative;
-    --video-player-height: calc(100vh - var(--topnav-height));
+    --video-player-height: calc(100vh - var(--topnav-height) - 72px);
     width: calc(var(--video-player-height) / 16 * 9); /* 9:16 aspect ratio */
     height: var(--video-player-height);
+    min-height: 560px;
+    min-width: 315px;
 }
 
 .player-wrapper video {

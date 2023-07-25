@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 import SignupPage from "./pages/SignupPage";
 import UnauthenticatedRoutes from "./pages/UnauthenticatedRoutes";
+import VideoPage from "./pages/VideoPage";
 
 const router = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
             {
                 path: "users/:username",
                 element: <ProfilePage />,
+            },
+            {
+                path: "videos/:videoId",
+                element: <VideoPage />,
             },
         ],
     },

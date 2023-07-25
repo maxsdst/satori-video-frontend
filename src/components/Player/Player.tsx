@@ -1,33 +1,33 @@
-import { Box, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { Box, VStack, useBoolean } from "@chakra-ui/react";
 import ReactPlayer from "react-player/file";
-import PlayerControls from "../PlayerControls";
+import Video from "../../entities/Video";
 import "./Player.css";
-import PlayerInfo from "../PlayerInfo";
+import PlayerControls from "./PlayerControls";
+import PlayerInfo from "./PlayerInfo";
 
 interface Props {
-    url: string;
+    video: Video;
 }
 
-function Player({ url }: Props) {
-    const [isPlaying, setPlaying] = useState(true);
-    const [isMuted, setMuted] = useState(true);
+function Player({ video }: Props) {
+    const [isPlaying, { on: play, off: pause }] = useBoolean(true);
+    const [isMuted, { on: mute, off: unmute }] = useBoolean(true);
 
     return (
         <Box className="player-wrapper">
             <VStack position="absolute" width="100%" height="100%" spacing={0}>
                 <PlayerControls
                     isPlaying={isPlaying}
-                    onPause={() => setPlaying(false)}
-                    onPlay={() => setPlaying(true)}
+                    onPause={pause}
+                    onPlay={play}
                     isMuted={isMuted}
-                    onMute={() => setMuted(true)}
-                    onUnmute={() => setMuted(false)}
+                    onMute={mute}
+                    onUnmute={unmute}
                 />
-                <PlayerInfo />
+                <PlayerInfo video={video} />
             </VStack>
             <ReactPlayer
-                url={url}
+                url={video.source}
                 playing={isPlaying}
                 muted={isMuted}
                 loop={true}
