@@ -38,6 +38,12 @@ class ApiClient<T> {
         this.endpoint = endpoint;
     }
 
+    getAll = (requestConfig?: AxiosRequestConfig) => {
+        return axiosInstance
+            .get<T[]>(this.endpoint, requestConfig)
+            .then((res) => res.data);
+    };
+
     get = (id?: number | string, requestConfig?: AxiosRequestConfig) => {
         const url = appendId(this.endpoint, id);
         return axiosInstance.get<T>(url, requestConfig).then((res) => res.data);

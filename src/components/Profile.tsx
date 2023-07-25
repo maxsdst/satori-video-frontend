@@ -4,35 +4,30 @@ import {
     Flex,
     HStack,
     Heading,
-    Spinner,
     Text,
     VStack,
     useDisclosure,
 } from "@chakra-ui/react";
+import ProfileEntity from "../entities/Profile";
 import useOwnProfile from "../hooks/useOwnProfile";
-import useProfile from "../hooks/useProfile";
 import EditProfileModal from "./EditProfileModal";
 
 interface Props {
-    username: string;
+    profile: ProfileEntity;
 }
 
-function Profile({ username }: Props) {
+function Profile({ profile }: Props) {
     const {
         isOpen: isEditModalOpen,
         onOpen: openEditModal,
         onClose: closeEditModal,
     } = useDisclosure();
 
-    const profile = useProfile(username);
-    const ownProfile = useOwnProfile();
+    const { data: ownProfile, isLoading, error } = useOwnProfile();
+    if (isLoading) return null;
+    if (error) throw error;
 
-    if (profile.isLoading || ownProfile.isLoading) return <Spinner />;
-    if (profile.error) throw profile.error;
-    if (ownProfile.error) throw ownProfile.error;
-
-    const isOwnProfile =
-        profile.data.user.username === ownProfile.data?.user.username;
+    const isOwnProfile = profile.user.username === ownProfile?.user.username;
 
     return (
         <>
@@ -48,7 +43,7 @@ function Profile({ username }: Props) {
                     justifyContent="space-between"
                     alignItems="end"
                 >
-                    <Avatar size="2xl" src={profile.data.avatar || undefined} />
+                    <Avatar size="2xl" src={profile.avatar || undefined} />
                     {isOwnProfile ? (
                         <Button
                             variant="outline"
@@ -72,12 +67,10 @@ function Profile({ username }: Props) {
                     )}
                 </Flex>
                 <VStack alignItems="start" spacing={1} width="100%">
-                    <Heading size="md">{profile.data.full_name}</Heading>
-                    <Text fontSize="md">@{profile.data.user.username}</Text>
+                    <Heading size="md">{profile.full_name}</Heading>
+                    <Text fontSize="md">@{profile.user.username}</Text>
                 </VStack>
-                {profile.data.description && (
-                    <Text>{profile.data.description}</Text>
-                )}
+                {profile.description && <Text>{profile.description}</Text>}
                 <HStack spacing={5} fontSize="sm">
                     <Text>
                         <b>123</b> Following
@@ -89,7 +82,7 @@ function Profile({ username }: Props) {
             </VStack>
             {isOwnProfile && (
                 <EditProfileModal
-                    profile={profile.data}
+                    profile={profile}
                     isOpen={isEditModalOpen}
                     onClose={closeEditModal}
                 />

@@ -8,30 +8,38 @@ import {
     VStack,
 } from "@chakra-ui/react";
 import { AiOutlineHeart } from "react-icons/ai";
+import { Link } from "react-router-dom";
+import Video from "../entities/Video";
 
-function VideoGridItem() {
+interface Props {
+    video: Video;
+}
+
+function VideoGridItem({ video }: Props) {
     return (
         <VStack maxWidth="600px" alignItems="start">
             <AspectRatio width="100%" ratio={3 / 4}>
-                <Image
-                    objectFit="cover"
-                    src="https://i.pinimg.com/originals/9f/c9/8d/9fc98dfd612fe1eb13a6ae083444a4f6.jpg"
-                />
+                <Link to={"/videos/" + video.id}>
+                    <Image objectFit="cover" src={video.thumbnail} />
+                </Link>
             </AspectRatio>
-            <Text fontSize="md" noOfLines={1}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius ex
-                laudantium corporis, quod repudiandae maiores consequatur
-                delectus eum ab vitae, quo voluptate error laboriosam, veniam
-                culpa doloribus dolore. Nemo, magni?
-            </Text>
+            {video.title && (
+                <Link to={"/videos/" + video.id}>
+                    <Text fontSize="md" noOfLines={1}>
+                        {video.title}
+                    </Text>
+                </Link>
+            )}
             <HStack width="100%" justifyContent="space-between">
-                <HStack>
-                    <Avatar
-                        size="xs"
-                        src="https://i.pinimg.com/originals/9f/c9/8d/9fc98dfd612fe1eb13a6ae083444a4f6.jpg"
-                    />
-                    <Text>username</Text>
-                </HStack>
+                <Link to={"/users/" + video.profile.user.username}>
+                    <HStack>
+                        <Avatar
+                            size="xs"
+                            src={video.profile.avatar || undefined}
+                        />
+                        <Text>{video.profile.user.username}</Text>
+                    </HStack>
+                </Link>
                 <HStack spacing={1}>
                     <Icon as={AiOutlineHeart} boxSize="22px" />
                     <Text fontSize="md">12.3K</Text>
