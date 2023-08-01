@@ -1,5 +1,6 @@
 import { Spinner, VStack } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
+import MainContentArea from "../components/MainContentArea";
 import Profile from "../components/Profile";
 import UserVideosSection from "../components/UserVideosSection";
 import useProfile from "../hooks/useProfile";
@@ -12,10 +13,12 @@ function ProfilePage() {
     if (error) throw error;
 
     return (
-        <VStack alignItems="start" width="100%" spacing={6}>
-            <Profile profile={profile} />
-            <UserVideosSection profileId={profile.id} />
-        </VStack>
+        <MainContentArea isContentCentered={false}>
+            <VStack alignItems="start" width="100%" spacing={6}>
+                <Profile profile={profile} />
+                <UserVideosSection profileId={profile.id} />
+            </VStack>
+        </MainContentArea>
     );
 }
 

@@ -1,16 +1,11 @@
-import { Flex } from "@chakra-ui/react";
 import AuthBox from "../auth/components/AuthBox";
+import MainContentArea from "../components/MainContentArea";
 
 function ForgotPasswordPage() {
     return (
-        <Flex
-            width="100%"
-            height="100%"
-            justifyContent="center"
-            alignItems="center"
-        >
+        <MainContentArea isContentCentered={true}>
             <AuthBox mode="forgot_password" />
-        </Flex>
+        </MainContentArea>
     );
 }
 
