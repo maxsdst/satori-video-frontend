@@ -7,4 +7,5 @@ export default interface Video {
     description: string;
     source: string;
     thumbnail: string;
+    first_frame: string;
 }

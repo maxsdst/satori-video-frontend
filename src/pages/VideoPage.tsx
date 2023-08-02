@@ -1,8 +1,8 @@
-import { Spinner } from "@chakra-ui/react";
+import { Flex, Spinner } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
-import MainContentArea from "../components/MainContentArea";
-import Player from "../components/Player";
+import VideoSequence from "../components/VideoSequence";
 import useVideo from "../hooks/useVideo";
+import { MAIN_CONTENT_AREA_PADDING } from "../styleConstants";
 
 function VideoPage() {
     const { videoId } = useParams();
@@ -12,9 +12,16 @@ function VideoPage() {
     if (error) throw error;
 
     return (
-        <MainContentArea isContentCentered={true}>
-            <Player video={video} />
-        </MainContentArea>
+        <Flex
+            width="100%"
+            height="100%"
+            justifyContent="center"
+            alignItems="start"
+            paddingX={MAIN_CONTENT_AREA_PADDING}
+            paddingTop={MAIN_CONTENT_AREA_PADDING}
+        >
+            <VideoSequence videos={[video, video, video]} />
+        </Flex>
     );
 }
 

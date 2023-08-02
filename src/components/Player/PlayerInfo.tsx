@@ -1,6 +1,7 @@
 import { Avatar, HStack, Heading, Text, VStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import Video from "../../entities/Video";
+import { PLAYER_DROP_SHADOW } from "../../styleConstants";
 
 interface Props {
     video: Video;
@@ -13,7 +14,7 @@ function PlayerInfo({ video }: Props) {
             paddingBottom={4}
             alignItems="start"
             spacing={1}
-            filter="var(--player-drop-shadow)"
+            filter={PLAYER_DROP_SHADOW}
             width="100%"
             zIndex={100}
         >

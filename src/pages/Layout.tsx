@@ -9,6 +9,7 @@ import {
 import { Outlet } from "react-router-dom";
 import SideNav from "../components/SideNav";
 import TopNav from "../components/TopNav";
+import { TOPNAV_HEIGHT } from "../styleConstants";
 
 function Layout() {
     const shouldOpenSidenav = useBreakpointValue(
@@ -23,7 +24,7 @@ function Layout() {
         <Grid
             templateAreas={`"topnav" "main"`}
             templateColumns="1fr"
-            templateRows={"56px 1fr"}
+            templateRows={`${TOPNAV_HEIGHT} 1fr`}
             height="100vh"
         >
             <GridItem area="topnav">

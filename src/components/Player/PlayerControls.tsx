@@ -3,6 +3,7 @@ import { AiOutlineComment, AiOutlineHeart } from "react-icons/ai";
 import { BiVolumeFull, BiVolumeMute } from "react-icons/bi";
 import { CiPause1 } from "react-icons/ci";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import { PLAYER_DROP_SHADOW } from "../../styleConstants";
 import PlayerButton from "./PlayerButton";
 
 interface Props {
@@ -35,7 +36,7 @@ function PlayerControls({
                     <Icon
                         as={CiPause1}
                         boxSize="50px"
-                        filter="var(--player-drop-shadow)"
+                        filter={PLAYER_DROP_SHADOW}
                         opacity={0.8}
                     />
                 </AbsoluteCenter>
