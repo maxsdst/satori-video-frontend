@@ -26,6 +26,9 @@ const VerticalSlider = forwardRef(function VerticalSlider(
     { children, spaceBetweenSlides, onSlideChange }: Props,
     ref: Ref<VerticalSliderHandle>
 ) {
+    const NEXT_SLIDE_KEYS = ["ArrowDown", "PageDown"];
+    const PREV_SLIDE_KEYS = ["ArrowUp", "PageUp"];
+
     const [state, dispatch] = useReducer(verticalSliderReducer, {
         x: 0,
         y: 0,
@@ -56,7 +59,19 @@ const VerticalSlider = forwardRef(function VerticalSlider(
     }));
 
     return (
-        <Box height="100%" position="relative" overflowY="hidden">
+        <Box
+            height="100%"
+            position="relative"
+            overflowY="hidden"
+            tabIndex={1}
+            _focus={{ outline: "0" }}
+            onKeyDown={(e) => {
+                if (NEXT_SLIDE_KEYS.includes(e.key))
+                    dispatch({ type: "GO_TO_NEXT_SLIDE", slides });
+                else if (PREV_SLIDE_KEYS.includes(e.key))
+                    dispatch({ type: "GO_TO_PREV_SLIDE", slides });
+            }}
+        >
             <Draggable
                 axis="y"
                 position={state}
