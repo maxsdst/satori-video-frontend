@@ -9,11 +9,18 @@ interface SliderState {
     dragStartTime?: number;
 }
 
-interface Action {
+interface GoToSlideAction {
+    type: "GO_TO_NEXT_SLIDE" | "GO_TO_PREV_SLIDE";
+    slides?: HTMLCollection;
+}
+
+interface HandleDragAction {
     type: "HANDLE_DRAG_START" | "HANDLE_DRAG_STOP";
     dragData: DraggableData;
     slides?: HTMLCollection;
 }
+
+type Action = GoToSlideAction | HandleDragAction;
 
 function getSlide(index: number, slides?: HTMLCollection): HTMLElement | null {
     return slides?.[index] ? (slides[index] as HTMLElement) : null;
@@ -72,6 +79,24 @@ function verticalSliderReducer(
     const nextSlide = getSlide(state.currentSlideIndex + 1, action.slides);
 
     switch (action.type) {
+        case "GO_TO_NEXT_SLIDE":
+            if (!nextSlide) return state;
+            return {
+                x: 0,
+                y: 0 - nextSlide.offsetTop,
+                currentSlideIndex: state.currentSlideIndex + 1,
+                transition: true,
+            };
+
+        case "GO_TO_PREV_SLIDE":
+            if (!prevSlide) return state;
+            return {
+                x: 0,
+                y: 0 - prevSlide.offsetTop,
+                currentSlideIndex: state.currentSlideIndex - 1,
+                transition: true,
+            };
+
         case "HANDLE_DRAG_START":
             return {
                 ...state,
@@ -81,39 +106,35 @@ function verticalSliderReducer(
             };
 
         case "HANDLE_DRAG_STOP":
+            state = { ...state, transition: true };
+
             if (
-                nextSlide &&
-                (isSwipeUp(
+                isSwipeUp(
                     action.dragData.y,
                     state.dragStartY,
                     state.dragStartTime
                 ) ||
-                    shouldGoToNext(action.dragData.y, currentSlide!))
+                shouldGoToNext(action.dragData.y, currentSlide!)
             )
-                return {
-                    x: 0,
-                    y: 0 - nextSlide.offsetTop,
-                    currentSlideIndex: state.currentSlideIndex + 1,
-                    transition: true,
-                };
+                return verticalSliderReducer(state, {
+                    type: "GO_TO_NEXT_SLIDE",
+                    slides: action.slides,
+                });
 
             if (
-                prevSlide &&
-                (isSwipeDown(
+                isSwipeDown(
                     action.dragData.y,
                     state.dragStartY,
                     state.dragStartTime
                 ) ||
-                    shouldGoToPrev(action.dragData.y, currentSlide!))
+                shouldGoToPrev(action.dragData.y, currentSlide!)
             )
-                return {
-                    x: 0,
-                    y: 0 - prevSlide.offsetTop,
-                    currentSlideIndex: state.currentSlideIndex - 1,
-                    transition: true,
-                };
+                return verticalSliderReducer(state, {
+                    type: "GO_TO_PREV_SLIDE",
+                    slides: action.slides,
+                });
 
-            return { ...state, transition: true };
+            return state;
     }
 
     return state;

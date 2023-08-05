@@ -1,5 +1,13 @@
 import { Box, VStack } from "@chakra-ui/react";
-import { ReactElement, useEffect, useReducer, useRef } from "react";
+import {
+    ReactElement,
+    Ref,
+    forwardRef,
+    useEffect,
+    useImperativeHandle,
+    useReducer,
+    useRef,
+} from "react";
 import Draggable from "react-draggable";
 import verticalSliderReducer from "./verticalSliderReducer";
 
@@ -9,11 +17,15 @@ interface Props {
     onSlideChange: (slideIndex: number) => void;
 }
 
-function VerticalSlider({
-    children,
-    spaceBetweenSlides,
-    onSlideChange,
-}: Props) {
+export interface VerticalSliderHandle {
+    goToNext: () => void;
+    goToPrev: () => void;
+}
+
+const VerticalSlider = forwardRef(function VerticalSlider(
+    { children, spaceBetweenSlides, onSlideChange }: Props,
+    ref: Ref<VerticalSliderHandle>
+) {
     const [state, dispatch] = useReducer(verticalSliderReducer, {
         x: 0,
         y: 0,
@@ -27,6 +39,21 @@ function VerticalSlider({
 
     const slidesContainer = useRef<HTMLDivElement>(null);
     const slides = slidesContainer.current?.children;
+
+    useImperativeHandle(ref, () => ({
+        goToNext() {
+            dispatch({
+                type: "GO_TO_NEXT_SLIDE",
+                slides: slidesContainer.current?.children,
+            });
+        },
+        goToPrev() {
+            dispatch({
+                type: "GO_TO_PREV_SLIDE",
+                slides: slidesContainer.current?.children,
+            });
+        },
+    }));
 
     return (
         <Box height="100%" position="relative" overflowY="hidden">
@@ -59,6 +86,6 @@ function VerticalSlider({
             </Draggable>
         </Box>
     );
-}
+});
 
 export default VerticalSlider;

@@ -1,11 +1,12 @@
 import { Box } from "@chakra-ui/react";
-import { useState } from "react";
-import Video from "../entities/Video";
-import { useWindowDimensions } from "../hooks/useWindowDimensions";
-import { MAIN_CONTENT_AREA_PADDING, TOPNAV_HEIGHT } from "../styleConstants";
-import { isInPortraitMode } from "../utils";
-import Player from "./Player";
-import VerticalSlider from "./VerticalSlider";
+import { useRef, useState } from "react";
+import Video from "../../entities/Video";
+import { useWindowDimensions } from "../../hooks/useWindowDimensions";
+import { MAIN_CONTENT_AREA_PADDING, TOPNAV_HEIGHT } from "../../styleConstants";
+import { isInPortraitMode } from "../../utils";
+import Player from "../Player";
+import VerticalSlider, { VerticalSliderHandle } from "../VerticalSlider";
+import Navigation from "./Navigation";
 
 interface Props {
     videos: Video[];
@@ -18,6 +19,8 @@ function VideoSequence({ videos }: Props) {
 
     const handleSlideChange = (slideIndex: number) =>
         setCurrentVideoIndex(slideIndex);
+
+    const slider = useRef<VerticalSliderHandle>(null);
 
     if (isInPortraitMode(width, height))
         return (
@@ -56,10 +59,11 @@ function VideoSequence({ videos }: Props) {
         const playerWidth = `calc(${playerHeight} / 16 * 9)`;
 
         return (
-            <Box position="relative" height={availableArea}>
+            <Box position="relative" width="100%" height={availableArea}>
                 <VerticalSlider
                     spaceBetweenSlides="24px"
                     onSlideChange={handleSlideChange}
+                    ref={slider}
                 >
                     {videos.map((video, index) => (
                         <Player
@@ -72,6 +76,12 @@ function VideoSequence({ videos }: Props) {
                         />
                     ))}
                 </VerticalSlider>
+                <Navigation
+                    showUp={currentVideoIndex !== 0}
+                    showDown={currentVideoIndex < videos.length - 1}
+                    onUp={() => slider.current?.goToPrev()}
+                    onDown={() => slider.current?.goToNext()}
+                />
             </Box>
         );
     }
