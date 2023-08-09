@@ -9,6 +9,7 @@ import {
     useRef,
 } from "react";
 import Draggable from "react-draggable";
+import WheelIndicator from "wheel-indicator";
 import verticalSliderReducer from "./verticalSliderReducer";
 
 interface Props {
@@ -42,6 +43,29 @@ const VerticalSlider = forwardRef(function VerticalSlider(
 
     const slidesContainer = useRef<HTMLDivElement>(null);
     const slides = slidesContainer.current?.children;
+
+    useEffect(() => {
+        if (!slidesContainer.current) return;
+
+        const wheelIndicator = new WheelIndicator({
+            elem: slidesContainer.current,
+            callback: (e) => {
+                e.direction === "down"
+                    ? dispatch({
+                          type: "GO_TO_NEXT_SLIDE",
+                          slides: slidesContainer.current?.children,
+                      })
+                    : dispatch({
+                          type: "GO_TO_PREV_SLIDE",
+                          slides: slidesContainer.current?.children,
+                      });
+            },
+        });
+
+        return () => {
+            wheelIndicator.destroy();
+        };
+    }, [slidesContainer]);
 
     useImperativeHandle(ref, () => ({
         goToNext() {
