@@ -14,6 +14,7 @@ import verticalSliderReducer from "./verticalSliderReducer";
 
 interface Props {
     children?: ReactElement[];
+    isDraggable: boolean;
     spaceBetweenSlides: string;
     onSlideChange: (slideIndex: number) => void;
 }
@@ -24,7 +25,7 @@ export interface VerticalSliderHandle {
 }
 
 const VerticalSlider = forwardRef(function VerticalSlider(
-    { children, spaceBetweenSlides, onSlideChange }: Props,
+    { isDraggable, children, spaceBetweenSlides, onSlideChange }: Props,
     ref: Ref<VerticalSliderHandle>
 ) {
     const NEXT_SLIDE_KEYS = ["ArrowDown", "PageDown"];
@@ -98,6 +99,7 @@ const VerticalSlider = forwardRef(function VerticalSlider(
         >
             <Draggable
                 axis="y"
+                disabled={!isDraggable}
                 position={state}
                 onStart={(_, data) =>
                     dispatch({

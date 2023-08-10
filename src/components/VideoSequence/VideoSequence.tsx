@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import Video from "../../entities/Video";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 import { MAIN_CONTENT_AREA_PADDING, TOPNAV_HEIGHT } from "../../styleConstants";
-import { isInPortraitMode } from "../../utils";
+import { isInPortraitMode, isTouchDevice } from "../../utils";
 import Player from "../Player";
 import VerticalSlider, { VerticalSliderHandle } from "../VerticalSlider";
 import Navigation from "./Navigation";
@@ -37,6 +37,7 @@ function VideoSequence({ videos }: Props) {
                 backgroundColor="black"
             >
                 <VerticalSlider
+                    isDraggable={isTouchDevice()}
                     spaceBetweenSlides="0"
                     onSlideChange={handleSlideChange}
                 >
@@ -61,6 +62,7 @@ function VideoSequence({ videos }: Props) {
         return (
             <Box position="relative" width="100%" height={availableArea}>
                 <VerticalSlider
+                    isDraggable={isTouchDevice()}
                     spaceBetweenSlides="24px"
                     onSlideChange={handleSlideChange}
                     ref={slider}
