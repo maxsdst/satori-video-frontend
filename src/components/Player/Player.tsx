@@ -23,6 +23,8 @@ interface Props {
     isPlaying: boolean;
     width: string;
     height: string;
+    minWidth?: string;
+    minHeight?: string;
     roundCorners: boolean;
 }
 
@@ -33,6 +35,8 @@ function Player({
     isPlaying: isPlayingProp,
     width,
     height,
+    minWidth,
+    minHeight,
     roundCorners,
 }: Props) {
     const player = useRef<ReactPlayer>(null);
@@ -58,8 +62,8 @@ function Player({
             })}
             width={width}
             height={height}
-            minWidth="315px"
-            minHeight="560px"
+            minWidth={minWidth}
+            minHeight={minHeight}
             position="relative"
             overflow="hidden"
             backgroundImage={video.first_frame}

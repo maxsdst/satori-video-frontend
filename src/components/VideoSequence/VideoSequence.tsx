@@ -78,6 +78,8 @@ function VideoSequence({ videos }: Props) {
                             isPlaying={currentVideoIndex === index}
                             width={playerWidth}
                             height={playerHeight}
+                            minWidth="315px"
+                            minHeight="560px"
                             roundCorners={true}
                         />
                     ))}
