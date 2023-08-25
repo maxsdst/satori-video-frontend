@@ -54,6 +54,10 @@ function Player({
         }
     }, [isPlayingProp]);
 
+    useEffect(() => {
+        if (isPlaying) player.current?.setState({ showPreview: false });
+    }, [isPlaying]);
+
     return (
         <Box
             className={classNames({
