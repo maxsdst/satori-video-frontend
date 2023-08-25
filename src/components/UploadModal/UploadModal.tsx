@@ -10,6 +10,7 @@ import {
 import { useState } from "react";
 import Upload from "../../entities/Upload";
 import Video from "../../entities/Video";
+import EditVideoModal from "../EditVideoModal";
 import ProgressBar from "../ProgressBar";
 import ProcessingBar from "./ProcessingBar";
 import UploadForm from "./UploadForm";
@@ -88,6 +89,14 @@ function UploadModal({ isOpen, onClose, onVideoMutated }: Props) {
                     </ModalBody>
                 </ModalContent>
             </Modal>
+            {video && (
+                <EditVideoModal
+                    video={video}
+                    isOpen={isOpen && step === "edit"}
+                    onClose={closeModal}
+                    onVideoEdited={onVideoMutated}
+                />
+            )}
         </>
     );
 }
