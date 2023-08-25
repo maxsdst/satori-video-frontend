@@ -18,6 +18,8 @@ import VideoInfo from "./VideoInfo";
 
 interface Props {
     video: Video;
+    showInteractionButtons: boolean;
+    showVideoInfo: boolean;
     isPlaying: boolean;
     width: string;
     height: string;
@@ -26,6 +28,8 @@ interface Props {
 
 function Player({
     video,
+    showInteractionButtons,
+    showVideoInfo,
     isPlaying: isPlayingProp,
     width,
     height,
@@ -84,10 +88,10 @@ function Player({
                         onUnmute={unmute}
                     />
                     <Box position="absolute" bottom={0} right={0} zIndex={2}>
-                        <InteractionButtons />
+                        {showInteractionButtons && <InteractionButtons />}
                     </Box>
                 </Box>
-                <VideoInfo video={video} />
+                {showVideoInfo && <VideoInfo video={video} />}
             </VStack>
             <ReactPlayer
                 url={video.source}

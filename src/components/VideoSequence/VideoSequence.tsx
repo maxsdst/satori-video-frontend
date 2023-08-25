@@ -45,6 +45,8 @@ function VideoSequence({ videos }: Props) {
                         <Player
                             key={video.id}
                             video={video}
+                            showInteractionButtons={true}
+                            showVideoInfo={true}
                             isPlaying={currentVideoIndex === index}
                             width={`${width}px`}
                             height={`${height}px`}
@@ -71,6 +73,8 @@ function VideoSequence({ videos }: Props) {
                         <Player
                             key={video.id}
                             video={video}
+                            showInteractionButtons={true}
+                            showVideoInfo={true}
                             isPlaying={currentVideoIndex === index}
                             width={playerWidth}
                             height={playerHeight}
