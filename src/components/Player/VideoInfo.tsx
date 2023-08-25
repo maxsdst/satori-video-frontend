@@ -7,7 +7,7 @@ interface Props {
     video: Video;
 }
 
-function PlayerInfo({ video }: Props) {
+function VideoInfo({ video }: Props) {
     return (
         <VStack
             paddingX={4}
@@ -16,7 +16,7 @@ function PlayerInfo({ video }: Props) {
             spacing={1}
             filter={PLAYER_DROP_SHADOW}
             width="100%"
-            zIndex={100}
+            zIndex={2}
         >
             <Link to={"/users/" + video.profile.user.username}>
                 <HStack>
@@ -35,4 +35,4 @@ function PlayerInfo({ video }: Props) {
     );
 }
 
-export default PlayerInfo;
+export default VideoInfo;

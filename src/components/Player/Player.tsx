@@ -1,11 +1,20 @@
-import { Box, VStack, useBoolean } from "@chakra-ui/react";
+import {
+    AbsoluteCenter,
+    Box,
+    Icon,
+    VStack,
+    useBoolean,
+} from "@chakra-ui/react";
 import classNames from "classnames";
 import { useEffect, useRef } from "react";
+import { FaPlay } from "react-icons/fa";
 import ReactPlayer from "react-player/file";
 import Video from "../../entities/Video";
+import { PLAYER_DROP_SHADOW } from "../../styleConstants";
+import PlayerControls from "./Controls";
+import InteractionButtons from "./InteractionButtons";
 import "./Player.css";
-import PlayerControls from "./PlayerControls";
-import PlayerInfo from "./PlayerInfo";
+import VideoInfo from "./VideoInfo";
 
 interface Props {
     video: Video;
@@ -54,16 +63,31 @@ function Player({
             backgroundPosition="center"
             borderRadius={roundCorners ? "6px" : undefined}
         >
+            {!isPlaying && (
+                <AbsoluteCenter verticalAlign="">
+                    <Icon
+                        as={FaPlay}
+                        boxSize="40px"
+                        filter={PLAYER_DROP_SHADOW}
+                        opacity={0.8}
+                    />
+                </AbsoluteCenter>
+            )}
             <VStack position="absolute" width="100%" height="100%" spacing={0}>
-                <PlayerControls
-                    isPlaying={isPlaying}
-                    onPause={pause}
-                    onPlay={play}
-                    isMuted={isMuted}
-                    onMute={mute}
-                    onUnmute={unmute}
-                />
-                <PlayerInfo video={video} />
+                <Box position="relative" width="100%" height="100%">
+                    <PlayerControls
+                        isPlaying={isPlaying}
+                        onPause={pause}
+                        onPlay={play}
+                        isMuted={isMuted}
+                        onMute={mute}
+                        onUnmute={unmute}
+                    />
+                    <Box position="absolute" bottom={0} right={0} zIndex={2}>
+                        <InteractionButtons />
+                    </Box>
+                </Box>
+                <VideoInfo video={video} />
             </VStack>
             <ReactPlayer
                 url={video.source}

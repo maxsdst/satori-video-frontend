@@ -12,7 +12,9 @@ function PlayerButton({ icon, children, onClick }: Props) {
         <Button
             variant="ghost"
             width="60px"
-            paddingY={6}
+            height="60px"
+            borderRadius="50%"
+            padding={0}
             opacity={0.9}
             onClick={(e) => {
                 e.stopPropagation();
