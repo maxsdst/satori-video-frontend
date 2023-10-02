@@ -17,7 +17,7 @@ function Layout() {
         { ssr: false, fallback: "md" }
     );
 
-    const [isSidenavOpened, { toggle: toggleSidenav }] =
+    const [isSidenavOpen, { toggle: toggleSidenav }] =
         useBoolean(shouldOpenSidenav);
 
     return (
@@ -28,11 +28,14 @@ function Layout() {
             height="100vh"
         >
             <GridItem area="topnav">
-                <TopNav toggleSidenav={toggleSidenav} />
+                <TopNav
+                    isSidenavOpen={isSidenavOpen}
+                    toggleSidenav={toggleSidenav}
+                />
             </GridItem>
             <GridItem area="main">
                 <Flex direction="row" width="100%" height="100%">
-                    {isSidenavOpened && <SideNav />}
+                    {isSidenavOpen && <SideNav />}
                     <Box width="100%" height="100%">
                         <Outlet />
                     </Box>

@@ -8,15 +8,16 @@ import {
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import useOwnProfile from "../hooks/useOwnProfile";
+import IconButton from "./IconButton";
 import SearchInput from "./SearchInput";
-import TopNavButton from "./TopNavButton";
 import UserMenu from "./UserMenu";
 
 interface Props {
+    isSidenavOpen: boolean;
     toggleSidenav: () => void;
 }
 
-function TopNav({ toggleSidenav }: Props) {
+function TopNav({ isSidenavOpen, toggleSidenav }: Props) {
     const { data: profile, isLoading } = useOwnProfile();
 
     const [isSearchModeOn, { on: setSearchModeOn, off: setSearchModeOff }] =
@@ -27,7 +28,8 @@ function TopNav({ toggleSidenav }: Props) {
     if (isSearchModeOn)
         return (
             <HStack padding={padding} justifyContent="center">
-                <TopNavButton
+                <IconButton
+                    label="Search"
                     icon={AiOutlineArrowLeft}
                     onClick={() => setSearchModeOff()}
                 />
@@ -38,7 +40,10 @@ function TopNav({ toggleSidenav }: Props) {
     return (
         <HStack padding={padding} justifyContent="space-between">
             <HStack>
-                <TopNavButton
+                <IconButton
+                    label={
+                        isSidenavOpen ? "Hide navigation" : "Show navigation"
+                    }
                     icon={RxHamburgerMenu}
                     onClick={() => toggleSidenav()}
                 />
@@ -55,20 +60,21 @@ function TopNav({ toggleSidenav }: Props) {
             <HStack spacing={5}>
                 <HStack spacing={1}>
                     <Hide above="md">
-                        <TopNavButton
+                        <IconButton
                             icon={AiOutlineSearch}
-                            tooltipLabel="Search"
+                            label="Search"
                             onClick={() => setSearchModeOn()}
                         />
                     </Hide>
                     {isLoading || !profile ? null : (
                         <>
-                            <TopNavButton
-                                tooltipLabel="Upload"
+                            <IconButton
+                                label="Upload"
                                 icon={AiOutlineUpload}
+                                link="/uploads?upload"
                             />
-                            <TopNavButton
-                                tooltipLabel="Notifications"
+                            <IconButton
+                                label="Notifications"
                                 icon={AiOutlineBell}
                             />
                         </>
