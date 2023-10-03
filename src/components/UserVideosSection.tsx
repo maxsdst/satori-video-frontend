@@ -18,10 +18,18 @@ function UserVideosSection({ profileId }: Props) {
             </TabList>
             <TabPanels>
                 <TabPanel padding={0} marginTop={4}>
-                    <VideoGrid videoQuery={{ profileId }} />
+                    <VideoGrid
+                        videoQuery={{ profileId }}
+                        showUsers={false}
+                        showLikes={false}
+                    />
                 </TabPanel>
                 <TabPanel padding={0} marginTop={4}>
-                    <VideoGrid videoQuery={{ profileId }} />
+                    <VideoGrid
+                        videoQuery={{ profileId }}
+                        showUsers={false}
+                        showLikes={false}
+                    />
                 </TabPanel>
             </TabPanels>
         </Tabs>
