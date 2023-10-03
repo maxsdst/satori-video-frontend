@@ -6,10 +6,11 @@ import {
     Tabs,
     useDisclosure,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import MainContentArea from "../components/MainContentArea";
 import UploadModal from "../components/UploadModal";
+import VideoTable, { VideoTableHandle } from "../components/VideoTable";
 
 interface Props {
     tabName: "videos" | "uploads";
@@ -42,6 +43,8 @@ function MyVideosPage({ tabName }: Props) {
         navigate("/uploads");
     }
 
+    const videoTable = useRef<VideoTableHandle>(null);
+
     return (
         <>
             <MainContentArea isContentCentered={false}>
@@ -60,7 +63,7 @@ function MyVideosPage({ tabName }: Props) {
                     </TabList>
                     <TabPanels>
                         <TabPanel padding={0}>
-                            <p>videos</p>
+                            <VideoTable ref={videoTable} />
                         </TabPanel>
                         <TabPanel>
                             <p>uploads</p>
@@ -71,7 +74,7 @@ function MyVideosPage({ tabName }: Props) {
             <UploadModal
                 isOpen={isUploadModalOpen}
                 onClose={handleUploadModalClose}
-                onVideoMutated={() => {}}
+                onVideoMutated={() => videoTable.current?.refetchVideos()}
             />
         </>
     );

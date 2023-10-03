@@ -1,0 +1,11 @@
+.videotable-action-buttons {
+    display: none !important;
+}
+
+tr.is-highlighted .videotable-description {
+    display: none;
+}
+
+tr.is-highlighted .videotable-action-buttons {
+    display: flex !important;
+}

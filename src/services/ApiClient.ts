@@ -30,6 +30,13 @@ function appendId(endpoint: string, id?: number | string) {
     return typeof id === "undefined" ? endpoint : endpoint + id + "/";
 }
 
+export interface GetAllResponse<T> {
+    count: number;
+    previous: string | null;
+    next: string | null;
+    results: T[];
+}
+
 class ApiClient<T> {
     endpoint: string;
 
@@ -40,7 +47,7 @@ class ApiClient<T> {
 
     getAll = (requestConfig?: AxiosRequestConfig) => {
         return axiosInstance
-            .get<T[]>(this.endpoint, requestConfig)
+            .get<GetAllResponse<T>>(this.endpoint, requestConfig)
             .then((res) => res.data);
     };
 
@@ -63,6 +70,13 @@ class ApiClient<T> {
         const url = appendId(this.endpoint, id);
         return axiosInstance
             .patch<T>(url, data, requestConfig)
+            .then((res) => res.data);
+    };
+
+    delete = (id?: number | string, requestConfig?: AxiosRequestConfig) => {
+        const url = appendId(this.endpoint, id);
+        return axiosInstance
+            .delete<T>(url, requestConfig)
             .then((res) => res.data);
     };
 }
