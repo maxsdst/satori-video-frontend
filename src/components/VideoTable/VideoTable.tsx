@@ -9,6 +9,7 @@ import {
     VStack,
 } from "@chakra-ui/react";
 import {
+    SortingState,
     createColumnHelper,
     flexRender,
     getCoreRowModel,
@@ -29,6 +30,7 @@ import useVideos, { VideoQuery } from "../../hooks/useVideos";
 import { MAIN_CONTENT_AREA_PADDING } from "../../styleConstants";
 import LimitOffsetPagination from "../LimitOffsetPagination";
 import Cell from "./Cell";
+import Header from "./Header";
 import VideoCell from "./VideoCell";
 import "./VideoTable.css";
 import { NUMERIC_COLUMNS } from "./constants";
@@ -69,21 +71,37 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
 
     useImperativeHandle(ref, () => ({ refetchVideos }));
 
+    const [sorting, setSorting] = useState<SortingState>([]);
+
+    useEffect(() => {
+        if (sorting.length > 0)
+            setVideoQuery({
+                ...videoQuery,
+                ordering: (sorting[0].desc ? "-" : "") + sorting[0].id,
+            });
+        else setVideoQuery({ ...videoQuery, ordering: undefined });
+    }, [sorting]);
+
     const columnHelper = createColumnHelper<Video>();
 
     const table = useReactTable<Video>({
         data: videos?.results || [],
+        state: { sorting },
         getCoreRowModel: getCoreRowModel(),
+        onSortingChange: setSorting,
+        enableSortingRemoval: false,
+        manualSorting: true,
         columns: [
             {
                 accessorKey: "title",
-                header: "Video",
+                header: (header) => <Header header={header}>Video</Header>,
                 cell: ({ row: { original: video } }) => (
                     <VideoCell
                         video={video}
                         onVideoMutated={() => refetchVideos()}
                     />
                 ),
+                enableSorting: true,
             },
             columnHelper.display({
                 id: "upload_date",
@@ -133,7 +151,7 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
                                         isNumeric={NUMERIC_COLUMNS.includes(
                                             header.column.id
                                         )}
-                                        paddingY={2}
+                                        paddingY={1}
                                     >
                                         {header.isPlaceholder
                                             ? null

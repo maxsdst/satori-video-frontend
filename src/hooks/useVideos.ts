@@ -6,6 +6,7 @@ export interface VideoQuery {
     profileId?: number;
     limit?: number;
     offset?: number;
+    ordering?: string;
 }
 
 interface UseVideosOptions {
@@ -29,6 +30,7 @@ function useVideos(
                     profile: query.profileId,
                     limit: query.limit,
                     offset: query.offset,
+                    ordering: query.ordering,
                 },
             }),
         enabled,
