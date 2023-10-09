@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import Video from "../entities/Video";
-import ApiClient, { GetAllResponse } from "../services/ApiClient";
+import { GetAllResponse } from "../services/ApiClient";
+import videoService from "../services/videoService";
 
 export interface VideoQuery {
     profileId?: number;
@@ -15,8 +16,6 @@ interface UseVideosOptions {
     keepPreviousData?: boolean;
 }
 
-const apiClient = new ApiClient<Video>("/videos/videos/");
-
 function useVideos(
     query: VideoQuery,
     { staleTime, enabled, keepPreviousData }: UseVideosOptions
@@ -25,7 +24,7 @@ function useVideos(
         queryKey: ["videos", query],
         staleTime,
         queryFn: () =>
-            apiClient.getAll({
+            videoService.getAll({
                 params: {
                     profile: query.profileId,
                     limit: query.limit,
