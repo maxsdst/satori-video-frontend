@@ -28,6 +28,7 @@ import Video from "../../entities/Video";
 import useOwnProfile from "../../hooks/useOwnProfile";
 import useVideos, { VideoQuery } from "../../hooks/useVideos";
 import { MAIN_CONTENT_AREA_PADDING } from "../../styleConstants";
+import { convertDateToString } from "../../utils";
 import LimitOffsetPagination from "../LimitOffsetPagination";
 import Cell from "./Cell";
 import Header from "./Header";
@@ -71,7 +72,9 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
 
     useImperativeHandle(ref, () => ({ refetchVideos }));
 
-    const [sorting, setSorting] = useState<SortingState>([]);
+    const [sorting, setSorting] = useState<SortingState>([
+        { id: "upload_date", desc: true },
+    ]);
 
     useEffect(() => {
         if (sorting.length > 0)
@@ -103,11 +106,15 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
                 ),
                 enableSorting: true,
             },
-            columnHelper.display({
-                id: "upload_date",
-                header: "Upload date",
-                cell: "Aug 23, 2023",
-            }),
+            {
+                accessorKey: "upload_date",
+                header: (header) => (
+                    <Header header={header}>Upload date</Header>
+                ),
+                cell: ({ row: { original: video } }) =>
+                    convertDateToString(video.upload_date),
+                enableSorting: true,
+            },
             columnHelper.display({
                 id: "view_count",
                 header: "Views",
