@@ -5,6 +5,7 @@ import {
     applyAuthTokenInterceptor,
     getBrowserLocalStorage,
 } from "axios-jwt";
+import BaseQuery, { Filter, Ordering, Pagination } from "./BaseQuery";
 
 const BASE_URL = "http://localhost:8000/api";
 
@@ -30,6 +31,30 @@ function appendId(endpoint: string, id?: number | string) {
     return typeof id === "undefined" ? endpoint : endpoint + id + "/";
 }
 
+function applyFilters(filters: Filter[], requestConfig: AxiosRequestConfig) {
+    const params: Record<string, string> = {};
+    for (const filter of filters)
+        params[filter.field + "__" + filter.lookupType] =
+            filter.value.toString();
+
+    requestConfig.params = { ...requestConfig.params, ...params };
+}
+
+function applyOrdering(
+    { field, direction }: Ordering,
+    requestConfig: AxiosRequestConfig
+) {
+    const ordering = (direction === "DESC" ? "-" : "") + field;
+    requestConfig.params = { ...requestConfig.params, ordering };
+}
+
+function applyPagination(
+    { limit, offset }: Pagination,
+    requestConfig: AxiosRequestConfig
+) {
+    requestConfig.params = { ...requestConfig.params, limit, offset };
+}
+
 export interface GetAllResponse<T> {
     count: number;
     previous: string | null;
@@ -45,7 +70,16 @@ class ApiClient<T> {
         this.endpoint = endpoint;
     }
 
-    getAll = (requestConfig?: AxiosRequestConfig) => {
+    getAll = (requestConfig?: AxiosRequestConfig, query?: BaseQuery) => {
+        if (!requestConfig) requestConfig = {} as AxiosRequestConfig;
+
+        if (query) {
+            const { filters, ordering, pagination } = query;
+            if (filters) applyFilters(filters, requestConfig);
+            if (ordering) applyOrdering(ordering, requestConfig);
+            if (pagination) applyPagination(pagination, requestConfig);
+        }
+
         return axiosInstance
             .get<GetAllResponse<T>>(this.endpoint, requestConfig)
             .then((res) => res.data);

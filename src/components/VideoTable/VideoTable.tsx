@@ -31,6 +31,7 @@ import { MAIN_CONTENT_AREA_PADDING } from "../../styleConstants";
 import { convertDateToString } from "../../utils";
 import LimitOffsetPagination from "../LimitOffsetPagination";
 import Cell from "./Cell";
+import Filtering from "./Filtering";
 import Header from "./Header";
 import VideoCell from "./VideoCell";
 import "./VideoTable.css";
@@ -44,8 +45,7 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
     const defaultPageSize = 10;
 
     const [videoQuery, setVideoQuery] = useState<VideoQuery>({
-        limit: defaultPageSize,
-        offset: 0,
+        pagination: { limit: defaultPageSize, offset: 0 },
     });
 
     const {
@@ -80,7 +80,10 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
         if (sorting.length > 0)
             setVideoQuery({
                 ...videoQuery,
-                ordering: (sorting[0].desc ? "-" : "") + sorting[0].id,
+                ordering: {
+                    field: sorting[0].id,
+                    direction: sorting[0].desc ? "DESC" : "ASC",
+                },
             });
         else setVideoQuery({ ...videoQuery, ordering: undefined });
     }, [sorting]);
@@ -147,6 +150,11 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
             maxWidth={`calc(100vw - ${MAIN_CONTENT_AREA_PADDING} * 2)`}
             spacing={4}
         >
+            <Filtering
+                onChange={(appliedFilters) =>
+                    setVideoQuery({ ...videoQuery, filters: appliedFilters })
+                }
+            />
             <TableContainer width="100%" overflowX="auto">
                 <Table variant="simple" size="sm">
                     <Thead>
@@ -197,8 +205,7 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
                 onChange={(limit, offset) =>
                     setVideoQuery({
                         ...videoQuery,
-                        limit,
-                        offset,
+                        pagination: { limit, offset },
                     })
                 }
             />

@@ -1,13 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import Video from "../entities/Video";
 import { GetAllResponse } from "../services/ApiClient";
+import BaseQuery from "../services/BaseQuery";
 import videoService from "../services/videoService";
 
-export interface VideoQuery {
+export interface VideoQuery extends BaseQuery {
     profileId?: number;
-    limit?: number;
-    offset?: number;
-    ordering?: string;
 }
 
 interface UseVideosOptions {
@@ -24,14 +22,14 @@ function useVideos(
         queryKey: ["videos", query],
         staleTime,
         queryFn: () =>
-            videoService.getAll({
-                params: {
-                    profile: query.profileId,
-                    limit: query.limit,
-                    offset: query.offset,
-                    ordering: query.ordering,
+            videoService.getAll(
+                {
+                    params: {
+                        profile: query.profileId,
+                    },
                 },
-            }),
+                query
+            ),
         enabled,
         keepPreviousData,
     });

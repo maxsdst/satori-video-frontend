@@ -9,17 +9,29 @@ import { HTMLInputTypeAttribute } from "react";
 
 interface Props {
     type: HTMLInputTypeAttribute;
-    label: string;
+    label?: string;
     inputProps?: InputProps;
     isInvalid?: boolean;
     errorMessage?: string;
+    placeholder?: string;
 }
 
-function Input({ type, label, inputProps, isInvalid, errorMessage }: Props) {
+function Input({
+    type,
+    label,
+    inputProps,
+    isInvalid,
+    errorMessage,
+    placeholder,
+}: Props) {
     return (
         <FormControl isInvalid={isInvalid}>
-            <FormLabel>{label}</FormLabel>
-            <ChakraInput type={type} {...inputProps} />
+            {label && <FormLabel>{label}</FormLabel>}
+            <ChakraInput
+                type={type}
+                placeholder={placeholder}
+                {...inputProps}
+            />
             {errorMessage && (
                 <FormErrorMessage>{errorMessage}</FormErrorMessage>
             )}
