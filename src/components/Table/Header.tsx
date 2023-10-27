@@ -1,14 +1,13 @@
 import { HStack, Icon, Text } from "@chakra-ui/react";
 import { HeaderContext } from "@tanstack/table-core";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
-import Video from "../../entities/Video";
 
-interface Props {
-    header: HeaderContext<Video, any>;
+interface Props<T> {
+    header: HeaderContext<T, any>;
     children: string;
 }
 
-function Header({ header, children }: Props) {
+function Header<T>({ header, children }: Props<T>) {
     const sortIcons = {
         asc: FaSortUp,
         desc: FaSortDown,

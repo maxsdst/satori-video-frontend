@@ -23,37 +23,15 @@ import { Filter } from "../../../services/BaseQuery";
 import IconButton from "../../IconButton";
 import CharFilterModal from "./CharFilterModal";
 import NumberFilterModal from "./NumberFilterModal";
-import filteringReducer, { Option } from "./filteringReducer";
+import filteringReducer, { FilteringOption } from "./filteringReducer";
 
 interface Props {
+    options: FilteringOption[];
+    mainField: string;
     onChange: (appliedFilters: Filter[]) => void;
 }
 
-function Filtering({ onChange }: Props) {
-    const fieldDisplayNames: Record<string, string> = {
-        title: "Title",
-        description: "Description",
-        views: "Views",
-    };
-
-    const options: Option[] = [
-        {
-            field: "title",
-            name: fieldDisplayNames["title"],
-            type: "char",
-        },
-        {
-            field: "description",
-            name: fieldDisplayNames["description"],
-            type: "char",
-        },
-        {
-            field: "views",
-            name: fieldDisplayNames["views"],
-            type: "number",
-        },
-    ];
-
+function Filtering({ options, mainField, onChange }: Props) {
     const [{ availableOptions, appliedFilters }, dispatch] = useReducer(
         filteringReducer,
         {
@@ -65,12 +43,11 @@ function Filtering({ onChange }: Props) {
 
     const [input, setInput] = useState("");
 
-    const [selectedOption, setSelectedOption] = useState<Option | null>();
+    const [selectedOption, setSelectedOption] =
+        useState<FilteringOption | null>();
 
     const filteredOptions = availableOptions.filter(
-        (option) =>
-            !input ||
-            fieldDisplayNames[option.field].toLowerCase().startsWith(input)
+        (option) => !input || option.name.toLowerCase().startsWith(input)
     );
 
     const {
@@ -111,8 +88,12 @@ function Filtering({ onChange }: Props) {
         gte: ">=",
     };
 
-    const isTitleOptionAvailable = !!availableOptions.find(
-        (option) => option.field === "title"
+    const mainOption = options.find((option) => option.field === mainField);
+    if (mainOption?.type !== "char")
+        throw "Main filtering field must be a text field";
+
+    const isMainOptionAvailable = !!availableOptions.find(
+        (option) => option.field === mainField
     );
 
     return (
@@ -143,41 +124,47 @@ function Filtering({ onChange }: Props) {
                         </InputGroup>
                     </PopoverAnchor>
                     <HStack flexWrap="wrap">
-                        {appliedFilters.map((filter) => (
-                            <Box
-                                backgroundColor="gray.700"
-                                paddingLeft={4}
-                                paddingRight={1}
-                                paddingY={1}
-                                borderRadius="28px"
-                            >
-                                <HStack spacing={1}>
-                                    <Text
-                                        fontSize="sm"
-                                        maxWidth="200px"
-                                        noOfLines={1}
-                                        wordBreak="break-all"
-                                    >
-                                        {fieldDisplayNames[filter.field]}{" "}
-                                        {lookupTypeNames[filter.lookupType]}{" "}
-                                        {filter.type === "char"
-                                            ? `"${filter.value}"`
-                                            : filter.value}
-                                    </Text>
-                                    <IconButton
-                                        icon={AiOutlineCloseCircle}
-                                        label="Remove"
-                                        size="sm"
-                                        onClick={() =>
-                                            dispatch({
-                                                type: "REMOVE_FILTER",
-                                                filter,
-                                            })
-                                        }
-                                    />
-                                </HStack>
-                            </Box>
-                        ))}
+                        {appliedFilters.map((filter) => {
+                            const optionName = options.find(
+                                (option) => option.field === filter.field
+                            )?.name;
+
+                            return (
+                                <Box
+                                    backgroundColor="gray.700"
+                                    paddingLeft={4}
+                                    paddingRight={1}
+                                    paddingY={1}
+                                    borderRadius="28px"
+                                >
+                                    <HStack spacing={1}>
+                                        <Text
+                                            fontSize="sm"
+                                            maxWidth="200px"
+                                            noOfLines={1}
+                                            wordBreak="break-all"
+                                        >
+                                            {optionName}{" "}
+                                            {lookupTypeNames[filter.lookupType]}{" "}
+                                            {filter.type === "char"
+                                                ? `"${filter.value}"`
+                                                : filter.value}
+                                        </Text>
+                                        <IconButton
+                                            icon={AiOutlineCloseCircle}
+                                            label="Remove"
+                                            size="sm"
+                                            onClick={() =>
+                                                dispatch({
+                                                    type: "REMOVE_FILTER",
+                                                    filter,
+                                                })
+                                            }
+                                        />
+                                    </HStack>
+                                </Box>
+                            );
+                        })}
                     </HStack>
                 </VStack>
                 <PopoverContent
@@ -188,7 +175,7 @@ function Filtering({ onChange }: Props) {
                 >
                     <PopoverBody paddingX={0} paddingY={2}>
                         <List>
-                            {input && isTitleOptionAvailable && (
+                            {input && isMainOptionAvailable && (
                                 <ListItem>
                                     <Button
                                         variant="ghost"
@@ -201,7 +188,7 @@ function Filtering({ onChange }: Props) {
                                             dispatch({
                                                 type: "ADD_FILTER",
                                                 filter: {
-                                                    field: "title",
+                                                    field: mainOption.field,
                                                     type: "char",
                                                     lookupType: "icontains",
                                                     value: input,
@@ -213,7 +200,7 @@ function Filtering({ onChange }: Props) {
                                             closeAutocomplete();
                                         }}
                                     >
-                                        Title contains "{input}"
+                                        {mainOption.name} contains "{input}"
                                     </Button>
                                 </ListItem>
                             )}
@@ -230,12 +217,12 @@ function Filtering({ onChange }: Props) {
                                             openFilterModal();
                                         }}
                                     >
-                                        {fieldDisplayNames[option.field]}
+                                        {option.name}
                                     </Button>
                                 </ListItem>
                             ))}
                         </List>
-                        {!isTitleOptionAvailable &&
+                        {!isMainOptionAvailable &&
                             filteredOptions.length === 0 && (
                                 <Text
                                     paddingX={4}

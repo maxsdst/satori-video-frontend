@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Input from "../../../forms/Input";
 import { Filter } from "../../../services/BaseQuery";
-import { Option } from "./filteringReducer";
+import { FilteringOption } from "./filteringReducer";
 
 const schema = z.object({
     lookupType: z.union([z.literal("lte"), z.literal("gte")]),
@@ -25,7 +25,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 interface Props {
-    option: Option;
+    option: FilteringOption;
     isOpen: boolean;
     onClose: () => void;
     onApplyFilter: (filter: Filter) => void;

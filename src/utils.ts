@@ -32,3 +32,7 @@ export function convertDateToString(date: Date) {
         months[date.getMonth()]
     } ${date.getDate()}, ${date.getFullYear()}`;
 }
+
+export function insertIf<T>(condition: boolean, element: T): T[] {
+    return condition ? [element] : [];
+}

@@ -1,14 +1,14 @@
 import { Filter } from "../../../services/BaseQuery";
 
-export interface Option {
+export interface FilteringOption {
     field: string;
     name: string;
     type: "char" | "number";
 }
 
 interface FilteringState {
-    options: Option[];
-    availableOptions: Option[];
+    options: FilteringOption[];
+    availableOptions: FilteringOption[];
     appliedFilters: Filter[];
 }
 
