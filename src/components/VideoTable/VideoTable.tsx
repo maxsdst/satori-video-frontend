@@ -10,6 +10,7 @@ import {
 import Video from "../../entities/Video";
 import useOwnProfile from "../../hooks/useOwnProfile";
 import useVideos, { VideoQuery } from "../../hooks/useVideos";
+import { Ordering } from "../../services/BaseQuery";
 import { convertDateToString } from "../../utils";
 import Table, { ColumnDef, FilteringOption } from "../Table";
 import VideoCell from "./VideoCell";
@@ -22,7 +23,13 @@ export interface VideoTableHandle {
 const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
     const defaultPageSize = 10;
 
+    const defaultOrdering: Ordering = {
+        field: "upload_date",
+        direction: "DESC",
+    };
+
     const [videoQuery, setVideoQuery] = useState<VideoQuery>({
+        ordering: defaultOrdering,
         pagination: { limit: defaultPageSize, offset: 0 },
     });
 
@@ -100,7 +107,7 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
             onFilteringChange={(filters) =>
                 setVideoQuery({ ...videoQuery, filters })
             }
-            defaultOrdering={{ field: "upload_date", direction: "DESC" }}
+            defaultOrdering={defaultOrdering}
             onOrderingChange={(ordering) =>
                 setVideoQuery({ ...videoQuery, ordering })
             }
