@@ -18,10 +18,16 @@ import UploadForm from "./UploadForm";
 interface Props {
     isOpen: boolean;
     onClose: () => void;
+    onUploadCreated: () => void;
     onVideoMutated: () => void;
 }
 
-function UploadModal({ isOpen, onClose, onVideoMutated }: Props) {
+function UploadModal({
+    isOpen,
+    onClose,
+    onUploadCreated,
+    onVideoMutated,
+}: Props) {
     const [step, setStep] = useState<
         "select_file" | "uploading" | "processing" | "edit"
     >("select_file");
@@ -62,6 +68,7 @@ function UploadModal({ isOpen, onClose, onVideoMutated }: Props) {
                                 onSubmit={() => setStep("uploading")}
                                 onUploadProgress={setPercentCompleted}
                                 onUploadCreated={(upload) => {
+                                    onUploadCreated();
                                     setUpload(upload);
                                     setStep("processing");
                                 }}

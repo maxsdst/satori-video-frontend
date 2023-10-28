@@ -14,7 +14,13 @@ interface NumberFilter extends BaseFilter {
     value: number;
 }
 
-export type Filter = CharFilter | NumberFilter;
+interface BooleanFilter extends BaseFilter {
+    type: "boolean";
+    lookupType: "exact";
+    value: boolean;
+}
+
+export type Filter = CharFilter | NumberFilter | BooleanFilter;
 
 export interface Ordering {
     field: string;

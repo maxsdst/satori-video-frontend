@@ -3,7 +3,7 @@ import { Filter } from "../../../services/BaseQuery";
 export interface FilteringOption {
     field: string;
     name: string;
-    type: "char" | "number";
+    type: "char" | "number" | "boolean";
 }
 
 interface FilteringState {

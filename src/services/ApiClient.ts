@@ -33,9 +33,14 @@ function appendId(endpoint: string, id?: number | string) {
 
 function applyFilters(filters: Filter[], requestConfig: AxiosRequestConfig) {
     const params: Record<string, string> = {};
-    for (const filter of filters)
-        params[filter.field + "__" + filter.lookupType] =
-            filter.value.toString();
+
+    for (const filter of filters) {
+        const name =
+            filter.lookupType === "exact"
+                ? filter.field
+                : filter.field + "__" + filter.lookupType;
+        params[name] = filter.value.toString();
+    }
 
     requestConfig.params = { ...requestConfig.params, ...params };
 }

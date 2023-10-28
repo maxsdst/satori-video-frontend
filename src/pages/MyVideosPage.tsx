@@ -10,6 +10,7 @@ import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import MainContentArea from "../components/MainContentArea";
 import UploadModal from "../components/UploadModal";
+import UploadTable, { UploadTableHandle } from "../components/UploadTable";
 import VideoTable, { VideoTableHandle } from "../components/VideoTable";
 
 interface Props {
@@ -44,11 +45,13 @@ function MyVideosPage({ tabName }: Props) {
     }
 
     const videoTable = useRef<VideoTableHandle>(null);
+    const uploadTable = useRef<UploadTableHandle>(null);
 
     return (
         <>
             <MainContentArea isContentCentered={false}>
                 <Tabs
+                    isLazy
                     width="100%"
                     index={tabs.findIndex((tab) => tab.name === tabName)}
                     onChange={(index) => navigate(tabs[index].path)}
@@ -65,8 +68,8 @@ function MyVideosPage({ tabName }: Props) {
                         <TabPanel padding={0}>
                             <VideoTable ref={videoTable} />
                         </TabPanel>
-                        <TabPanel>
-                            <p>uploads</p>
+                        <TabPanel padding={0}>
+                            <UploadTable ref={uploadTable} />
                         </TabPanel>
                     </TabPanels>
                 </Tabs>
@@ -74,7 +77,11 @@ function MyVideosPage({ tabName }: Props) {
             <UploadModal
                 isOpen={isUploadModalOpen}
                 onClose={handleUploadModalClose}
-                onVideoMutated={() => videoTable.current?.refetchVideos()}
+                onUploadCreated={() => uploadTable.current?.refetchUploads()}
+                onVideoMutated={() => {
+                    videoTable.current?.refetchVideos();
+                    uploadTable.current?.refetchUploads();
+                }}
             />
         </>
     );

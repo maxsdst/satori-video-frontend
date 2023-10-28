@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import Upload from "../entities/Upload";
-import ApiClient from "../services/ApiClient";
+import uploadService from "../services/uploadService";
 
 interface UploadData {
     file: File;
@@ -16,15 +16,13 @@ interface UseCreateUploadOptions {
     onUploadProgress?: (percentCompleted: number) => void;
 }
 
-const apiClient = new ApiClient<Upload>("/videos/uploads/");
-
 function useCreateUpload({
     onError,
     onUploadProgress,
 }: UseCreateUploadOptions) {
     return useMutation<Upload, AxiosError<ErrorData>, UploadData>({
         mutationFn: (data) =>
-            apiClient.post(data, {
+            uploadService.post(data, {
                 headers: { "Content-Type": "multipart/form-data" },
                 onUploadProgress: (e) =>
                     e.total &&

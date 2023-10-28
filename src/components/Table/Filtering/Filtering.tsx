@@ -21,6 +21,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { MdFilterList } from "react-icons/md";
 import { Filter } from "../../../services/BaseQuery";
 import IconButton from "../../IconButton";
+import BooleanFilterModal from "./BooleanFilterModal";
 import CharFilterModal from "./CharFilterModal";
 import NumberFilterModal from "./NumberFilterModal";
 import filteringReducer, { FilteringOption } from "./filteringReducer";
@@ -83,9 +84,10 @@ function Filtering({ options, mainField, onChange }: Props) {
     }, [appliedFilters]);
 
     const lookupTypeNames = {
-        icontains: "contains",
-        lte: "<=",
-        gte: ">=",
+        icontains: " contains ",
+        lte: " <= ",
+        gte: " >= ",
+        exact: ": ",
     };
 
     const mainOption = options.find((option) => option.field === mainField);
@@ -131,6 +133,7 @@ function Filtering({ options, mainField, onChange }: Props) {
 
                             return (
                                 <Box
+                                    key={filter.field}
                                     backgroundColor="gray.700"
                                     paddingLeft={4}
                                     paddingRight={1}
@@ -144,11 +147,14 @@ function Filtering({ options, mainField, onChange }: Props) {
                                             noOfLines={1}
                                             wordBreak="break-all"
                                         >
-                                            {optionName}{" "}
-                                            {lookupTypeNames[filter.lookupType]}{" "}
-                                            {filter.type === "char"
-                                                ? `"${filter.value}"`
-                                                : filter.value}
+                                            {optionName}
+                                            {lookupTypeNames[filter.lookupType]}
+                                            {filter.type === "char" &&
+                                                `"${filter.value}"`}
+                                            {filter.type === "number" &&
+                                                filter.value}
+                                            {filter.type === "boolean" &&
+                                                (filter.value ? "Yes" : "No")}
                                         </Text>
                                         <IconButton
                                             icon={AiOutlineCloseCircle}
@@ -247,6 +253,16 @@ function Filtering({ options, mainField, onChange }: Props) {
             )}
             {isFilterModalOpen && selectedOption?.type === "number" && (
                 <NumberFilterModal
+                    option={selectedOption}
+                    isOpen={isFilterModalOpen}
+                    onClose={closeFilterModal}
+                    onApplyFilter={(filter) =>
+                        dispatch({ type: "ADD_FILTER", filter })
+                    }
+                />
+            )}
+            {isFilterModalOpen && selectedOption?.type === "boolean" && (
+                <BooleanFilterModal
                     option={selectedOption}
                     isOpen={isFilterModalOpen}
                     onClose={closeFilterModal}
