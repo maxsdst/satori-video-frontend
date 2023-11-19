@@ -1,6 +1,8 @@
 import { Box } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { VIEW_DURATION_THRESHOLD_SECONDS } from "../../constants";
 import Video from "../../entities/Video";
+import useCreateView from "../../hooks/useCreateView";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 import { MAIN_CONTENT_AREA_PADDING, TOPNAV_HEIGHT } from "../../styleConstants";
 import { isInPortraitMode, isTouchDevice } from "../../utils";
@@ -17,10 +19,34 @@ function VideoSequence({ videos }: Props) {
 
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 
-    const handleSlideChange = (slideIndex: number) =>
+    function handleSlideChange(slideIndex: number) {
         setCurrentVideoIndex(slideIndex);
+    }
 
     const slider = useRef<VerticalSliderHandle>(null);
+
+    const currentVideo = videos[currentVideoIndex];
+
+    const createView = useCreateView({});
+    const [isViewCreated, setIsViewCreated] = useState(false);
+
+    useEffect(() => {
+        setIsViewCreated(false);
+    }, [currentVideoIndex]);
+
+    function handlePlayerProgress(
+        secondsPlayed: number,
+        percentPlayed: number
+    ) {
+        if (isViewCreated) return;
+        if (
+            secondsPlayed > VIEW_DURATION_THRESHOLD_SECONDS ||
+            percentPlayed > 50
+        ) {
+            createView.mutate({ videoId: currentVideo.id });
+            setIsViewCreated(true);
+        }
+    }
 
     if (isInPortraitMode(width, height))
         return (
@@ -51,6 +77,7 @@ function VideoSequence({ videos }: Props) {
                             width={`${width}px`}
                             height={`${height}px`}
                             roundCorners={false}
+                            onProgress={handlePlayerProgress}
                         />
                     ))}
                 </VerticalSlider>
@@ -81,6 +108,7 @@ function VideoSequence({ videos }: Props) {
                             minWidth="315px"
                             minHeight="560px"
                             roundCorners={true}
+                            onProgress={handlePlayerProgress}
                         />
                     ))}
                 </VerticalSlider>

@@ -9,4 +9,5 @@ export default interface Video {
     source: string;
     thumbnail: string;
     first_frame: string;
+    view_count: number;
 }

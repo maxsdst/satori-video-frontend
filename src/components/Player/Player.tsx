@@ -6,7 +6,7 @@ import {
     useBoolean,
 } from "@chakra-ui/react";
 import classNames from "classnames";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import ReactPlayer from "react-player/file";
 import Video from "../../entities/Video";
@@ -26,6 +26,7 @@ interface Props {
     minWidth?: string;
     minHeight?: string;
     roundCorners: boolean;
+    onProgress?: (secondsPlayed: number, percentPlayed: number) => void;
 }
 
 function Player({
@@ -38,6 +39,7 @@ function Player({
     minWidth,
     minHeight,
     roundCorners,
+    onProgress,
 }: Props) {
     const player = useRef<ReactPlayer>(null);
 
@@ -57,6 +59,8 @@ function Player({
     useEffect(() => {
         if (isPlaying) player.current?.setState({ showPreview: false });
     }, [isPlaying]);
+
+    const [duration, setDuration] = useState<number>();
 
     return (
         <Box
@@ -112,6 +116,13 @@ function Player({
                 light={video.first_frame}
                 playIcon={<></>}
                 ref={player}
+                onDuration={(duration) => setDuration(duration)}
+                progressInterval={
+                    duration && duration < 10 ? (duration / 10) * 1000 : 1000
+                }
+                onProgress={({ playedSeconds, played }) =>
+                    onProgress?.(playedSeconds, played * 100)
+                }
             />
         </Box>
     );
