@@ -11,6 +11,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { PiPlay } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import Video from "../../entities/Video";
+import { formatNumber } from "../../utils";
 
 interface Props {
     video: Video;
@@ -37,9 +38,11 @@ function Item({ video, showUser, showLikes }: Props) {
                             justifyContent="space-between"
                             padding={3}
                         >
-                            <HStack spacing={0.5}>
-                                <Icon as={PiPlay} boxSize={5} />
-                                <Text fontSize="md">12.3M</Text>
+                            <HStack spacing={1}>
+                                <Icon as={PiPlay} boxSize={4} />
+                                <Text fontSize="md">
+                                    {formatNumber(video.view_count)}
+                                </Text>
                             </HStack>
                         </HStack>
                     </VStack>
@@ -72,8 +75,8 @@ function Item({ video, showUser, showLikes }: Props) {
                         </Link>
                     )}
                     {showLikes && (
-                        <HStack spacing={0.5}>
-                            <Icon as={AiOutlineHeart} boxSize={5} />
+                        <HStack spacing={1}>
+                            <Icon as={AiOutlineHeart} boxSize={4} />
                             <Text fontSize="md">12.3K</Text>
                         </HStack>
                     )}
