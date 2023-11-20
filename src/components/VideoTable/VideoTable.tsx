@@ -1,5 +1,6 @@
 import { Spinner } from "@chakra-ui/react";
 import ms from "ms";
+import numbro from "numbro";
 import {
     Ref,
     forwardRef,
@@ -79,6 +80,13 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
             cell: (video) => convertDateToString(video.upload_date),
             enableOrdering: true,
         },
+        {
+            field: "view_count",
+            header: "Views",
+            cell: (video) =>
+                numbro(video.view_count).format({ thousandSeparated: true }),
+            enableOrdering: true,
+        },
     ];
 
     const filteringOptions: FilteringOption[] = [
@@ -93,7 +101,7 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
             type: "char",
         },
         {
-            field: "views",
+            field: "view_count",
             name: "Views",
             type: "number",
         },

@@ -1,3 +1,4 @@
+import numbro from "numbro";
 import { PORTRAIT_MODE_ASPECT_RATIO } from "./styleConstants";
 
 export function isInPortraitMode(width: number, height: number) {
@@ -35,4 +36,17 @@ export function convertDateToString(date: Date) {
 
 export function insertIf<T>(condition: boolean, element: T): T[] {
     return condition ? [element] : [];
+}
+
+export function formatNumber(number: number): string {
+    if (number < 1_000) return number.toString();
+
+    let format = null;
+
+    if (number < 10_000)
+        format = { average: true, mantissa: 1, trimMantissa: true };
+    else if (number < 1_000_000) format = { average: true };
+    else format = { average: true, mantissa: 1, trimMantissa: true };
+
+    return numbro(number).format(format).toUpperCase();
 }

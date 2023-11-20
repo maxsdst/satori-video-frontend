@@ -18,6 +18,7 @@ import {
 import { useRef } from "react";
 import Video from "../../entities/Video";
 import useDeleteVideo from "../../hooks/useDeleteVideo";
+import { formatNumber } from "../../utils";
 
 interface Props {
     video: Video;
@@ -79,7 +80,9 @@ function DeleteVideoDialog({ video, isOpen, onClose, onVideoDeleted }: Props) {
                                     <Text color="gray.400">
                                         Uploaded Aug 23, 2023
                                     </Text>
-                                    <Text color="gray.400">0 views</Text>
+                                    <Text color="gray.400">
+                                        {formatNumber(video.view_count)} views
+                                    </Text>
                                 </VStack>
                             </HStack>
                         </VStack>
