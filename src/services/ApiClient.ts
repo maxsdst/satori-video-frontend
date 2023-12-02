@@ -60,6 +60,13 @@ function applyPagination(
     requestConfig.params = { ...requestConfig.params, limit, offset };
 }
 
+function parseDates(object: any, dateFields: string[]) {
+    if (typeof object !== "object" || object === null) return;
+    for (const field of dateFields)
+        if (object.hasOwnProperty(field))
+            object[field] = new Date(object[field]);
+}
+
 export interface GetAllResponse<T> {
     count: number;
     previous: string | null;
@@ -69,10 +76,12 @@ export interface GetAllResponse<T> {
 
 class ApiClient<T> {
     endpoint: string;
+    dateFields?: string[];
 
-    constructor(endpoint: string) {
+    constructor(endpoint: string, dateFields?: string[]) {
         if (!endpoint.endsWith("/")) endpoint += "/";
         this.endpoint = endpoint;
+        this.dateFields = dateFields;
     }
 
     getAll = (requestConfig?: AxiosRequestConfig, query?: BaseQuery) => {
@@ -87,18 +96,30 @@ class ApiClient<T> {
 
         return axiosInstance
             .get<GetAllResponse<T>>(this.endpoint, requestConfig)
-            .then((res) => res.data);
+            .then((res) => {
+                if (this.dateFields)
+                    for (const object of res.data.results)
+                        parseDates(object, this.dateFields);
+
+                return res.data;
+            });
     };
 
     get = (id?: number | string, requestConfig?: AxiosRequestConfig) => {
         const url = appendId(this.endpoint, id);
-        return axiosInstance.get<T>(url, requestConfig).then((res) => res.data);
+        return axiosInstance.get<T>(url, requestConfig).then((res) => {
+            if (this.dateFields) parseDates(res.data, this.dateFields);
+            return res.data;
+        });
     };
 
     post = (data: any, requestConfig?: AxiosRequestConfig) => {
         return axiosInstance
             .post<T>(this.endpoint, data, requestConfig)
-            .then((res) => res.data);
+            .then((res) => {
+                if (this.dateFields) parseDates(res.data, this.dateFields);
+                return res.data;
+            });
     };
 
     patch = (
@@ -107,16 +128,18 @@ class ApiClient<T> {
         requestConfig?: AxiosRequestConfig
     ) => {
         const url = appendId(this.endpoint, id);
-        return axiosInstance
-            .patch<T>(url, data, requestConfig)
-            .then((res) => res.data);
+        return axiosInstance.patch<T>(url, data, requestConfig).then((res) => {
+            if (this.dateFields) parseDates(res.data, this.dateFields);
+            return res.data;
+        });
     };
 
     delete = (id?: number | string, requestConfig?: AxiosRequestConfig) => {
         const url = appendId(this.endpoint, id);
-        return axiosInstance
-            .delete<T>(url, requestConfig)
-            .then((res) => res.data);
+        return axiosInstance.delete<T>(url, requestConfig).then((res) => {
+            if (this.dateFields) parseDates(res.data, this.dateFields);
+            return res.data;
+        });
     };
 }
 

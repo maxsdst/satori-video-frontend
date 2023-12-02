@@ -11,3 +11,5 @@ export default interface Video {
     first_frame: string;
     view_count: number;
 }
+
+export const DATE_FIELDS = ["upload_date"];

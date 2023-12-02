@@ -8,3 +8,5 @@ export default interface Upload {
     video: Video | null;
     is_done: boolean;
 }
+
+export const DATE_FIELDS = ["creation_date"];
