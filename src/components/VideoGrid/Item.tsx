@@ -77,7 +77,9 @@ function Item({ video, showUser, showLikes }: Props) {
                     {showLikes && (
                         <HStack spacing={1}>
                             <Icon as={AiOutlineHeart} boxSize={4} />
-                            <Text fontSize="md">12.3K</Text>
+                            <Text fontSize="md">
+                                {formatNumber(video.like_count)}
+                            </Text>
                         </HStack>
                     )}
                 </HStack>
