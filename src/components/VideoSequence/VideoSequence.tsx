@@ -70,7 +70,7 @@ function VideoSequence({ videos }: Props) {
                     {videos.map((video, index) => (
                         <Player
                             key={video.id}
-                            video={video}
+                            videoId={video.id}
                             showInteractionButtons={true}
                             showVideoInfo={true}
                             isPlaying={currentVideoIndex === index}
@@ -99,7 +99,7 @@ function VideoSequence({ videos }: Props) {
                     {videos.map((video, index) => (
                         <Player
                             key={video.id}
-                            video={video}
+                            videoId={video.id}
                             showInteractionButtons={true}
                             showVideoInfo={true}
                             isPlaying={currentVideoIndex === index}

@@ -9,7 +9,7 @@ import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import ReactPlayer from "react-player/file";
-import Video from "../../entities/Video";
+import useVideo from "../../hooks/useVideo";
 import { PLAYER_DROP_SHADOW } from "../../styleConstants";
 import PlayerControls from "./Controls";
 import InteractionButtons from "./InteractionButtons";
@@ -17,7 +17,7 @@ import "./Player.css";
 import VideoInfo from "./VideoInfo";
 
 interface Props {
-    video: Video;
+    videoId: number;
     showInteractionButtons: boolean;
     showVideoInfo: boolean;
     isPlaying: boolean;
@@ -30,7 +30,7 @@ interface Props {
 }
 
 function Player({
-    video,
+    videoId,
     showInteractionButtons,
     showVideoInfo,
     isPlaying: isPlayingProp,
@@ -41,6 +41,8 @@ function Player({
     roundCorners,
     onProgress,
 }: Props) {
+    const { data: video, isLoading, refetch } = useVideo(videoId);
+
     const player = useRef<ReactPlayer>(null);
 
     const [isPlaying, { on: play, off: pause }] = useBoolean(isPlayingProp);
@@ -61,6 +63,8 @@ function Player({
     }, [isPlaying]);
 
     const [duration, setDuration] = useState<number>();
+
+    if (isLoading || !video) return null;
 
     return (
         <Box
@@ -100,7 +104,12 @@ function Player({
                         onUnmute={unmute}
                     />
                     <Box position="absolute" bottom={0} right={0} zIndex={2}>
-                        {showInteractionButtons && <InteractionButtons />}
+                        {showInteractionButtons && (
+                            <InteractionButtons
+                                video={video}
+                                refetchVideo={refetch}
+                            />
+                        )}
                     </Box>
                 </Box>
                 {showVideoInfo && <VideoInfo video={video} />}

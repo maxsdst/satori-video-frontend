@@ -1,13 +1,14 @@
-import { As, Button, Icon, Text, VStack } from "@chakra-ui/react";
+import { As, Button, Icon, IconProps, Text, VStack } from "@chakra-ui/react";
 import { PLAYER_DROP_SHADOW } from "../../styleConstants";
 
 interface Props {
     icon: As;
+    iconColor?: IconProps["color"];
     children?: string;
     onClick: () => void;
 }
 
-function PlayerButton({ icon, children, onClick }: Props) {
+function PlayerButton({ icon, iconColor, children, onClick }: Props) {
     return (
         <Button
             variant="ghost"
@@ -23,7 +24,12 @@ function PlayerButton({ icon, children, onClick }: Props) {
             onTouchStartCapture={(e) => e.stopPropagation()}
         >
             <VStack spacing={0}>
-                <Icon as={icon} boxSize="28px" filter={PLAYER_DROP_SHADOW} />
+                <Icon
+                    as={icon}
+                    color={iconColor}
+                    boxSize="28px"
+                    filter={PLAYER_DROP_SHADOW}
+                />
                 {children && (
                     <Text
                         fontSize="sm"

@@ -10,6 +10,8 @@ export default interface Video {
     thumbnail: string;
     first_frame: string;
     view_count: number;
+    like_count: number;
+    is_liked: boolean;
 }
 
 export const DATE_FIELDS = ["upload_date"];

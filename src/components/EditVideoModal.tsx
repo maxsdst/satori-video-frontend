@@ -104,7 +104,7 @@ function EditVideoModal({ video, isOpen, onClose, onVideoEdited }: Props) {
 
     const player = (
         <Player
-            video={video}
+            videoId={video.id}
             showInteractionButtons={false}
             showVideoInfo={false}
             isPlaying={false}
