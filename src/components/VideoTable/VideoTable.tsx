@@ -1,5 +1,4 @@
 import { Spinner } from "@chakra-ui/react";
-import ms from "ms";
 import numbro from "numbro";
 import {
     Ref,
@@ -51,7 +50,6 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
         error: videosError,
         refetch: refetchVideos,
     } = useVideos(videoQuery, {
-        staleTime: ms("5m"),
         enabled: !!videoQuery.profileId,
         keepPreviousData: true,
     });
@@ -85,6 +83,13 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
             header: "Views",
             cell: (video) =>
                 numbro(video.view_count).format({ thousandSeparated: true }),
+            enableOrdering: true,
+        },
+        {
+            field: "like_count",
+            header: "Likes",
+            cell: (video) =>
+                numbro(video.like_count).format({ thousandSeparated: true }),
             enableOrdering: true,
         },
     ];
