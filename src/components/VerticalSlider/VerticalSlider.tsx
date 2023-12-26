@@ -17,6 +17,7 @@ interface Props {
     isDraggable: boolean;
     spaceBetweenSlides: string;
     onSlideChange: (slideIndex: number) => void;
+    isDisabled: boolean;
 }
 
 export interface VerticalSliderHandle {
@@ -25,7 +26,13 @@ export interface VerticalSliderHandle {
 }
 
 const VerticalSlider = forwardRef(function VerticalSlider(
-    { isDraggable, children, spaceBetweenSlides, onSlideChange }: Props,
+    {
+        isDraggable,
+        children,
+        spaceBetweenSlides,
+        onSlideChange,
+        isDisabled,
+    }: Props,
     ref: Ref<VerticalSliderHandle>
 ) {
     const NEXT_SLIDE_KEYS = ["ArrowDown", "PageDown"];
@@ -35,7 +42,14 @@ const VerticalSlider = forwardRef(function VerticalSlider(
         x: 0,
         y: 0,
         currentSlideIndex: 0,
+        isDisabled,
     });
+
+    useEffect(() => {
+        isDisabled
+            ? dispatch({ type: "DISABLE" })
+            : dispatch({ type: "ENABLE" });
+    }, [isDisabled]);
 
     useEffect(
         () => onSlideChange(state.currentSlideIndex),
@@ -61,6 +75,7 @@ const VerticalSlider = forwardRef(function VerticalSlider(
                           slides: slidesContainer.current?.children,
                       });
             },
+            preventMouse: false,
         });
 
         return () => {

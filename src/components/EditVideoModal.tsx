@@ -111,6 +111,7 @@ function EditVideoModal({ video, isOpen, onClose, onVideoEdited }: Props) {
             width={playerWidth}
             height={playerHeight}
             roundCorners={false}
+            isFullscreen={false}
         />
     );
 

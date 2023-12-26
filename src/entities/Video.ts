@@ -12,6 +12,7 @@ export default interface Video {
     view_count: number;
     like_count: number;
     is_liked: boolean;
+    comment_count: number;
 }
 
 export const DATE_FIELDS = ["upload_date"];

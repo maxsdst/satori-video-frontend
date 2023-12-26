@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useBoolean } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { VIEW_DURATION_THRESHOLD_SECONDS } from "../../constants";
 import Video from "../../entities/Video";
@@ -6,7 +6,7 @@ import useCreateView from "../../hooks/useCreateView";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 import { MAIN_CONTENT_AREA_PADDING, TOPNAV_HEIGHT } from "../../styleConstants";
 import { isInPortraitMode, isTouchDevice } from "../../utils";
-import Player from "../Player";
+import Player, { PlayerHandle } from "../Player";
 import VerticalSlider, { VerticalSliderHandle } from "../VerticalSlider";
 import Navigation from "./Navigation";
 
@@ -19,20 +19,36 @@ function VideoSequence({ videos }: Props) {
 
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 
-    function handleSlideChange(slideIndex: number) {
-        setCurrentVideoIndex(slideIndex);
-    }
-
     const slider = useRef<VerticalSliderHandle>(null);
+    const [isSliderDisabled, { on: disableSlider, off: enableSlider }] =
+        useBoolean(false);
 
-    const currentVideo = videos[currentVideoIndex];
+    const players = useRef<(PlayerHandle | null)[]>([]);
+
+    const isFullscreen = isInPortraitMode(width, height);
+
+    useEffect(() => {
+        if (!isFullscreen) enableSlider();
+        if (
+            isFullscreen &&
+            players.current?.[currentVideoIndex]?.areCommentsOpen
+        )
+            disableSlider();
+    }, [isFullscreen]);
 
     const createView = useCreateView({});
     const [isViewCreated, setIsViewCreated] = useState(false);
 
     useEffect(() => {
         setIsViewCreated(false);
+        players.current?.forEach((player) => player?.closeComments());
     }, [currentVideoIndex]);
+
+    const currentVideo = videos[currentVideoIndex];
+
+    function handleSlideChange(slideIndex: number) {
+        setCurrentVideoIndex(slideIndex);
+    }
 
     function handlePlayerProgress(
         secondsPlayed: number,
@@ -48,7 +64,7 @@ function VideoSequence({ videos }: Props) {
         }
     }
 
-    if (isInPortraitMode(width, height))
+    if (isFullscreen)
         return (
             <Box
                 position="fixed"
@@ -66,10 +82,15 @@ function VideoSequence({ videos }: Props) {
                     isDraggable={isTouchDevice()}
                     spaceBetweenSlides="0"
                     onSlideChange={handleSlideChange}
+                    isDisabled={isSliderDisabled}
                 >
                     {videos.map((video, index) => (
                         <Player
                             key={video.id}
+                            ref={(player) => {
+                                if (players.current)
+                                    players.current[index] = player;
+                            }}
                             videoId={video.id}
                             showInteractionButtons={true}
                             showVideoInfo={true}
@@ -78,6 +99,9 @@ function VideoSequence({ videos }: Props) {
                             height={`${height}px`}
                             roundCorners={false}
                             onProgress={handlePlayerProgress}
+                            isFullscreen={true}
+                            onCommentsOpened={disableSlider}
+                            onCommentsClosed={enableSlider}
                         />
                     ))}
                 </VerticalSlider>
@@ -95,10 +119,15 @@ function VideoSequence({ videos }: Props) {
                     spaceBetweenSlides="24px"
                     onSlideChange={handleSlideChange}
                     ref={slider}
+                    isDisabled={false}
                 >
                     {videos.map((video, index) => (
                         <Player
                             key={video.id}
+                            ref={(player) => {
+                                if (players.current)
+                                    players.current[index] = player;
+                            }}
                             videoId={video.id}
                             showInteractionButtons={true}
                             showVideoInfo={true}
@@ -109,6 +138,7 @@ function VideoSequence({ videos }: Props) {
                             minHeight="560px"
                             roundCorners={true}
                             onProgress={handlePlayerProgress}
+                            isFullscreen={false}
                         />
                     ))}
                 </VerticalSlider>

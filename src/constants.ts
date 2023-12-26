@@ -6,3 +6,4 @@ export const MAX_VIDEO_SIZE_MB = 50;
 export const MAX_IMAGE_SIZE_MB = 2;
 export const BYTES_IN_MB = 1024 ** 2;
 export const VIEW_DURATION_THRESHOLD_SECONDS = 5;
+export const COMMENT_TEXT_MAX_LENGTH = 2000;

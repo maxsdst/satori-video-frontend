@@ -3,9 +3,9 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import Video from "../../../../entities/Video";
 import useCreateLike from "../../../../hooks/useCreateLike";
 import useRemoveLike from "../../../../hooks/useRemoveLike";
+import likeReducer from "../../../../reducers/likeReducer";
 import { formatNumber } from "../../../../utils";
 import PlayerButton from "../../PlayerButton";
-import likeReducer from "./likeReducer";
 
 interface Props {
     video: Video;

@@ -4,6 +4,7 @@ interface SliderState {
     x: number;
     y: number;
     currentSlideIndex: number;
+    isDisabled: boolean;
     transition?: boolean;
     dragStartY?: number;
     dragStartTime?: number;
@@ -20,7 +21,11 @@ interface HandleDragAction {
     slides?: HTMLCollection;
 }
 
-type Action = GoToSlideAction | HandleDragAction;
+interface SetDisabledAction {
+    type: "DISABLE" | "ENABLE";
+}
+
+type Action = GoToSlideAction | HandleDragAction | SetDisabledAction;
 
 function getSlide(index: number, slides?: HTMLCollection): HTMLElement | null {
     return slides?.[index] ? (slides[index] as HTMLElement) : null;
@@ -74,6 +79,15 @@ function verticalSliderReducer(
     state: SliderState,
     action: Action
 ): SliderState {
+    switch (action.type) {
+        case "DISABLE":
+            return { ...state, isDisabled: true };
+        case "ENABLE":
+            return { ...state, isDisabled: false };
+    }
+
+    if (state.isDisabled) return state;
+
     const prevSlide = getSlide(state.currentSlideIndex - 1, action.slides);
     const currentSlide = getSlide(state.currentSlideIndex, action.slides);
     const nextSlide = getSlide(state.currentSlideIndex + 1, action.slides);
@@ -82,6 +96,7 @@ function verticalSliderReducer(
         case "GO_TO_NEXT_SLIDE":
             if (!nextSlide) return state;
             return {
+                ...state,
                 x: 0,
                 y: 0 - nextSlide.offsetTop,
                 currentSlideIndex: state.currentSlideIndex + 1,
@@ -91,6 +106,7 @@ function verticalSliderReducer(
         case "GO_TO_PREV_SLIDE":
             if (!prevSlide) return state;
             return {
+                ...state,
                 x: 0,
                 y: 0 - prevSlide.offsetTop,
                 currentSlideIndex: state.currentSlideIndex - 1,
