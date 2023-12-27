@@ -25,7 +25,16 @@ interface SetDisabledAction {
     type: "DISABLE" | "ENABLE";
 }
 
-type Action = GoToSlideAction | HandleDragAction | SetDisabledAction;
+interface HandleWindowResizedAction {
+    type: "HANDLE_WINDOW_RESIZED";
+    slides?: HTMLCollection;
+}
+
+type Action =
+    | GoToSlideAction
+    | HandleDragAction
+    | SetDisabledAction
+    | HandleWindowResizedAction;
 
 function getSlide(index: number, slides?: HTMLCollection): HTMLElement | null {
     return slides?.[index] ? (slides[index] as HTMLElement) : null;
@@ -151,6 +160,15 @@ function verticalSliderReducer(
                 });
 
             return state;
+
+        case "HANDLE_WINDOW_RESIZED":
+            if (!currentSlide) return state;
+            return {
+                ...state,
+                x: 0,
+                y: 0 - currentSlide.offsetTop,
+                transition: false,
+            };
     }
 
     return state;

@@ -10,6 +10,7 @@ import {
 } from "react";
 import Draggable from "react-draggable";
 import WheelIndicator from "wheel-indicator";
+import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 import verticalSliderReducer from "./verticalSliderReducer";
 
 interface Props {
@@ -82,6 +83,12 @@ const VerticalSlider = forwardRef(function VerticalSlider(
             wheelIndicator.destroy();
         };
     }, [slidesContainer]);
+
+    const windowDimensions = useWindowDimensions();
+
+    useEffect(() => {
+        dispatch({ type: "HANDLE_WINDOW_RESIZED", slides });
+    }, [windowDimensions]);
 
     useImperativeHandle(ref, () => ({
         goToNext() {

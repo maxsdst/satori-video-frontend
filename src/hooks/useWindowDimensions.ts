@@ -10,8 +10,10 @@ export function useWindowDimensions() {
 }
 
 function subscribe(callback: () => void) {
-    window.addEventListener("resize", callback);
-    return () => window.removeEventListener("resize", callback);
+    const events = ["resize", "fullscreenchange"];
+    events.forEach((event) => window.addEventListener(event, callback));
+    return () =>
+        events.forEach((event) => window.removeEventListener(event, callback));
 }
 
 let prevDimensions: WindowDimensions | undefined = undefined;
