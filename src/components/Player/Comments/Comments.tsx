@@ -80,8 +80,8 @@ function Comments({
                             loadMoreTrigger="scroll"
                             containerRef={commentListContainer}
                             styles={{
-                                paddingLeft: "1.5rem",
-                                paddingRight: "1.5rem",
+                                paddingLeft: "1.25rem",
+                                paddingRight: "1.25rem",
                                 paddingTop: "0.5rem",
                                 paddingBottom: "0.5rem",
                                 gap: "1.25rem",

@@ -12,6 +12,7 @@ import { useRef } from "react";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import Comment from "../../../../entities/Comment";
+import ExpandableText from "../../../ExpandableText";
 import CommentList, { CommentListHandle } from "../CommentList";
 import ActionMenu from "./ActionMenu";
 import CreateReplyForm from "./CreateReplyForm";
@@ -66,13 +67,13 @@ function Item({ comment, isReply, onEdit, onDeleted }: Props) {
                                 ago
                             </Text>
                         </HStack>
-                        <Text
+                        <ExpandableText
+                            noOfLines={4}
                             fontSize="sm"
-                            wordBreak="break-word"
-                            whiteSpace="pre-line"
+                            expandButtonSize="sm"
                         >
                             {comment.text}
-                        </Text>
+                        </ExpandableText>
                     </VStack>
                     <ActionMenu
                         comment={comment}

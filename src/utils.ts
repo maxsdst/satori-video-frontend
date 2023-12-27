@@ -50,3 +50,33 @@ export function formatNumber(number: number): string {
 
     return numbro(number).format(format).toUpperCase();
 }
+
+export function getLineHeightInPx(element: Element): number {
+    const styles = getComputedStyle(element);
+    const lineHeightValue = styles.getPropertyValue("line-height");
+
+    if (isNumber(lineHeightValue)) {
+        const fontSizeValue = styles.getPropertyValue("font-size");
+
+        if (isPxValue(fontSizeValue)) {
+            const fontSize = new Number(fontSizeValue.slice(0, -2)) as number;
+            const lineHeight = new Number(lineHeightValue) as number;
+            return fontSize * lineHeight;
+        }
+
+        throw `Unknown CSS unit: ${fontSizeValue}`;
+    }
+
+    if (isPxValue(lineHeightValue))
+        return new Number(lineHeightValue.slice(0, -2)) as number;
+
+    throw `Unknown CSS unit: ${lineHeightValue}`;
+}
+
+function isNumber(str: string) {
+    return str ? !isNaN(new Number(str) as number) : false;
+}
+
+function isPxValue(str: string) {
+    return str.endsWith("px");
+}
