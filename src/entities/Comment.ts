@@ -4,7 +4,9 @@ export default interface Comment {
     id: number;
     video: number;
     profile: Profile;
-    parent: number;
+    mentioned_profile: number | null;
+    mentioned_profile_username: string | null;
+    parent: number | null;
     text: string;
     creation_date: Date;
     reply_count: number;

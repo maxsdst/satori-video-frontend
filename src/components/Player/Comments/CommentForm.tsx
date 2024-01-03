@@ -1,5 +1,6 @@
 import {
     Avatar,
+    Box,
     Button,
     FormControl,
     FormErrorMessage,
@@ -30,6 +31,7 @@ type FormData = z.infer<typeof schema>;
 
 export interface ErrorData {
     text?: string[];
+    detail?: string[];
 }
 
 export interface CommentFormHandle {
@@ -47,6 +49,7 @@ interface Props {
     textareaAutoFocus?: boolean;
     defaultTextareaValue?: string;
     submitButtonText: string;
+    mentionedUsername?: string;
 }
 
 const CommentForm = forwardRef(
@@ -61,6 +64,7 @@ const CommentForm = forwardRef(
             textareaAutoFocus,
             defaultTextareaValue,
             submitButtonText,
+            mentionedUsername,
         }: Props,
         ref: Ref<CommentFormHandle>
     ) => {
@@ -101,7 +105,21 @@ const CommentForm = forwardRef(
                         size={avatarSize}
                     />
                     <VStack width="100%" alignItems="end">
-                        <FormControl isInvalid={!!errors.text}>
+                        {mentionedUsername && (
+                            <Box
+                                alignSelf="start"
+                                fontSize="sm"
+                                backgroundColor="gray.600"
+                                paddingX={2}
+                                paddingY="3px"
+                                borderRadius="18px"
+                            >
+                                @{mentionedUsername}
+                            </Box>
+                        )}
+                        <FormControl
+                            isInvalid={!!errors.text || !!errorData?.detail}
+                        >
                             <Textarea
                                 {...register("text")}
                                 defaultValue={defaultTextareaValue}
@@ -123,6 +141,11 @@ const CommentForm = forwardRef(
                             {errors.text && (
                                 <FormErrorMessage>
                                     {errors.text.message}
+                                </FormErrorMessage>
+                            )}
+                            {errorData?.detail && (
+                                <FormErrorMessage>
+                                    {errorData.detail.join(" ")}
                                 </FormErrorMessage>
                             )}
                         </FormControl>

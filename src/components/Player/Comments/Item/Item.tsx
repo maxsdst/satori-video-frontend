@@ -2,6 +2,7 @@ import {
     Avatar,
     Box,
     Button,
+    Link as ChakraLink,
     HStack,
     Text,
     VStack,
@@ -21,11 +22,18 @@ import LikeButton from "./LikeButton";
 interface Props {
     comment: Comment;
     isReply?: boolean;
+    onReplyToReplyCreated?: (reply: Comment) => void;
     onEdit: () => void;
     onDeleted: () => void;
 }
 
-function Item({ comment, isReply, onEdit, onDeleted }: Props) {
+function Item({
+    comment,
+    isReply,
+    onReplyToReplyCreated,
+    onEdit,
+    onDeleted,
+}: Props) {
     const {
         isOpen: isReplyFormOpen,
         onOpen: openReplyForm,
@@ -72,7 +80,25 @@ function Item({ comment, isReply, onEdit, onDeleted }: Props) {
                             fontSize="sm"
                             expandButtonSize="sm"
                         >
-                            {comment.text}
+                            {comment.mentioned_profile_username &&
+                                (comment.mentioned_profile ? (
+                                    <ChakraLink
+                                        as={Link}
+                                        color="blue.200"
+                                        _hover={{ cursor: "pointer" }}
+                                        to={
+                                            "/users/" +
+                                            comment.mentioned_profile_username
+                                        }
+                                    >
+                                        @{comment.mentioned_profile_username}{" "}
+                                    </ChakraLink>
+                                ) : (
+                                    <Text as="span">
+                                        @{comment.mentioned_profile_username}{" "}
+                                    </Text>
+                                ))}
+                            <Text as="span">{comment.text}</Text>
                         </ExpandableText>
                     </VStack>
                     <ActionMenu
@@ -98,7 +124,11 @@ function Item({ comment, isReply, onEdit, onDeleted }: Props) {
                         <CreateReplyForm
                             comment={comment}
                             onReplyCreated={(reply) =>
-                                commentList.current?.addCreatedComment(reply)
+                                isReply
+                                    ? onReplyToReplyCreated?.(reply)
+                                    : commentList.current?.addCreatedComment(
+                                          reply
+                                      )
                             }
                             onClose={closeReplyForm}
                         />

@@ -1,19 +1,19 @@
 import {
+    Box,
     Button,
     ChakraProps,
-    Text,
     ThemingProps,
     VStack,
     useBoolean,
 } from "@chakra-ui/react";
-import { useLayoutEffect, useRef, useState } from "react";
+import { ReactNode, useLayoutEffect, useRef, useState } from "react";
 import { getLineHeightInPx } from "../utils";
 
 interface Props {
     noOfLines: number;
     fontSize?: ChakraProps["fontSize"];
     expandButtonSize?: ThemingProps<"Button">["size"];
-    children: string;
+    children: ReactNode;
 }
 
 function ExpandableText({
@@ -38,7 +38,7 @@ function ExpandableText({
 
     return (
         <VStack width="100%" alignItems="start" spacing={1}>
-            <Text
+            <Box
                 ref={text}
                 fontSize={fontSize}
                 noOfLines={isTextTooLong && !isExpanded ? noOfLines : undefined}
@@ -46,7 +46,7 @@ function ExpandableText({
                 whiteSpace="pre-line"
             >
                 {children}
-            </Text>
+            </Box>
             {isTextTooLong && (
                 <Button
                     variant="link"

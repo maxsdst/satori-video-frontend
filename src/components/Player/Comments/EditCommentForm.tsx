@@ -38,13 +38,14 @@ function EditCommentForm({
             errorData={errorData}
             isAlwaysActive={true}
             onClose={onClose}
-            avatarSize="sm"
+            avatarSize={comment.parent ? "sm" : "md"}
             textareaPlaceholder={
                 isReply ? "Add a reply..." : "Add a comment..."
             }
             textareaAutoFocus={true}
             defaultTextareaValue={comment.text}
             submitButtonText="Save"
+            mentionedUsername={comment.mentioned_profile_username || undefined}
         />
     );
 }

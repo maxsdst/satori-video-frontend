@@ -114,6 +114,9 @@ const CommentList = forwardRef(
                     key={comment.id}
                     comment={comment}
                     isReply={isReplyList}
+                    onReplyToReplyCreated={(comment) =>
+                        setCreatedComments([...createdComments, comment])
+                    }
                     onEdit={() => setEditedCommentId(comment.id)}
                     onDeleted={() => {
                         _handleCommentDeleted(comment.id);

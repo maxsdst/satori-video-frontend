@@ -16,11 +16,22 @@ function CreateReplyForm({ comment, onReplyCreated, onClose }: Props) {
         onError: (data) => setErrorData(data),
     });
 
+    const shouldMentionProfile = !!comment.parent;
+
     return (
         <CommentForm
             onSubmit={({ text }) => {
                 createComment.mutate(
-                    { videoId: comment.video, parentId: comment.id, text },
+                    {
+                        videoId: comment.video,
+                        parentId: shouldMentionProfile
+                            ? comment.parent || undefined
+                            : comment.id,
+                        mentionedProfile: shouldMentionProfile
+                            ? comment.profile.id
+                            : undefined,
+                        text,
+                    },
                     {
                         onSuccess: (comment) => {
                             onReplyCreated(comment);
@@ -36,6 +47,9 @@ function CreateReplyForm({ comment, onReplyCreated, onClose }: Props) {
             textareaPlaceholder="Add a reply..."
             textareaAutoFocus={true}
             submitButtonText="Reply"
+            mentionedUsername={
+                shouldMentionProfile ? comment.profile.user.username : undefined
+            }
         />
     );
 }

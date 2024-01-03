@@ -6,6 +6,7 @@ import commentService from "../services/commentService";
 interface CommentData {
     videoId: number;
     parentId?: number;
+    mentionedProfile?: number;
     text: string;
 }
 
@@ -13,6 +14,7 @@ interface ErrorData {
     video?: string[];
     parent?: string[];
     text?: string[];
+    detail?: string[];
 }
 
 interface UseCreateCommentOptions {
@@ -25,6 +27,7 @@ function useCreateComment({ onError }: UseCreateCommentOptions) {
             commentService.post({
                 video: data.videoId,
                 parent: data.parentId || null,
+                mentioned_profile: data.mentionedProfile || null,
                 text: data.text,
             }),
         onError: (error) => {
