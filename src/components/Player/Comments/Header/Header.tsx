@@ -1,16 +1,18 @@
 import { HStack, Text } from "@chakra-ui/react";
-import { MdOutlineClose, MdOutlineSort } from "react-icons/md";
-import Video from "../../../entities/Video";
-import { formatNumber } from "../../../utils";
-import IconButton from "../../IconButton";
+import { MdOutlineClose } from "react-icons/md";
+import Video from "../../../../entities/Video";
+import { formatNumber } from "../../../../utils";
+import IconButton from "../../../IconButton";
+import SortMenu, { OnOrderingChange } from "./SortMenu";
 
 interface Props {
     video: Video;
+    onOrderingChange: OnOrderingChange;
     onClose: () => void;
     height: string;
 }
 
-function Header({ video, onClose, height }: Props) {
+function Header({ video, onOrderingChange, onClose, height }: Props) {
     return (
         <HStack
             justifyContent="space-between"
@@ -27,7 +29,7 @@ function Header({ video, onClose, height }: Props) {
                 <Text>{formatNumber(video.comment_count)}</Text>
             </HStack>
             <HStack spacing={0}>
-                <IconButton icon={MdOutlineSort} label="Sort" />
+                <SortMenu onOrderingChange={onOrderingChange} />
                 <IconButton
                     icon={MdOutlineClose}
                     label="Close"

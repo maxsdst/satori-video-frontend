@@ -18,6 +18,7 @@ import useComments, {
     useHandleCommentUpdated,
 } from "../../../hooks/useComments";
 import EditCommentForm from "./EditCommentForm";
+import { Ordering } from "./Header";
 import Item from "./Item";
 
 export interface CommentListHandle {
@@ -27,6 +28,7 @@ export interface CommentListHandle {
 interface Props {
     videoId: number;
     parentId?: number;
+    ordering: Ordering;
     pageSize: number;
     showFetchedComments: boolean;
     isReplyList: boolean;
@@ -41,6 +43,7 @@ const CommentList = forwardRef(
         {
             videoId,
             parentId,
+            ordering,
             pageSize,
             showFetchedComments,
             isReplyList,
@@ -51,7 +54,22 @@ const CommentList = forwardRef(
         }: Props,
         ref: Ref<CommentListHandle>
     ) => {
-        const query: CommentQuery = { videoId, parentId };
+        const queryOrdering: CommentQuery["ordering"] = (() => {
+            switch (ordering) {
+                case "top":
+                    return { field: "popularity_score", direction: "DESC" };
+                case "new":
+                    return { field: "creation_date", direction: "DESC" };
+                default:
+                    return undefined;
+            }
+        })();
+
+        const query: CommentQuery = {
+            videoId,
+            parentId,
+            ordering: queryOrdering,
+        };
 
         const {
             data: comments,

@@ -156,6 +156,7 @@ function Item({
                     ref={commentList}
                     videoId={comment.video}
                     parentId={comment.id}
+                    ordering="new"
                     pageSize={10}
                     showFetchedComments={areRepliesOpen}
                     isReplyList={true}

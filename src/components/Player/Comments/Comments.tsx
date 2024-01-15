@@ -1,9 +1,9 @@
 import { Box, Divider, Flex, Portal, VStack } from "@chakra-ui/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Video from "../../../entities/Video";
 import CommentList, { CommentListHandle } from "./CommentList";
 import CreateCommentForm from "./CreateCommentForm";
-import Header from "./Header";
+import Header, { Ordering } from "./Header";
 
 interface Props {
     video: Video;
@@ -27,6 +27,8 @@ function Comments({
     const commentListContainer = useRef<HTMLDivElement>(null);
     const commentList = useRef<CommentListHandle>(null);
 
+    const [ordering, setOrdering] = useState<Ordering>("top");
+
     const headerHeight = "3rem";
 
     const comments = (
@@ -42,7 +44,12 @@ function Comments({
             onTouchStartCapture={(e) => e.stopPropagation()}
         >
             <VStack spacing={0}>
-                <Header video={video} onClose={onClose} height={headerHeight} />
+                <Header
+                    video={video}
+                    onOrderingChange={setOrdering}
+                    onClose={onClose}
+                    height={headerHeight}
+                />
                 <Flex
                     direction="column-reverse"
                     justifyContent="flex-start"
@@ -74,6 +81,7 @@ function Comments({
                         <CommentList
                             ref={commentList}
                             videoId={video.id}
+                            ordering={ordering}
                             pageSize={20}
                             showFetchedComments={true}
                             isReplyList={false}
