@@ -22,7 +22,7 @@ const UploadTable = forwardRef(({}, ref: Ref<UploadTableHandle>) => {
 
     const [uploadQuery, setUploadQuery] = useState<UploadQuery>({
         ordering: defaultOrdering,
-        pagination: { limit: defaultPageSize, offset: 0 },
+        pagination: { type: "limit_offset", limit: defaultPageSize, offset: 0 },
     });
 
     const {

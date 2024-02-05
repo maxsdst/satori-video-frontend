@@ -27,10 +27,19 @@ export interface Ordering {
     direction?: "ASC" | "DESC";
 }
 
-export interface Pagination {
+interface LimitOffsetPagination {
+    type: "limit_offset";
     limit?: number;
     offset?: number;
 }
+
+interface SnapshotPagination {
+    type: "snapshot";
+    pageSize?: number;
+    cursor?: string;
+}
+
+export type Pagination = LimitOffsetPagination | SnapshotPagination;
 
 export default interface BaseQuery {
     filters?: Filter[];

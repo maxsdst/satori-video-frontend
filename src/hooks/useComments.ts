@@ -4,9 +4,8 @@ import {
     useQueryClient,
 } from "@tanstack/react-query";
 import Comment from "../entities/Comment";
-import { GetAllResponse } from "../services/ApiClient";
 import BaseQuery from "../services/BaseQuery";
-import commentService from "../services/commentService";
+import commentService, { GetAllResponse } from "../services/commentService";
 
 export interface CommentQuery extends BaseQuery {
     videoId?: number;
@@ -18,37 +17,31 @@ function getQueryKey(query: CommentQuery) {
 }
 
 interface UseCommentsOptions {
-    pageSize: number;
     staleTime?: number;
     enabled?: boolean;
 }
 
 function useComments(
     query: CommentQuery,
-    { pageSize, staleTime, enabled }: UseCommentsOptions
+    { staleTime, enabled }: UseCommentsOptions
 ) {
-    return useInfiniteQuery<GetAllResponse<Comment>, Error>({
+    return useInfiniteQuery<GetAllResponse, Error>({
         queryKey: getQueryKey(query),
         staleTime,
         enabled,
-        queryFn: ({ pageParam = 1 }) =>
-            commentService.getAll(
+        queryFn: ({ pageParam }) => {
+            if (pageParam) return commentService.getAll({}, {}, pageParam);
+            return commentService.getAll(
                 {
                     params: {
                         video: query.videoId,
                         parent: query.parentId,
                     },
                 },
-                {
-                    ...query,
-                    pagination: {
-                        limit: pageSize,
-                        offset: (pageParam - 1) * pageSize,
-                    },
-                }
-            ),
-        getNextPageParam: (lastPage, allPages) =>
-            lastPage.next ? allPages.length + 1 : undefined,
+                query
+            );
+        },
+        getNextPageParam: (lastPage) => lastPage.next || undefined,
     });
 }
 
@@ -60,7 +53,7 @@ export function useHandleCommentUpdated(query: CommentQuery) {
     return (updatedComment: Comment) => {
         queryClient.setQueryData(
             getQueryKey(query),
-            (data: InfiniteData<GetAllResponse<Comment>> | undefined) => {
+            (data: InfiniteData<GetAllResponse> | undefined) => {
                 if (!data) return data;
 
                 return {
@@ -85,7 +78,7 @@ export function useHandleCommentDeleted(query: CommentQuery) {
     return (deletedCommentId: number) => {
         queryClient.setQueryData(
             getQueryKey(query),
-            (data: InfiniteData<GetAllResponse<Comment>> | undefined) => {
+            (data: InfiniteData<GetAllResponse> | undefined) => {
                 if (!data) return data;
 
                 return {

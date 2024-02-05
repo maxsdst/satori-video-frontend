@@ -1,8 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import Video from "../entities/Video";
-import { GetAllResponse } from "../services/ApiClient";
 import BaseQuery from "../services/BaseQuery";
-import videoService from "../services/videoService";
+import videoService, { GetAllResponse } from "../services/videoService";
 
 export interface VideoQuery extends BaseQuery {
     profileId?: number;
@@ -18,7 +16,7 @@ function useVideos(
     query: VideoQuery,
     { staleTime, enabled, keepPreviousData }: UseVideosOptions
 ) {
-    return useQuery<GetAllResponse<Video>, Error>({
+    return useQuery<GetAllResponse, Error>({
         queryKey: ["videos", query],
         staleTime,
         queryFn: () =>

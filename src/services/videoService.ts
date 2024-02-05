@@ -1,4 +1,15 @@
 import Video, { DATE_FIELDS } from "../entities/Video";
-import ApiClient from "./ApiClient";
+import ApiClient, {
+    GetAllResponse as GenericGetAllResponse,
+    PaginationType,
+} from "./ApiClient";
 
-export default new ApiClient<Video>("/videos/videos/", DATE_FIELDS);
+export default new ApiClient<Video, PaginationType.LimitOffset>(
+    "/videos/videos/",
+    DATE_FIELDS
+);
+
+export type GetAllResponse = GenericGetAllResponse<
+    Video,
+    PaginationType.LimitOffset
+>;

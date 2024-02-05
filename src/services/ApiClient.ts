@@ -54,10 +54,29 @@ function applyOrdering(
 }
 
 function applyPagination(
-    { limit, offset }: Pagination,
+    pagination: Pagination,
     requestConfig: AxiosRequestConfig
 ) {
-    requestConfig.params = { ...requestConfig.params, limit, offset };
+    switch (pagination.type) {
+        case "limit_offset":
+            requestConfig.params = {
+                ...requestConfig.params,
+                limit: pagination.limit,
+                offset: pagination.offset,
+            };
+            break;
+
+        case "snapshot":
+            requestConfig.params = {
+                ...requestConfig.params,
+                page_size: pagination.pageSize,
+                cursor: pagination.cursor,
+            };
+            break;
+
+        default:
+            throw "Unknown pagination type";
+    }
 }
 
 function parseDates(object: any, dateFields: string[]) {
@@ -67,14 +86,32 @@ function parseDates(object: any, dateFields: string[]) {
             object[field] = new Date(object[field]);
 }
 
-export interface GetAllResponse<T> {
+export enum PaginationType {
+    LimitOffset,
+    Snapshot,
+}
+
+interface LimitOffsetPaginationResponse<T> {
     count: number;
     previous: string | null;
     next: string | null;
     results: T[];
 }
+interface SnapshotPaginationResponse<T> {
+    previous: string | null;
+    next: string | null;
+    results: T[];
+}
 
-class ApiClient<T> {
+export type GetAllResponse<T, PaginationT> =
+    PaginationT extends PaginationType.Snapshot
+        ? SnapshotPaginationResponse<T>
+        : LimitOffsetPaginationResponse<T>;
+
+class ApiClient<
+    T,
+    PaginationT extends PaginationType = PaginationType.LimitOffset
+> {
     endpoint: string;
     dateFields?: string[];
 
@@ -84,18 +121,24 @@ class ApiClient<T> {
         this.dateFields = dateFields;
     }
 
-    getAll = (requestConfig?: AxiosRequestConfig, query?: BaseQuery) => {
+    getAll = (
+        requestConfig?: AxiosRequestConfig,
+        query?: BaseQuery,
+        fullUrl?: string
+    ) => {
         if (!requestConfig) requestConfig = {} as AxiosRequestConfig;
 
-        if (query) {
+        if (!fullUrl && query) {
             const { filters, ordering, pagination } = query;
             if (filters) applyFilters(filters, requestConfig);
             if (ordering) applyOrdering(ordering, requestConfig);
             if (pagination) applyPagination(pagination, requestConfig);
         }
 
+        const url = fullUrl || this.endpoint;
+
         return axiosInstance
-            .get<GetAllResponse<T>>(this.endpoint, requestConfig)
+            .get<GetAllResponse<T, PaginationT>>(url, requestConfig)
             .then((res) => {
                 if (this.dateFields)
                     for (const object of res.data.results)

@@ -160,7 +160,7 @@ function Table<T>({
                 defaultPageSize={defaultPageSize}
                 totalItems={totalItems}
                 onChange={(limit, offset) =>
-                    onPaginationChange({ limit, offset })
+                    onPaginationChange({ type: "limit_offset", limit, offset })
                 }
             />
         </VStack>

@@ -1,8 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import Upload from "../entities/Upload";
-import { GetAllResponse } from "../services/ApiClient";
 import BaseQuery from "../services/BaseQuery";
-import uploadService from "../services/uploadService";
+import uploadService, { GetAllResponse } from "../services/uploadService";
 
 export interface UploadQuery extends BaseQuery {}
 
@@ -15,7 +13,7 @@ function useUploads(
     query: UploadQuery,
     { staleTime, keepPreviousData }: UseUploadsOptions
 ) {
-    return useQuery<GetAllResponse<Upload>, Error>({
+    return useQuery<GetAllResponse, Error>({
         queryKey: ["uploads", query],
         staleTime,
         queryFn: () => uploadService.getAll({}, query),

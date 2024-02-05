@@ -69,6 +69,7 @@ const CommentList = forwardRef(
             videoId,
             parentId,
             ordering: queryOrdering,
+            pagination: { type: "snapshot", pageSize },
         };
 
         const {
@@ -77,7 +78,7 @@ const CommentList = forwardRef(
             hasNextPage,
             fetchNextPage,
             isFetchingNextPage,
-        } = useComments(query, { pageSize, enabled: showFetchedComments });
+        } = useComments(query, { enabled: showFetchedComments });
 
         const handleCommentUpdated = useHandleCommentUpdated(query);
         const handleCommentDeleted = useHandleCommentDeleted(query);

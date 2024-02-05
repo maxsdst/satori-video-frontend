@@ -30,7 +30,7 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
 
     const [videoQuery, setVideoQuery] = useState<VideoQuery>({
         ordering: defaultOrdering,
-        pagination: { limit: defaultPageSize, offset: 0 },
+        pagination: { type: "limit_offset", limit: defaultPageSize, offset: 0 },
     });
 
     const {
