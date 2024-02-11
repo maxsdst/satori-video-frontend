@@ -12,6 +12,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import Comment from "../../../../../entities/Comment";
 import useOwnProfile from "../../../../../hooks/useOwnProfile";
 import DeleteCommentDialog from "./DeleteCommentDialog";
+import ReportModal from "./ReportModal";
 
 interface Props {
     comment: Comment;
@@ -26,6 +27,12 @@ function ActionMenu({ comment, onEdit, onDeleted }: Props) {
         isOpen: isDeleteCommentDialogOpen,
         onOpen: openDeleteCommentDialog,
         onClose: closeDeleteCommentDialog,
+    } = useDisclosure();
+
+    const {
+        isOpen: isReportModalOpen,
+        onOpen: openReportModal,
+        onClose: closeReportModal,
     } = useDisclosure();
 
     if (isLoading || error) return null;
@@ -68,6 +75,7 @@ function ActionMenu({ comment, onEdit, onDeleted }: Props) {
                     <MenuList>
                         <MenuItem
                             icon={<Icon as={AiOutlineFlag} boxSize={5} />}
+                            onClick={openReportModal}
                         >
                             Report
                         </MenuItem>
@@ -79,6 +87,11 @@ function ActionMenu({ comment, onEdit, onDeleted }: Props) {
                 isOpen={isDeleteCommentDialogOpen}
                 onClose={closeDeleteCommentDialog}
                 onDeleted={onDeleted}
+            />
+            <ReportModal
+                comment={comment}
+                isOpen={isReportModalOpen}
+                onClose={closeReportModal}
             />
         </>
     );
