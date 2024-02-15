@@ -1,10 +1,10 @@
 import { VStack } from "@chakra-ui/react";
 import { AiOutlineComment } from "react-icons/ai";
-import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import Video from "../../../entities/Video";
 import { formatNumber } from "../../../utils";
 import PlayerButton from "../PlayerButton";
 import LikeButton from "./LikeButton";
+import MoreActionsMenu from "./MoreActionsMenu";
 
 interface Props {
     video: Video;
@@ -14,15 +14,12 @@ interface Props {
 
 function InteractionButtons({ video, refetchVideo, openComments }: Props) {
     return (
-        <VStack spacing={0}>
+        <VStack spacing={0} zIndex={4}>
             <LikeButton video={video} refetchVideo={refetchVideo} />
             <PlayerButton icon={AiOutlineComment} onClick={openComments}>
                 {formatNumber(video.comment_count)}
             </PlayerButton>
-            <PlayerButton
-                icon={HiOutlineDotsHorizontal}
-                onClick={() => console.log("menu")}
-            />
+            <MoreActionsMenu />
         </VStack>
     );
 }

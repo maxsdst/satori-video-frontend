@@ -137,7 +137,12 @@ const Player = forwardRef(
                         height="100%"
                         spacing={0}
                     >
-                        <Box position="relative" width="100%" height="100%">
+                        <Box
+                            position="relative"
+                            width="100%"
+                            height="100%"
+                            zIndex={3}
+                        >
                             <PlayerControls
                                 isPlaying={isPlaying}
                                 onPause={pause}
