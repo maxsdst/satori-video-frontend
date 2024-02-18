@@ -14,7 +14,11 @@ import { useWindowDimensions } from "../../../hooks/useWindowDimensions";
 import { isInPortraitMode } from "../../../utils";
 import PlayerButton from "../PlayerButton";
 
-function MoreActionsMenu() {
+interface Props {
+    onOpenDescription: () => void;
+}
+
+function MoreActionsMenu({ onOpenDescription }: Props) {
     const { width, height } = useWindowDimensions();
     const isFullscreen = isInPortraitMode(width, height);
 
@@ -30,6 +34,7 @@ function MoreActionsMenu() {
             <MenuItem
                 {...menuItemStyles}
                 icon={<Icon as={PiTextAlignLeftFill} boxSize={5} />}
+                onClick={onOpenDescription}
             >
                 Description
             </MenuItem>

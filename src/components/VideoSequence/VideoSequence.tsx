@@ -31,7 +31,7 @@ function VideoSequence({ videos }: Props) {
         if (!isFullscreen) enableSlider();
         if (
             isFullscreen &&
-            players.current?.[currentVideoIndex]?.areCommentsOpen
+            players.current?.[currentVideoIndex]?.isContentExpanded
         )
             disableSlider();
     }, [isFullscreen]);
@@ -41,7 +41,7 @@ function VideoSequence({ videos }: Props) {
 
     useEffect(() => {
         setIsViewCreated(false);
-        players.current?.forEach((player) => player?.closeComments());
+        players.current?.forEach((player) => player?.collapseContent());
     }, [currentVideoIndex]);
 
     const currentVideo = videos[currentVideoIndex];
@@ -100,8 +100,8 @@ function VideoSequence({ videos }: Props) {
                             roundCorners={false}
                             onProgress={handlePlayerProgress}
                             isFullscreen={true}
-                            onCommentsOpened={disableSlider}
-                            onCommentsClosed={enableSlider}
+                            onContentExpanded={disableSlider}
+                            onContentCollapsed={enableSlider}
                         />
                     ))}
                 </VerticalSlider>

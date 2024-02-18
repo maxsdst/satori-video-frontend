@@ -9,17 +9,23 @@ import MoreActionsMenu from "./MoreActionsMenu";
 interface Props {
     video: Video;
     refetchVideo: () => void;
-    openComments: () => void;
+    onOpenComments: () => void;
+    onOpenDescription: () => void;
 }
 
-function InteractionButtons({ video, refetchVideo, openComments }: Props) {
+function InteractionButtons({
+    video,
+    refetchVideo,
+    onOpenComments,
+    onOpenDescription,
+}: Props) {
     return (
         <VStack spacing={0} zIndex={4}>
             <LikeButton video={video} refetchVideo={refetchVideo} />
-            <PlayerButton icon={AiOutlineComment} onClick={openComments}>
+            <PlayerButton icon={AiOutlineComment} onClick={onOpenComments}>
                 {formatNumber(video.comment_count)}
             </PlayerButton>
-            <MoreActionsMenu />
+            <MoreActionsMenu onOpenDescription={onOpenDescription} />
         </VStack>
     );
 }

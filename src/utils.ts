@@ -13,7 +13,7 @@ export function isTouchDevice(): boolean {
     );
 }
 
-export function convertDateToString(date: Date) {
+export function getShortenedMonth(date: Date) {
     const months = [
         "Jan",
         "Feb",
@@ -29,9 +29,13 @@ export function convertDateToString(date: Date) {
         "Dec",
     ];
 
-    return `${
-        months[date.getMonth()]
-    } ${date.getDate()}, ${date.getFullYear()}`;
+    return months[date.getMonth()];
+}
+
+export function convertDateToString(date: Date) {
+    return `${getShortenedMonth(
+        date
+    )} ${date.getDate()}, ${date.getFullYear()}`;
 }
 
 export function insertIf<T>(condition: boolean, element: T): T[] {

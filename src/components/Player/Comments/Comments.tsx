@@ -1,6 +1,7 @@
-import { Box, Divider, Flex, Portal, VStack } from "@chakra-ui/react";
+import { Box, Divider, Flex } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import Video from "../../../entities/Video";
+import AdaptivePanel from "../AdaptivePanel";
 import CommentList, { CommentListHandle } from "./CommentList";
 import CreateCommentForm from "./CreateCommentForm";
 import Header, { Ordering } from "./Header";
@@ -29,81 +30,63 @@ function Comments({
 
     const [ordering, setOrdering] = useState<Ordering>("top");
 
-    const headerHeight = "3rem";
-
-    const comments = (
-        <Box
+    return (
+        <AdaptivePanel
+            onClose={onClose}
             width={width}
             height={height}
             minHeight={minHeight}
-            backgroundColor="gray.700"
-            position={isFullscreen ? "fixed" : "relative"}
-            top={isFullscreen ? 0 : undefined}
-            zIndex={2}
-            borderRightRadius={!isFullscreen ? borderRadius : undefined}
-            onTouchStartCapture={(e) => e.stopPropagation()}
+            isFullscreen={isFullscreen}
+            borderRadius={borderRadius}
+            header={<Header video={video} onOrderingChange={setOrdering} />}
         >
-            <VStack spacing={0}>
-                <Header
-                    video={video}
-                    onOrderingChange={setOrdering}
-                    onClose={onClose}
-                    height={headerHeight}
-                />
-                <Flex
-                    direction="column-reverse"
-                    justifyContent="flex-start"
-                    width="100%"
-                    height={`calc(${height} - ${headerHeight})`}
-                    overflow="hidden"
-                >
-                    <Box width="100%">
-                        <Divider orientation="horizontal" />
-                        <Box width="100%" paddingX={4} paddingY={2}>
-                            <CreateCommentForm
-                                videoId={video.id}
-                                onCommentCreated={(comment) =>
-                                    commentList.current?.addCreatedComment(
-                                        comment
-                                    )
-                                }
-                            />
-                        </Box>
-                    </Box>
-                    <Box
-                        ref={commentListContainer}
-                        width="100%"
-                        overflowY="auto"
-                        flexGrow={1}
-                        flexShrink={1}
-                        onWheelCapture={(e) => e.stopPropagation()}
-                    >
-                        <CommentList
-                            ref={commentList}
+            <Flex
+                direction="column-reverse"
+                justifyContent="flex-start"
+                width="100%"
+                height="100%"
+                overflow="hidden"
+            >
+                <Box width="100%">
+                    <Divider orientation="horizontal" />
+                    <Box width="100%" paddingX={4} paddingY={2}>
+                        <CreateCommentForm
                             videoId={video.id}
-                            ordering={ordering}
-                            pageSize={20}
-                            showFetchedComments={true}
-                            isReplyList={false}
-                            loadMoreTrigger="scroll"
-                            containerRef={commentListContainer}
-                            styles={{
-                                paddingLeft: "1.25rem",
-                                paddingRight: "1.25rem",
-                                paddingTop: "0.5rem",
-                                paddingBottom: "0.5rem",
-                                gap: "1.25rem",
-                            }}
+                            onCommentCreated={(comment) =>
+                                commentList.current?.addCreatedComment(comment)
+                            }
                         />
                     </Box>
-                </Flex>
-            </VStack>
-        </Box>
+                </Box>
+                <Box
+                    ref={commentListContainer}
+                    width="100%"
+                    overflowY="auto"
+                    flexGrow={1}
+                    flexShrink={1}
+                    onWheelCapture={(e) => e.stopPropagation()}
+                >
+                    <CommentList
+                        ref={commentList}
+                        videoId={video.id}
+                        ordering={ordering}
+                        pageSize={20}
+                        showFetchedComments={true}
+                        isReplyList={false}
+                        loadMoreTrigger="scroll"
+                        containerRef={commentListContainer}
+                        styles={{
+                            paddingLeft: "1.25rem",
+                            paddingRight: "1.25rem",
+                            paddingTop: "0.5rem",
+                            paddingBottom: "0.5rem",
+                            gap: "1.25rem",
+                        }}
+                    />
+                </Box>
+            </Flex>
+        </AdaptivePanel>
     );
-
-    if (isFullscreen) return <Portal>{comments}</Portal>;
-
-    return comments;
 }
 
 export default Comments;

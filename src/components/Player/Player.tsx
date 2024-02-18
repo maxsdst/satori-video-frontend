@@ -1,18 +1,11 @@
-import {
-    AbsoluteCenter,
-    Box,
-    HStack,
-    Icon,
-    VStack,
-    useBoolean,
-    useDisclosure,
-} from "@chakra-ui/react";
+import { AbsoluteCenter, Box, HStack, Icon, VStack } from "@chakra-ui/react";
 import classNames from "classnames";
 import {
     Ref,
     forwardRef,
     useEffect,
     useImperativeHandle,
+    useReducer,
     useRef,
     useState,
 } from "react";
@@ -22,9 +15,11 @@ import useVideo from "../../hooks/useVideo";
 import { PLAYER_DROP_SHADOW } from "../../styleConstants";
 import Comments from "./Comments";
 import PlayerControls from "./Controls";
+import Description from "./Description";
 import InteractionButtons from "./InteractionButtons";
 import "./Player.css";
 import VideoInfo from "./VideoInfo";
+import playerReducer from "./playerReducer";
 
 interface Props {
     videoId: number;
@@ -38,13 +33,13 @@ interface Props {
     isFullscreen: boolean;
     roundCorners: boolean;
     onProgress?: (secondsPlayed: number, percentPlayed: number) => void;
-    onCommentsOpened?: () => void;
-    onCommentsClosed?: () => void;
+    onContentExpanded?: () => void;
+    onContentCollapsed?: () => void;
 }
 
 export interface PlayerHandle {
-    areCommentsOpen: boolean;
-    closeComments: () => void;
+    isContentExpanded: boolean;
+    collapseContent: () => void;
 }
 
 const Player = forwardRef(
@@ -61,25 +56,39 @@ const Player = forwardRef(
             isFullscreen,
             roundCorners,
             onProgress,
-            onCommentsOpened,
-            onCommentsClosed,
+            onContentExpanded,
+            onContentCollapsed,
         }: Props,
         ref: Ref<PlayerHandle>
     ) => {
         const { data: video, isLoading, refetch, error } = useVideo(videoId);
 
-        const player = useRef<ReactPlayer>(null);
+        const [
+            {
+                isPlaying,
+                isMuted,
+                areCommentsOpen,
+                isDescriptionOpen,
+                isContentExpanded,
+            },
+            dispatch,
+        ] = useReducer(playerReducer, {
+            isPlaying: isPlayingProp,
+            isMuted: true,
+            areCommentsOpen: false,
+            isDescriptionOpen: false,
+            isContentExpanded: false,
+        });
 
-        const [isPlaying, { on: play, off: pause }] = useBoolean(isPlayingProp);
-        const [isMuted, { on: mute, off: unmute }] = useBoolean(true);
+        const player = useRef<ReactPlayer>(null);
 
         useEffect(() => {
             if (isPlayingProp) {
                 player.current?.setState({ showPreview: false });
-                play();
+                dispatch({ type: "PLAY" });
             } else {
                 player.current?.setState({ showPreview: true });
-                pause();
+                dispatch({ type: "PAUSE" });
             }
         }, [isPlayingProp]);
 
@@ -89,13 +98,14 @@ const Player = forwardRef(
 
         const [duration, setDuration] = useState<number>();
 
-        const {
-            isOpen: areCommentsOpen,
-            onOpen: openComments,
-            onClose: closeComments,
-        } = useDisclosure();
+        useEffect(() => {
+            isContentExpanded ? onContentExpanded?.() : onContentCollapsed?.();
+        }, [isContentExpanded]);
 
-        useImperativeHandle(ref, () => ({ areCommentsOpen, closeComments }));
+        useImperativeHandle(ref, () => ({
+            isContentExpanded,
+            collapseContent: () => dispatch({ type: "COLLAPSE_CONTENT" }),
+        }));
 
         if (isLoading || !video) return null;
         if (error) throw error;
@@ -145,11 +155,11 @@ const Player = forwardRef(
                         >
                             <PlayerControls
                                 isPlaying={isPlaying}
-                                onPause={pause}
-                                onPlay={play}
+                                onPause={() => dispatch({ type: "PAUSE" })}
+                                onPlay={() => dispatch({ type: "PLAY" })}
                                 isMuted={isMuted}
-                                onMute={mute}
-                                onUnmute={unmute}
+                                onMute={() => dispatch({ type: "MUTE" })}
+                                onUnmute={() => dispatch({ type: "UNMUTE" })}
                             />
                             <Box
                                 position="absolute"
@@ -161,10 +171,14 @@ const Player = forwardRef(
                                     <InteractionButtons
                                         video={video}
                                         refetchVideo={refetch}
-                                        openComments={() => {
-                                            openComments();
-                                            onCommentsOpened?.();
-                                        }}
+                                        onOpenComments={() =>
+                                            dispatch({ type: "OPEN_COMMENTS" })
+                                        }
+                                        onOpenDescription={() =>
+                                            dispatch({
+                                                type: "OPEN_DESCRIPTION",
+                                            })
+                                        }
                                     />
                                 )}
                             </Box>
@@ -196,10 +210,18 @@ const Player = forwardRef(
                 {areCommentsOpen && (
                     <Comments
                         video={video}
-                        onClose={() => {
-                            closeComments();
-                            onCommentsClosed?.();
-                        }}
+                        onClose={() => dispatch({ type: "COLLAPSE_CONTENT" })}
+                        width={isFullscreen ? width : "450px"}
+                        height={height}
+                        minHeight={minHeight}
+                        isFullscreen={isFullscreen}
+                        borderRadius={borderRadius}
+                    />
+                )}
+                {isDescriptionOpen && (
+                    <Description
+                        video={video}
+                        onClose={() => dispatch({ type: "COLLAPSE_CONTENT" })}
                         width={isFullscreen ? width : "450px"}
                         height={height}
                         minHeight={minHeight}
