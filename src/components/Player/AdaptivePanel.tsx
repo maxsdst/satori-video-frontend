@@ -1,34 +1,24 @@
 import { Box, HStack, Portal, VStack } from "@chakra-ui/react";
-import { ReactNode } from "react";
+import { ReactNode, useContext } from "react";
 import { MdOutlineClose } from "react-icons/md";
 import IconButton from "../IconButton";
+import PlayerContext from "./playerContext";
 
 interface Props {
     onClose: () => void;
-    width: string;
-    height: string;
-    minHeight?: string;
-    isFullscreen: boolean;
-    borderRadius: string;
     header: ReactNode;
     children: ReactNode;
 }
 
-function AdaptivePanel({
-    onClose,
-    width,
-    height,
-    minHeight,
-    isFullscreen,
-    borderRadius,
-    header,
-    children,
-}: Props) {
+function AdaptivePanel({ onClose, header, children }: Props) {
+    const { width, height, minHeight, isFullscreen, borderRadius } =
+        useContext(PlayerContext);
+
     const headerHeight = "3rem";
 
     const panel = (
         <Box
-            width={width}
+            width={isFullscreen ? width : "450px"}
             height={height}
             minHeight={minHeight}
             backgroundColor="gray.700"

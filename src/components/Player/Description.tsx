@@ -7,30 +7,12 @@ import AdaptivePanel from "./AdaptivePanel";
 interface Props {
     video: Video;
     onClose: () => void;
-    width: string;
-    height: string;
-    minHeight?: string;
-    isFullscreen: boolean;
-    borderRadius: string;
 }
 
-function Description({
-    video,
-    onClose,
-    width,
-    height,
-    minHeight,
-    isFullscreen,
-    borderRadius,
-}: Props) {
+function Description({ video, onClose }: Props) {
     return (
         <AdaptivePanel
             onClose={onClose}
-            width={width}
-            height={height}
-            minHeight={minHeight}
-            isFullscreen={isFullscreen}
-            borderRadius={borderRadius}
             header={
                 <HStack height="100%">
                     <Text fontSize="lg" fontWeight="semibold">

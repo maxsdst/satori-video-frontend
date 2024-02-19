@@ -9,22 +9,9 @@ import Header, { Ordering } from "./Header";
 interface Props {
     video: Video;
     onClose: () => void;
-    width: string;
-    height: string;
-    minHeight?: string;
-    isFullscreen: boolean;
-    borderRadius: string;
 }
 
-function Comments({
-    video,
-    onClose,
-    width,
-    height,
-    minHeight,
-    isFullscreen,
-    borderRadius,
-}: Props) {
+function Comments({ video, onClose }: Props) {
     const commentListContainer = useRef<HTMLDivElement>(null);
     const commentList = useRef<CommentListHandle>(null);
 
@@ -33,11 +20,6 @@ function Comments({
     return (
         <AdaptivePanel
             onClose={onClose}
-            width={width}
-            height={height}
-            minHeight={minHeight}
-            isFullscreen={isFullscreen}
-            borderRadius={borderRadius}
             header={<Header video={video} onOrderingChange={setOrdering} />}
         >
             <Flex

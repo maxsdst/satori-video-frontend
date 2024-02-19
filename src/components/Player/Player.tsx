@@ -19,6 +19,7 @@ import Description from "./Description";
 import InteractionButtons from "./InteractionButtons";
 import "./Player.css";
 import VideoInfo from "./VideoInfo";
+import PlayerContext from "./playerContext";
 import playerReducer from "./playerReducer";
 
 interface Props {
@@ -113,123 +114,132 @@ const Player = forwardRef(
         const borderRadius = "6px";
 
         return (
-            <HStack height={height} minHeight={minHeight} spacing={0}>
-                <Box
-                    className={classNames({
-                        "player-wrapper": true,
-                        "video-round-corners": roundCorners,
-                    })}
-                    width={width}
-                    height={height}
-                    minWidth={minWidth}
-                    minHeight={minHeight}
-                    position="relative"
-                    overflow="hidden"
-                    backgroundImage={video.first_frame}
-                    backgroundSize="cover"
-                    backgroundPosition="center"
-                    borderRadius={roundCorners ? borderRadius : undefined}
-                    borderRightRadius={areCommentsOpen ? "0" : undefined}
-                >
-                    {!isPlaying && (
-                        <AbsoluteCenter verticalAlign="">
-                            <Icon
-                                as={FaPlay}
-                                boxSize="40px"
-                                filter={PLAYER_DROP_SHADOW}
-                                opacity={0.8}
-                            />
-                        </AbsoluteCenter>
-                    )}
-                    <VStack
-                        position="absolute"
-                        width="100%"
-                        height="100%"
-                        spacing={0}
+            <PlayerContext.Provider
+                value={{
+                    width,
+                    height,
+                    minWidth,
+                    minHeight,
+                    isFullscreen,
+                    borderRadius,
+                }}
+            >
+                <HStack height={height} minHeight={minHeight} spacing={0}>
+                    <Box
+                        className={classNames({
+                            "player-wrapper": true,
+                            "video-round-corners": roundCorners,
+                        })}
+                        width={width}
+                        height={height}
+                        minWidth={minWidth}
+                        minHeight={minHeight}
+                        position="relative"
+                        overflow="hidden"
+                        backgroundImage={video.first_frame}
+                        backgroundSize="cover"
+                        backgroundPosition="center"
+                        borderRadius={roundCorners ? borderRadius : undefined}
+                        borderRightRadius={areCommentsOpen ? "0" : undefined}
                     >
-                        <Box
-                            position="relative"
+                        {!isPlaying && (
+                            <AbsoluteCenter verticalAlign="">
+                                <Icon
+                                    as={FaPlay}
+                                    boxSize="40px"
+                                    filter={PLAYER_DROP_SHADOW}
+                                    opacity={0.8}
+                                />
+                            </AbsoluteCenter>
+                        )}
+                        <VStack
+                            position="absolute"
                             width="100%"
                             height="100%"
-                            zIndex={3}
+                            spacing={0}
                         >
-                            <PlayerControls
-                                isPlaying={isPlaying}
-                                onPause={() => dispatch({ type: "PAUSE" })}
-                                onPlay={() => dispatch({ type: "PLAY" })}
-                                isMuted={isMuted}
-                                onMute={() => dispatch({ type: "MUTE" })}
-                                onUnmute={() => dispatch({ type: "UNMUTE" })}
-                            />
                             <Box
-                                position="absolute"
-                                bottom={0}
-                                right={0}
-                                zIndex={2}
+                                position="relative"
+                                width="100%"
+                                height="100%"
+                                zIndex={3}
                             >
-                                {showInteractionButtons && (
-                                    <InteractionButtons
-                                        video={video}
-                                        refetchVideo={refetch}
-                                        onOpenComments={() =>
-                                            dispatch({ type: "OPEN_COMMENTS" })
-                                        }
-                                        onOpenDescription={() =>
-                                            dispatch({
-                                                type: "OPEN_DESCRIPTION",
-                                            })
-                                        }
-                                    />
-                                )}
+                                <PlayerControls
+                                    isPlaying={isPlaying}
+                                    onPause={() => dispatch({ type: "PAUSE" })}
+                                    onPlay={() => dispatch({ type: "PLAY" })}
+                                    isMuted={isMuted}
+                                    onMute={() => dispatch({ type: "MUTE" })}
+                                    onUnmute={() =>
+                                        dispatch({ type: "UNMUTE" })
+                                    }
+                                />
+                                <Box
+                                    position="absolute"
+                                    bottom={0}
+                                    right={0}
+                                    zIndex={2}
+                                >
+                                    {showInteractionButtons && (
+                                        <InteractionButtons
+                                            video={video}
+                                            refetchVideo={refetch}
+                                            onOpenComments={() =>
+                                                dispatch({
+                                                    type: "OPEN_COMMENTS",
+                                                })
+                                            }
+                                            onOpenDescription={() =>
+                                                dispatch({
+                                                    type: "OPEN_DESCRIPTION",
+                                                })
+                                            }
+                                        />
+                                    )}
+                                </Box>
                             </Box>
-                        </Box>
-                        {showVideoInfo && <VideoInfo video={video} />}
-                    </VStack>
-                    <ReactPlayer
-                        url={video.source}
-                        playing={isPlaying}
-                        muted={isMuted}
-                        loop={true}
-                        width="100%"
-                        height="100%"
-                        playsinline={true}
-                        light={video.first_frame}
-                        playIcon={<></>}
-                        ref={player}
-                        onDuration={(duration) => setDuration(duration)}
-                        progressInterval={
-                            duration && duration < 10
-                                ? (duration / 10) * 1000
-                                : 1000
-                        }
-                        onProgress={({ playedSeconds, played }) =>
-                            onProgress?.(playedSeconds, played * 100)
-                        }
-                    />
-                </Box>
-                {areCommentsOpen && (
-                    <Comments
-                        video={video}
-                        onClose={() => dispatch({ type: "COLLAPSE_CONTENT" })}
-                        width={isFullscreen ? width : "450px"}
-                        height={height}
-                        minHeight={minHeight}
-                        isFullscreen={isFullscreen}
-                        borderRadius={borderRadius}
-                    />
-                )}
-                {isDescriptionOpen && (
-                    <Description
-                        video={video}
-                        onClose={() => dispatch({ type: "COLLAPSE_CONTENT" })}
-                        width={isFullscreen ? width : "450px"}
-                        height={height}
-                        minHeight={minHeight}
-                        isFullscreen={isFullscreen}
-                        borderRadius={borderRadius}
-                    />
-                )}
-            </HStack>
+                            {showVideoInfo && <VideoInfo video={video} />}
+                        </VStack>
+                        <ReactPlayer
+                            url={video.source}
+                            playing={isPlaying}
+                            muted={isMuted}
+                            loop={true}
+                            width="100%"
+                            height="100%"
+                            playsinline={true}
+                            light={video.first_frame}
+                            playIcon={<></>}
+                            ref={player}
+                            onDuration={(duration) => setDuration(duration)}
+                            progressInterval={
+                                duration && duration < 10
+                                    ? (duration / 10) * 1000
+                                    : 1000
+                            }
+                            onProgress={({ playedSeconds, played }) =>
+                                onProgress?.(playedSeconds, played * 100)
+                            }
+                        />
+                    </Box>
+                    {areCommentsOpen && (
+                        <Comments
+                            video={video}
+                            onClose={() =>
+                                dispatch({ type: "COLLAPSE_CONTENT" })
+                            }
+                        />
+                    )}
+                    {isDescriptionOpen && (
+                        <Description
+                            video={video}
+                            onClose={() =>
+                                dispatch({ type: "COLLAPSE_CONTENT" })
+                            }
+                        />
+                    )}
+                </HStack>
+            </PlayerContext.Provider>
         );
     }
 );
