@@ -25,7 +25,10 @@ function InteractionButtons({
             <PlayerButton icon={AiOutlineComment} onClick={onOpenComments}>
                 {formatNumber(video.comment_count)}
             </PlayerButton>
-            <MoreActionsMenu onOpenDescription={onOpenDescription} />
+            <MoreActionsMenu
+                video={video}
+                onOpenDescription={onOpenDescription}
+            />
         </VStack>
     );
 }
