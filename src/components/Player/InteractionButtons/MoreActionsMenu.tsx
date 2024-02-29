@@ -8,10 +8,13 @@ import {
     useDisclosure,
 } from "@chakra-ui/react";
 import { AiOutlineFlag } from "react-icons/ai";
-import { HiOutlineBookmark, HiOutlineDotsVertical } from "react-icons/hi";
+import { HiOutlineDotsVertical } from "react-icons/hi";
+import { HiBookmark, HiOutlineBookmark } from "react-icons/hi2";
 import { PiTextAlignLeftFill } from "react-icons/pi";
 import { TbShare3 } from "react-icons/tb";
 import Video from "../../../entities/Video";
+import useCreateSavedVideo from "../../../hooks/useCreateSavedVideo";
+import useRemoveVideoFromSaved from "../../../hooks/useRemoveVideoFromSaved";
 import { useWindowDimensions } from "../../../hooks/useWindowDimensions";
 import { isInPortraitMode } from "../../../utils";
 import PlayerButton from "../PlayerButton";
@@ -31,6 +34,13 @@ function MoreActionsMenu({ video, onOpenDescription }: Props) {
         onOpen: openShareModal,
         onClose: closeShareModal,
     } = useDisclosure();
+
+    const createSavedVideo = useCreateSavedVideo(video.id, {
+        shouldUpdateVideoOptimistically: true,
+    });
+    const removeVideoFromSaved = useRemoveVideoFromSaved(video.id, {
+        shouldUpdateVideoOptimistically: true,
+    });
 
     const menuItemStyles = isFullscreen
         ? {
@@ -57,9 +67,20 @@ function MoreActionsMenu({ video, onOpenDescription }: Props) {
             </MenuItem>
             <MenuItem
                 {...menuItemStyles}
-                icon={<Icon as={HiOutlineBookmark} boxSize={5} />}
+                icon={
+                    <Icon
+                        as={video.is_saved ? HiBookmark : HiOutlineBookmark}
+                        boxSize={5}
+                    />
+                }
+                closeOnSelect={false}
+                onClick={() =>
+                    video.is_saved
+                        ? removeVideoFromSaved.mutate(null)
+                        : createSavedVideo.mutate(null)
+                }
             >
-                Save
+                {video.is_saved ? "Saved" : "Save"}
             </MenuItem>
             <MenuItem
                 {...menuItemStyles}

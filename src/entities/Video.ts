@@ -13,6 +13,7 @@ export default interface Video {
     like_count: number;
     is_liked: boolean;
     comment_count: number;
+    is_saved: boolean;
 }
 
 export const DATE_FIELDS = ["upload_date"];
