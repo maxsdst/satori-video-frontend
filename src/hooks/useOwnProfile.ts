@@ -1,27 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
-import { AxiosError, HttpStatusCode } from "axios";
+import { AxiosError } from "axios";
 import useLogout from "../auth/hooks/useLogout";
 import Profile from "../entities/Profile";
-import ApiClient from "../services/ApiClient";
-
-const apiClient = new ApiClient<Profile>("/profiles/profiles/me/");
+import {
+    OWN_PROFILE_CACHE_KEY,
+    getOwnProfile,
+} from "../services/profileService";
 
 function useOwnProfile() {
     const logout = useLogout();
 
     return useQuery<Profile | null, AxiosError>({
-        queryKey: ["own-profile"],
-        queryFn: () =>
-            apiClient.get().catch((error) => {
-                if (error instanceof AxiosError && error.response) {
-                    const status = error.response.status as HttpStatusCode;
-                    if (status === HttpStatusCode.Unauthorized) {
-                        logout();
-                        return null;
-                    }
-                }
-                throw error;
-            }),
+        queryKey: [OWN_PROFILE_CACHE_KEY],
+        queryFn: async () => {
+            const profile = await getOwnProfile();
+            if (!profile) logout();
+            return profile;
+        },
     });
 }
 

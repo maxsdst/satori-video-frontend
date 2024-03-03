@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import Profile from "../entities/Profile";
-import ApiClient from "../services/ApiClient";
+import { updateOwnProfile } from "../services/profileService";
 
 interface ProfileData {
     full_name?: string;
@@ -19,14 +19,9 @@ interface UseUpdateOwnProfileOptions {
     onError: (data: ErrorData) => void;
 }
 
-const apiClient = new ApiClient<Profile>("/profiles/profiles/me/");
-
 function useUpdateOwnProfile({ onError }: UseUpdateOwnProfileOptions) {
     return useMutation<Profile, AxiosError<ErrorData>, ProfileData>({
-        mutationFn: (data) =>
-            apiClient.patch(undefined, data, {
-                headers: { "Content-Type": "multipart/form-data" },
-            }),
+        mutationFn: (data) => updateOwnProfile(data),
         onError: (error) => {
             if (error.response?.data) onError(error.response.data);
         },
