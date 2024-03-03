@@ -9,7 +9,7 @@ import {
     useDisclosure,
 } from "@chakra-ui/react";
 import { formatDistanceToNowStrict } from "date-fns";
-import { useRef } from "react";
+import { memo, useRef } from "react";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import Comment from "../../../../entities/Comment";
@@ -23,8 +23,8 @@ interface Props {
     comment: Comment;
     isReply?: boolean;
     onReplyToReplyCreated?: (reply: Comment) => void;
-    onEdit: () => void;
-    onDeleted: () => void;
+    onEdit: (comment: Comment) => void;
+    onDeleted: (comment: Comment) => void;
 }
 
 function Item({
@@ -103,8 +103,8 @@ function Item({
                     </VStack>
                     <ActionMenu
                         comment={comment}
-                        onEdit={onEdit}
-                        onDeleted={onDeleted}
+                        onEdit={() => onEdit(comment)}
+                        onDeleted={() => onDeleted(comment)}
                     />
                 </HStack>
                 <HStack spacing={4}>
@@ -172,4 +172,4 @@ function Item({
     );
 }
 
-export default Item;
+export default memo(Item);

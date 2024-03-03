@@ -19,8 +19,9 @@ function useCreateSavedVideo(
     { shouldUpdateVideoOptimistically, onError }: UseCreateSavedVideoOptions
 ) {
     const optimisticUpdate = useOptimisticUpdate<Video>({
-        queryKey: ["videos", videoId],
-        updater: (video) => ({ ...video, is_saved: true }),
+        queryFilters: { queryKey: ["videos", videoId], exact: true },
+        updater: (video) => video && { ...video, is_saved: true },
+        shouldInvalidateQueries: true,
     });
 
     return useMutation<SavedVideo, AxiosError<ErrorData>, null>({

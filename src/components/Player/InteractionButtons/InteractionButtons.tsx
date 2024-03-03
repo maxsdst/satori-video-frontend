@@ -8,20 +8,18 @@ import MoreActionsMenu from "./MoreActionsMenu";
 
 interface Props {
     video: Video;
-    refetchVideo: () => void;
     onOpenComments: () => void;
     onOpenDescription: () => void;
 }
 
 function InteractionButtons({
     video,
-    refetchVideo,
     onOpenComments,
     onOpenDescription,
 }: Props) {
     return (
         <VStack spacing={0} zIndex={4}>
-            <LikeButton video={video} refetchVideo={refetchVideo} />
+            <LikeButton video={video} />
             <PlayerButton icon={AiOutlineComment} onClick={onOpenComments}>
                 {formatNumber(video.comment_count)}
             </PlayerButton>

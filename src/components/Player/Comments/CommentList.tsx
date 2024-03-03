@@ -6,7 +6,9 @@ import {
     Ref,
     RefObject,
     forwardRef,
+    useCallback,
     useImperativeHandle,
+    useMemo,
     useState,
 } from "react";
 import { BsArrowReturnRight } from "react-icons/bs";
@@ -54,23 +56,25 @@ const CommentList = forwardRef(
         }: Props,
         ref: Ref<CommentListHandle>
     ) => {
-        const queryOrdering: CommentQuery["ordering"] = (() => {
-            switch (ordering) {
-                case "top":
-                    return { field: "popularity_score", direction: "DESC" };
-                case "new":
-                    return { field: "creation_date", direction: "DESC" };
-                default:
-                    return undefined;
-            }
-        })();
+        const query = useMemo<CommentQuery>(() => {
+            const queryOrdering: CommentQuery["ordering"] = (() => {
+                switch (ordering) {
+                    case "top":
+                        return { field: "popularity_score", direction: "DESC" };
+                    case "new":
+                        return { field: "creation_date", direction: "DESC" };
+                    default:
+                        return undefined;
+                }
+            })();
 
-        const query: CommentQuery = {
-            videoId,
-            parentId,
-            ordering: queryOrdering,
-            pagination: { type: "snapshot", pageSize },
-        };
+            return {
+                videoId,
+                parentId,
+                ordering: queryOrdering,
+                pagination: { type: "snapshot", pageSize },
+            };
+        }, [videoId, parentId, ordering, pageSize]);
 
         const {
             data: comments,
@@ -104,16 +108,31 @@ const CommentList = forwardRef(
             );
         }
 
-        function _handleCommentDeleted(commentId: number) {
-            handleCommentDeleted(commentId);
-            setCreatedComments(
-                createdComments.filter((item) => item.id !== commentId)
-            );
-        }
-
         function isInCreatedComments(comment: Comment) {
             return createdComments.some((item) => item.id === comment.id);
         }
+
+        const onReplyToReplyCreated = useCallback(
+            (comment: Comment) => {
+                setCreatedComments([...createdComments, comment]);
+            },
+            [createdComments, setCreatedComments]
+        );
+
+        const onEditComment = useCallback(
+            (comment: Comment) => setEditedCommentId(comment.id),
+            [setEditedCommentId]
+        );
+
+        const onCommentDeleted = useCallback(
+            (comment: Comment) => {
+                handleCommentDeleted(comment.id);
+                setCreatedComments(
+                    createdComments.filter((item) => item.id !== comment.id)
+                );
+            },
+            [handleCommentDeleted, createdComments, setCreatedComments]
+        );
 
         function renderComment(comment: Comment) {
             if (comment.id === editedCommentId)
@@ -133,13 +152,9 @@ const CommentList = forwardRef(
                     key={comment.id}
                     comment={comment}
                     isReply={isReplyList}
-                    onReplyToReplyCreated={(comment) =>
-                        setCreatedComments([...createdComments, comment])
-                    }
-                    onEdit={() => setEditedCommentId(comment.id)}
-                    onDeleted={() => {
-                        _handleCommentDeleted(comment.id);
-                    }}
+                    onReplyToReplyCreated={onReplyToReplyCreated}
+                    onEdit={onEditComment}
+                    onDeleted={onCommentDeleted}
                 />
             );
         }

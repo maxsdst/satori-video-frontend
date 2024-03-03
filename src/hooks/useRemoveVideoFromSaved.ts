@@ -17,8 +17,9 @@ function useRemoveVideoFromSaved(
     { shouldUpdateVideoOptimistically }: UseRemoveVideoFromSavedOptions
 ) {
     const optimisticUpdate = useOptimisticUpdate<Video>({
-        queryKey: ["videos", videoId],
-        updater: (video) => ({ ...video, is_saved: false }),
+        queryFilters: { queryKey: ["videos", videoId], exact: true },
+        updater: (video) => video && { ...video, is_saved: false },
+        shouldInvalidateQueries: true,
     });
 
     return useMutation<null, AxiosError<ErrorData>, null>({

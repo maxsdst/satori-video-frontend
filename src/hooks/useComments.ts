@@ -3,6 +3,7 @@ import {
     useInfiniteQuery,
     useQueryClient,
 } from "@tanstack/react-query";
+import { useCallback } from "react";
 import Comment from "../entities/Comment";
 import BaseQuery from "../services/BaseQuery";
 import commentService, { GetAllResponse } from "../services/commentService";
@@ -75,22 +76,25 @@ export function useHandleCommentUpdated(query: CommentQuery) {
 export function useHandleCommentDeleted(query: CommentQuery) {
     const queryClient = useQueryClient();
 
-    return (deletedCommentId: number) => {
-        queryClient.setQueryData(
-            getQueryKey(query),
-            (data: InfiniteData<GetAllResponse> | undefined) => {
-                if (!data) return data;
+    return useCallback(
+        (deletedCommentId: number) => {
+            queryClient.setQueryData(
+                getQueryKey(query),
+                (data: InfiniteData<GetAllResponse> | undefined) => {
+                    if (!data) return data;
 
-                return {
-                    ...data,
-                    pages: data.pages.map((page) => ({
-                        ...page,
-                        results: page.results.filter(
-                            (item) => item.id !== deletedCommentId
-                        ),
-                    })),
-                };
-            }
-        );
-    };
+                    return {
+                        ...data,
+                        pages: data.pages.map((page) => ({
+                            ...page,
+                            results: page.results.filter(
+                                (item) => item.id !== deletedCommentId
+                            ),
+                        })),
+                    };
+                }
+            );
+        },
+        [query, queryClient]
+    );
 }

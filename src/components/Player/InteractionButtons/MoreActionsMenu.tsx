@@ -14,6 +14,7 @@ import { PiTextAlignLeftFill } from "react-icons/pi";
 import { TbShare3 } from "react-icons/tb";
 import Video from "../../../entities/Video";
 import useCreateSavedVideo from "../../../hooks/useCreateSavedVideo";
+import useOwnProfile from "../../../hooks/useOwnProfile";
 import useRemoveVideoFromSaved from "../../../hooks/useRemoveVideoFromSaved";
 import { useWindowDimensions } from "../../../hooks/useWindowDimensions";
 import { isInPortraitMode } from "../../../utils";
@@ -35,12 +36,16 @@ function MoreActionsMenu({ video, onOpenDescription }: Props) {
         onClose: closeShareModal,
     } = useDisclosure();
 
+    const { data: ownProfile, isLoading, error } = useOwnProfile();
+
     const createSavedVideo = useCreateSavedVideo(video.id, {
         shouldUpdateVideoOptimistically: true,
     });
     const removeVideoFromSaved = useRemoveVideoFromSaved(video.id, {
         shouldUpdateVideoOptimistically: true,
     });
+
+    if (isLoading || error) return null;
 
     const menuItemStyles = isFullscreen
         ? {
@@ -65,23 +70,25 @@ function MoreActionsMenu({ video, onOpenDescription }: Props) {
             >
                 Share
             </MenuItem>
-            <MenuItem
-                {...menuItemStyles}
-                icon={
-                    <Icon
-                        as={video.is_saved ? HiBookmark : HiOutlineBookmark}
-                        boxSize={5}
-                    />
-                }
-                closeOnSelect={false}
-                onClick={() =>
-                    video.is_saved
-                        ? removeVideoFromSaved.mutate(null)
-                        : createSavedVideo.mutate(null)
-                }
-            >
-                {video.is_saved ? "Saved" : "Save"}
-            </MenuItem>
+            {ownProfile && (
+                <MenuItem
+                    {...menuItemStyles}
+                    icon={
+                        <Icon
+                            as={video.is_saved ? HiBookmark : HiOutlineBookmark}
+                            boxSize={5}
+                        />
+                    }
+                    closeOnSelect={false}
+                    onClick={() =>
+                        video.is_saved
+                            ? removeVideoFromSaved.mutate(null)
+                            : createSavedVideo.mutate(null)
+                    }
+                >
+                    {video.is_saved ? "Saved" : "Save"}
+                </MenuItem>
+            )}
             <MenuItem
                 {...menuItemStyles}
                 icon={<Icon as={AiOutlineFlag} boxSize={5} />}

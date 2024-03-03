@@ -1,32 +1,41 @@
-import { QueryKey, useQueryClient } from "@tanstack/react-query";
+import { QueryFilters, QueryKey, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 interface UseOptimisticUpdateOptions<T> {
-    queryKey: QueryKey;
-    updater: (data: T) => T;
+    queryFilters: QueryFilters;
+    updater: (data: T | undefined) => T | undefined;
+    shouldInvalidateQueries?: boolean;
 }
 
 function useOptimisticUpdate<T>({
-    queryKey,
+    queryFilters,
     updater,
+    shouldInvalidateQueries,
 }: UseOptimisticUpdateOptions<T>) {
     const queryClient = useQueryClient();
-    const [previous, setPrevious] = useState<T | null>(null);
+    const [previousData, setPreviousData] = useState<
+        [QueryKey, T | undefined][] | null
+    >(null);
 
     async function onMutate() {
-        await queryClient.cancelQueries({ queryKey });
-        const data = queryClient.getQueryData<T>(queryKey);
-        if (data) queryClient.setQueryData<T>(queryKey, updater(data));
-        setPrevious(data || null);
+        await queryClient.cancelQueries(queryFilters);
+        const data = queryClient.getQueriesData<T>(queryFilters);
+        queryClient.setQueriesData<T>(queryFilters, updater);
+        setPreviousData(data);
     }
 
     function onError() {
-        if (previous) queryClient.setQueryData(queryKey, previous);
+        if (previousData) {
+            for (const [queryKey, data] of previousData) {
+                queryClient.setQueryData(queryKey, data);
+            }
+        }
     }
 
     function onSettled() {
-        setPrevious(null);
-        queryClient.invalidateQueries({ queryKey });
+        setPreviousData(null);
+        if (shouldInvalidateQueries)
+            queryClient.invalidateQueries(queryFilters);
     }
 
     return { onMutate, onError, onSettled };

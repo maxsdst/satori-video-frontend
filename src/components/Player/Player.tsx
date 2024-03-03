@@ -62,7 +62,7 @@ const Player = forwardRef(
         }: Props,
         ref: Ref<PlayerHandle>
     ) => {
-        const { data: video, isLoading, refetch, error } = useVideo(videoId);
+        const { data: video, isLoading, error } = useVideo(videoId);
 
         const [
             {
@@ -183,7 +183,6 @@ const Player = forwardRef(
                                     {showInteractionButtons && (
                                         <InteractionButtons
                                             video={video}
-                                            refetchVideo={refetch}
                                             onOpenComments={() =>
                                                 dispatch({
                                                     type: "OPEN_COMMENTS",
