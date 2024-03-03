@@ -6,15 +6,14 @@ import {
 import { useCallback } from "react";
 import Comment from "../entities/Comment";
 import BaseQuery from "../services/BaseQuery";
-import commentService, { GetAllResponse } from "../services/commentService";
+import commentService, {
+    COMMENTS_CACHE_KEY,
+    GetAllResponse,
+} from "../services/commentService";
 
 export interface CommentQuery extends BaseQuery {
     videoId?: number;
     parentId?: number;
-}
-
-function getQueryKey(query: CommentQuery) {
-    return ["comments", query];
 }
 
 interface UseCommentsOptions {
@@ -27,7 +26,7 @@ function useComments(
     { staleTime, enabled }: UseCommentsOptions
 ) {
     return useInfiniteQuery<GetAllResponse, Error>({
-        queryKey: getQueryKey(query),
+        queryKey: [COMMENTS_CACHE_KEY, query],
         staleTime,
         enabled,
         queryFn: ({ pageParam }) => {
@@ -53,7 +52,7 @@ export function useHandleCommentUpdated(query: CommentQuery) {
 
     return (updatedComment: Comment) => {
         queryClient.setQueryData(
-            getQueryKey(query),
+            [COMMENTS_CACHE_KEY, query],
             (data: InfiniteData<GetAllResponse> | undefined) => {
                 if (!data) return data;
 
@@ -79,7 +78,7 @@ export function useHandleCommentDeleted(query: CommentQuery) {
     return useCallback(
         (deletedCommentId: number) => {
             queryClient.setQueryData(
-                getQueryKey(query),
+                [COMMENTS_CACHE_KEY, query],
                 (data: InfiniteData<GetAllResponse> | undefined) => {
                     if (!data) return data;
 

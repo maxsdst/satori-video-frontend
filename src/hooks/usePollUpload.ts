@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import Upload from "../entities/Upload";
-import uploadService from "../services/uploadService";
+import uploadService, { UPLOADS_CACHE_KEY } from "../services/uploadService";
 
 const POLLING_INTERVAL_MS = 2000;
 
 function usePollUpload(uploadId: number) {
     const { data: upload, error } = useQuery<Upload, Error>({
-        queryKey: ["uploads", uploadId],
+        queryKey: [UPLOADS_CACHE_KEY, uploadId],
         queryFn: () => uploadService.get(uploadId),
         refetchInterval: (upload) =>
             upload?.is_done ? false : POLLING_INTERVAL_MS,

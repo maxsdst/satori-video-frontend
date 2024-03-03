@@ -4,6 +4,7 @@ import { produce } from "immer";
 import Like from "../entities/Like";
 import Video from "../entities/Video";
 import likeService from "../services/likeService";
+import { VIDEOS_CACHE_KEY } from "../services/videoService";
 import useOptimisticUpdate from "./useOptimisticUpdate";
 
 interface ErrorData {
@@ -20,7 +21,7 @@ function useCreateLike(
     { shouldUpdateVideoOptimistically, onError }: UseCreateLikeOptions
 ) {
     const optimisticUpdate = useOptimisticUpdate<Video>({
-        queryFilters: { queryKey: ["videos", videoId], exact: true },
+        queryFilters: { queryKey: [VIDEOS_CACHE_KEY, videoId], exact: true },
         updater: (video) =>
             video &&
             produce(video, (draft) => {

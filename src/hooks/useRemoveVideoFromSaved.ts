@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import Video from "../entities/Video";
 import { removeVideoFromSaved } from "../services/savedVideoService";
+import { VIDEOS_CACHE_KEY } from "../services/videoService";
 import useOptimisticUpdate from "./useOptimisticUpdate";
 
 interface ErrorData {
@@ -17,7 +18,7 @@ function useRemoveVideoFromSaved(
     { shouldUpdateVideoOptimistically }: UseRemoveVideoFromSavedOptions
 ) {
     const optimisticUpdate = useOptimisticUpdate<Video>({
-        queryFilters: { queryKey: ["videos", videoId], exact: true },
+        queryFilters: { queryKey: [VIDEOS_CACHE_KEY, videoId], exact: true },
         updater: (video) => video && { ...video, is_saved: false },
         shouldInvalidateQueries: true,
     });

@@ -4,6 +4,8 @@ import ApiClient, {
     PaginationType,
 } from "./ApiClient";
 
+export const UPLOADS_CACHE_KEY = "uploads";
+
 export default new ApiClient<Upload, PaginationType.LimitOffset>(
     "/videos/uploads/",
     DATE_FIELDS

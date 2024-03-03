@@ -4,7 +4,7 @@ import { produce } from "immer";
 import Comment from "../entities/Comment";
 import CommentLike from "../entities/CommentLike";
 import commentLikeService from "../services/commentLikeService";
-import { GetAllResponse } from "../services/commentService";
+import { COMMENTS_CACHE_KEY, GetAllResponse } from "../services/commentService";
 import useOptimisticUpdate from "./useOptimisticUpdate";
 
 interface ErrorData {
@@ -28,7 +28,7 @@ function useCreateCommentLike(
     const optimisticUpdate = useOptimisticUpdate<
         InfiniteData<GetAllResponse> | Comment
     >({
-        queryFilters: { queryKey: ["comments"] },
+        queryFilters: { queryKey: [COMMENTS_CACHE_KEY] },
         updater: (data) => {
             if (!data) return data;
 

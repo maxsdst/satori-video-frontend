@@ -3,7 +3,7 @@ import { AxiosError } from "axios";
 import { produce } from "immer";
 import Comment from "../entities/Comment";
 import { removeLike } from "../services/commentLikeService";
-import { GetAllResponse } from "../services/commentService";
+import { COMMENTS_CACHE_KEY, GetAllResponse } from "../services/commentService";
 import useOptimisticUpdate from "./useOptimisticUpdate";
 
 interface ErrorData {
@@ -26,7 +26,7 @@ function useRemoveCommentLike(
     const optimisticUpdate = useOptimisticUpdate<
         InfiniteData<GetAllResponse> | Comment
     >({
-        queryFilters: { queryKey: ["comments"] },
+        queryFilters: { queryKey: [COMMENTS_CACHE_KEY] },
         updater: (data) => {
             if (!data) return data;
 

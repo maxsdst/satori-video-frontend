@@ -3,6 +3,7 @@ import { AxiosError } from "axios";
 import SavedVideo from "../entities/SavedVideo";
 import Video from "../entities/Video";
 import savedVideoService from "../services/savedVideoService";
+import { VIDEOS_CACHE_KEY } from "../services/videoService";
 import useOptimisticUpdate from "./useOptimisticUpdate";
 
 interface ErrorData {
@@ -19,7 +20,7 @@ function useCreateSavedVideo(
     { shouldUpdateVideoOptimistically, onError }: UseCreateSavedVideoOptions
 ) {
     const optimisticUpdate = useOptimisticUpdate<Video>({
-        queryFilters: { queryKey: ["videos", videoId], exact: true },
+        queryFilters: { queryKey: [VIDEOS_CACHE_KEY, videoId], exact: true },
         updater: (video) => video && { ...video, is_saved: true },
         shouldInvalidateQueries: true,
     });
