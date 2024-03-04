@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import Profile from "../entities/Profile";
+import Profile from "../../entities/Profile";
 import {
     PROFILES_CACHE_KEY,
     retrieveByUsername,
-} from "../services/profileService";
+} from "../../services/profileService";
 
 function useProfile(username: string) {
     return useQuery<Profile, Error>({

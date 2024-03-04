@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import MainContentArea from "../components/MainContentArea";
 import Profile from "../components/Profile";
 import UserVideosSection from "../components/UserVideosSection";
-import useProfile from "../hooks/useProfile";
+import useProfile from "../hooks/profiles/useProfile";
 
 function ProfilePage() {
     const { username } = useParams();

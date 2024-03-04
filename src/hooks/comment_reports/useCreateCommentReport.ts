@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import commentReportService from "../services/commentReportService";
+import commentReportService from "../../services/commentReportService";
 
 export enum ReportReason {
     Spam = "spam",

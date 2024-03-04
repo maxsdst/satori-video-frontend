@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import viewService from "../services/viewService";
+import viewService from "../../services/viewService";
 
 interface ViewData {
     videoId: number;

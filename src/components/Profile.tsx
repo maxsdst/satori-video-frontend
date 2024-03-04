@@ -9,7 +9,7 @@ import {
     useDisclosure,
 } from "@chakra-ui/react";
 import ProfileEntity from "../entities/Profile";
-import useOwnProfile from "../hooks/useOwnProfile";
+import useOwnProfile from "../hooks/profiles/useOwnProfile";
 import EditProfileModal from "./EditProfileModal";
 
 interface Props {

@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import BaseQuery from "../services/BaseQuery";
+import BaseQuery from "../../services/BaseQuery";
 import videoService, {
     GetAllResponse,
     VIDEOS_CACHE_KEY,
-} from "../services/videoService";
+} from "../../services/videoService";
 
 export interface VideoQuery extends BaseQuery {
     profileId?: number;

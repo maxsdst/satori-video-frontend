@@ -1,5 +1,5 @@
 import { SimpleGrid, Spinner } from "@chakra-ui/react";
-import useVideos, { VideoQuery } from "../../hooks/useVideos";
+import useVideos, { VideoQuery } from "../../hooks/videos/useVideos";
 import Item from "./Item";
 
 interface Props {

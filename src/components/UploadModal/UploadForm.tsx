@@ -14,7 +14,7 @@ import { AiOutlineUpload } from "react-icons/ai";
 import { z } from "zod";
 import { BYTES_IN_MB, MAX_VIDEO_SIZE_MB } from "../../constants";
 import Upload from "../../entities/Upload";
-import useCreateUpload from "../../hooks/useCreateUpload";
+import useCreateUpload from "../../hooks/uploads/useCreateUpload";
 
 const ACCEPTED_VIDEO_TYPES = {
     "video/mp4": ".mp4",

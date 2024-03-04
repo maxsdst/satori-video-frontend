@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import Comment from "../entities/Comment";
-import commentService from "../services/commentService";
+import Comment from "../../entities/Comment";
+import commentService from "../../services/commentService";
 
 interface CommentData {
     text: string;

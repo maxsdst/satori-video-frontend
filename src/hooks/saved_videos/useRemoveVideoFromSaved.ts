@@ -1,36 +1,30 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { produce } from "immer";
-import Video from "../entities/Video";
-import { removeLike } from "../services/likeService";
-import { VIDEOS_CACHE_KEY } from "../services/videoService";
-import useOptimisticUpdate from "./useOptimisticUpdate";
+import Video from "../../entities/Video";
+import { removeVideoFromSaved } from "../../services/savedVideoService";
+import { VIDEOS_CACHE_KEY } from "../../services/videoService";
+import useOptimisticUpdate from "../useOptimisticUpdate";
 
 interface ErrorData {
     detail: string;
 }
 
-interface UseRemoveLikeOptions {
+interface UseRemoveVideoFromSavedOptions {
     shouldUpdateVideoOptimistically?: boolean;
 }
 
-function useRemoveLike(
+function useRemoveVideoFromSaved(
     videoId: number,
-    { shouldUpdateVideoOptimistically }: UseRemoveLikeOptions
+    { shouldUpdateVideoOptimistically }: UseRemoveVideoFromSavedOptions
 ) {
     const optimisticUpdate = useOptimisticUpdate<Video>({
         queryFilters: { queryKey: [VIDEOS_CACHE_KEY, videoId], exact: true },
-        updater: (video) =>
-            video &&
-            produce(video, (draft) => {
-                if (draft.is_liked) draft.like_count -= 1;
-                draft.is_liked = false;
-            }),
+        updater: (video) => video && { ...video, is_saved: false },
         shouldInvalidateQueries: true,
     });
 
     return useMutation<null, AxiosError<ErrorData>, null>({
-        mutationFn: () => removeLike(videoId),
+        mutationFn: () => removeVideoFromSaved(videoId),
         onMutate: async () => {
             if (shouldUpdateVideoOptimistically)
                 await optimisticUpdate.onMutate();
@@ -44,4 +38,4 @@ function useRemoveLike(
     });
 }
 
-export default useRemoveLike;
+export default useRemoveVideoFromSaved;

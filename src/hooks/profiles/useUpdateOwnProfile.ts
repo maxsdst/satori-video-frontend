@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import Profile from "../entities/Profile";
-import { updateOwnProfile } from "../services/profileService";
+import Profile from "../../entities/Profile";
+import { updateOwnProfile } from "../../services/profileService";
 
 interface ProfileData {
     full_name?: string;

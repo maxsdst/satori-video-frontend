@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import Video from "../../entities/Video";
-import usePollUpload from "../../hooks/usePollUpload";
+import usePollUpload from "../../hooks/uploads/usePollUpload";
 import ProgressBar from "../ProgressBar";
 
 interface Props {

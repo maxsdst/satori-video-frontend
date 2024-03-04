@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Comment from "../../../../entities/Comment";
-import useCreateComment from "../../../../hooks/useCreateComment";
+import useCreateComment from "../../../../hooks/comments/useCreateComment";
 import CommentForm, { ErrorData } from "../CommentForm";
 
 interface Props {

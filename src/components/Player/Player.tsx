@@ -11,7 +11,7 @@ import {
 } from "react";
 import { FaPlay } from "react-icons/fa";
 import ReactPlayer from "react-player/file";
-import useVideo from "../../hooks/useVideo";
+import useVideo from "../../hooks/videos/useVideo";
 import { PLAYER_DROP_SHADOW } from "../../styleConstants";
 import Comments from "./Comments";
 import PlayerControls from "./Controls";

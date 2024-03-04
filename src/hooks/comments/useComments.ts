@@ -4,12 +4,12 @@ import {
     useQueryClient,
 } from "@tanstack/react-query";
 import { useCallback } from "react";
-import Comment from "../entities/Comment";
-import BaseQuery from "../services/BaseQuery";
+import Comment from "../../entities/Comment";
+import BaseQuery from "../../services/BaseQuery";
 import commentService, {
     COMMENTS_CACHE_KEY,
     GetAllResponse,
-} from "../services/commentService";
+} from "../../services/commentService";
 
 export interface CommentQuery extends BaseQuery {
     videoId?: number;

@@ -1,8 +1,8 @@
 import { HStack, Text } from "@chakra-ui/react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import Comment from "../../../../entities/Comment";
-import useCreateCommentLike from "../../../../hooks/useCreateCommentLike";
-import useRemoveCommentLike from "../../../../hooks/useRemoveCommentLike";
+import useCreateCommentLike from "../../../../hooks/comment_likes/useCreateCommentLike";
+import useRemoveCommentLike from "../../../../hooks/comment_likes/useRemoveCommentLike";
 import { formatNumber } from "../../../../utils";
 import IconButton from "../../../IconButton";
 

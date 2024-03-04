@@ -1,7 +1,7 @@
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import Video from "../../../entities/Video";
-import useCreateLike from "../../../hooks/useCreateLike";
-import useRemoveLike from "../../../hooks/useRemoveLike";
+import useCreateLike from "../../../hooks/likes/useCreateLike";
+import useRemoveLike from "../../../hooks/likes/useRemoveLike";
 import { formatNumber } from "../../../utils";
 import PlayerButton from "../PlayerButton";
 

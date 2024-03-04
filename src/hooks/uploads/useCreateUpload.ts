@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import Upload from "../entities/Upload";
-import uploadService from "../services/uploadService";
+import Upload from "../../entities/Upload";
+import uploadService from "../../services/uploadService";
 
 interface UploadData {
     file: File;

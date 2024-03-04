@@ -1,7 +1,7 @@
 import { Flex, Spinner } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import VideoSequence from "../components/VideoSequence";
-import useVideo from "../hooks/useVideo";
+import useVideo from "../hooks/videos/useVideo";
 import { MAIN_CONTENT_AREA_PADDING } from "../styleConstants";
 
 function VideoPage() {

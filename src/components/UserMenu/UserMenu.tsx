@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { AiOutlineLogout, AiOutlineUser } from "react-icons/ai";
 import useLogout from "../../auth/hooks/useLogout";
-import useOwnProfile from "../../hooks/useOwnProfile";
+import useOwnProfile from "../../hooks/profiles/useOwnProfile";
 import UserMenuItem from "./UserMenuItem";
 
 function UserMenu() {

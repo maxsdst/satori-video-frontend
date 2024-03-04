@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
 import { z } from "zod";
 import { COMMENT_TEXT_MAX_LENGTH } from "../../../constants";
-import useOwnProfile from "../../../hooks/useOwnProfile";
+import useOwnProfile from "../../../hooks/profiles/useOwnProfile";
 
 const schema = z.object({
     text: z

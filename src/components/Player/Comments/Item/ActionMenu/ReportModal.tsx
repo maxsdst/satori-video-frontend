@@ -21,8 +21,8 @@ import Comment from "../../../../../entities/Comment";
 import useCreateCommentReport, {
     REPORT_REASON_DESCRIPTIONS,
     ReportReason,
-} from "../../../../../hooks/useCreateCommentReport";
-import useOwnProfile from "../../../../../hooks/useOwnProfile";
+} from "../../../../../hooks/comment_reports/useCreateCommentReport";
+import useOwnProfile from "../../../../../hooks/profiles/useOwnProfile";
 import LoginRequestModal from "../../../../LoginRequestModal";
 
 const schema = z.object({

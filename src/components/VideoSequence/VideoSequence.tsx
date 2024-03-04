@@ -2,7 +2,7 @@ import { Box, useBoolean } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { VIEW_DURATION_THRESHOLD_SECONDS } from "../../constants";
 import Video from "../../entities/Video";
-import useCreateView from "../../hooks/useCreateView";
+import useCreateView from "../../hooks/views/useCreateView";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 import { MAIN_CONTENT_AREA_PADDING, TOPNAV_HEIGHT } from "../../styleConstants";
 import { isInPortraitMode, isTouchDevice } from "../../utils";

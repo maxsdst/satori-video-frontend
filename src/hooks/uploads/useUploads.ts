@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import BaseQuery from "../services/BaseQuery";
+import BaseQuery from "../../services/BaseQuery";
 import uploadService, {
     GetAllResponse,
     UPLOADS_CACHE_KEY,
-} from "../services/uploadService";
+} from "../../services/uploadService";
 
 export interface UploadQuery extends BaseQuery {}
 

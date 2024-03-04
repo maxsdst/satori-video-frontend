@@ -7,7 +7,7 @@ import {
 } from "react-icons/ai";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Link } from "react-router-dom";
-import useOwnProfile from "../hooks/useOwnProfile";
+import useOwnProfile from "../hooks/profiles/useOwnProfile";
 import IconButton from "./IconButton";
 import SearchInput from "./SearchInput";
 import UserMenu from "./UserMenu";

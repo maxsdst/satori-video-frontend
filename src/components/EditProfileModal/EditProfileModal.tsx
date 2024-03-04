@@ -21,9 +21,9 @@ import {
 import Profile from "../../entities/Profile";
 import Input from "../../forms/Input";
 import Textarea from "../../forms/Textarea";
-import useOwnProfile from "../../hooks/useOwnProfile";
-import useProfile from "../../hooks/useProfile";
-import useUpdateOwnProfile from "../../hooks/useUpdateOwnProfile";
+import useOwnProfile from "../../hooks/profiles/useOwnProfile";
+import useProfile from "../../hooks/profiles/useProfile";
+import useUpdateOwnProfile from "../../hooks/profiles/useUpdateOwnProfile";
 import AvatarInput from "./AvatarInput";
 
 const ACCEPTED_IMAGE_TYPES = {

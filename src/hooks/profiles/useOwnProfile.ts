@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import useLogout from "../auth/hooks/useLogout";
-import Profile from "../entities/Profile";
+import useLogout from "../../auth/hooks/useLogout";
+import Profile from "../../entities/Profile";
 import {
     OWN_PROFILE_CACHE_KEY,
     getOwnProfile,
-} from "../services/profileService";
+} from "../../services/profileService";
 
 function useOwnProfile() {
     const logout = useLogout();

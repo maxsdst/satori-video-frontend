@@ -1,32 +1,38 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import SavedVideo from "../entities/SavedVideo";
-import Video from "../entities/Video";
-import savedVideoService from "../services/savedVideoService";
-import { VIDEOS_CACHE_KEY } from "../services/videoService";
-import useOptimisticUpdate from "./useOptimisticUpdate";
+import { produce } from "immer";
+import Like from "../../entities/Like";
+import Video from "../../entities/Video";
+import likeService from "../../services/likeService";
+import { VIDEOS_CACHE_KEY } from "../../services/videoService";
+import useOptimisticUpdate from "../useOptimisticUpdate";
 
 interface ErrorData {
     video?: string[];
 }
 
-interface UseCreateSavedVideoOptions {
+interface UseCreateLikeOptions {
     shouldUpdateVideoOptimistically?: boolean;
     onError?: (data: ErrorData) => void;
 }
 
-function useCreateSavedVideo(
+function useCreateLike(
     videoId: number,
-    { shouldUpdateVideoOptimistically, onError }: UseCreateSavedVideoOptions
+    { shouldUpdateVideoOptimistically, onError }: UseCreateLikeOptions
 ) {
     const optimisticUpdate = useOptimisticUpdate<Video>({
         queryFilters: { queryKey: [VIDEOS_CACHE_KEY, videoId], exact: true },
-        updater: (video) => video && { ...video, is_saved: true },
+        updater: (video) =>
+            video &&
+            produce(video, (draft) => {
+                if (!draft.is_liked) draft.like_count += 1;
+                draft.is_liked = true;
+            }),
         shouldInvalidateQueries: true,
     });
 
-    return useMutation<SavedVideo, AxiosError<ErrorData>, null>({
-        mutationFn: () => savedVideoService.post({ video: videoId }),
+    return useMutation<Like, AxiosError<ErrorData>, null>({
+        mutationFn: () => likeService.post({ video: videoId }),
         onMutate: async () => {
             if (shouldUpdateVideoOptimistically)
                 await optimisticUpdate.onMutate();
@@ -41,4 +47,4 @@ function useCreateSavedVideo(
     });
 }
 
-export default useCreateSavedVideo;
+export default useCreateLike;

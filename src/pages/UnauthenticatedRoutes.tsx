@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import useOwnProfile from "../hooks/useOwnProfile";
+import useOwnProfile from "../hooks/profiles/useOwnProfile";
 
 function UnauthenticatedRoutes() {
     const { data: profile, isLoading } = useOwnProfile();

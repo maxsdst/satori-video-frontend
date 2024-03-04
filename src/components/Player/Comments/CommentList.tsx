@@ -18,7 +18,7 @@ import useComments, {
     CommentQuery,
     useHandleCommentDeleted,
     useHandleCommentUpdated,
-} from "../../../hooks/useComments";
+} from "../../../hooks/comments/useComments";
 import EditCommentForm from "./EditCommentForm";
 import { Ordering } from "./Header";
 import Item from "./Item";

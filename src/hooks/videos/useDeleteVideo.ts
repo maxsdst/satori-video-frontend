@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import Video from "../entities/Video";
-import videoService from "../services/videoService";
+import Video from "../../entities/Video";
+import videoService from "../../services/videoService";
 
 interface ErrorData {
     detail: string;

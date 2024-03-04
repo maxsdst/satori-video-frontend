@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import Video from "../../entities/Video";
-import useDeleteVideo from "../../hooks/useDeleteVideo";
+import useDeleteVideo from "../../hooks/videos/useDeleteVideo";
 import { formatNumber } from "../../utils";
 
 interface Props {

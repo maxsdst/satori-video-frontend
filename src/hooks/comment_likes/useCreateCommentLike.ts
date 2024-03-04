@@ -1,26 +1,31 @@
 import { InfiniteData, useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { produce } from "immer";
-import Comment from "../entities/Comment";
-import { removeLike } from "../services/commentLikeService";
-import { COMMENTS_CACHE_KEY, GetAllResponse } from "../services/commentService";
-import useOptimisticUpdate from "./useOptimisticUpdate";
+import Comment from "../../entities/Comment";
+import CommentLike from "../../entities/CommentLike";
+import commentLikeService from "../../services/commentLikeService";
+import {
+    COMMENTS_CACHE_KEY,
+    GetAllResponse,
+} from "../../services/commentService";
+import useOptimisticUpdate from "../useOptimisticUpdate";
 
 interface ErrorData {
-    detail: string;
+    comment?: string[];
 }
 
-interface UseRemoveCommentLikeOptions {
+interface UseCreateCommentLikeOptions {
     shouldUpdateCommentOptimistically?: boolean;
+    onError?: (data: ErrorData) => void;
 }
 
-function useRemoveCommentLike(
+function useCreateCommentLike(
     commentId: number,
-    { shouldUpdateCommentOptimistically }: UseRemoveCommentLikeOptions
+    { shouldUpdateCommentOptimistically, onError }: UseCreateCommentLikeOptions
 ) {
     function updateComment(comment: Comment) {
-        if (comment.is_liked) comment.like_count -= 1;
-        comment.is_liked = false;
+        if (!comment.is_liked) comment.like_count += 1;
+        comment.is_liked = true;
     }
 
     const optimisticUpdate = useOptimisticUpdate<
@@ -46,13 +51,14 @@ function useRemoveCommentLike(
         },
     });
 
-    return useMutation<null, AxiosError<ErrorData>, null>({
-        mutationFn: () => removeLike(commentId),
+    return useMutation<CommentLike, AxiosError<ErrorData>, null>({
+        mutationFn: () => commentLikeService.post({ comment: commentId }),
         onMutate: async () => {
             if (shouldUpdateCommentOptimistically)
                 await optimisticUpdate.onMutate();
         },
-        onError: () => {
+        onError: (error) => {
+            if (error.response?.data) onError?.(error.response.data);
             if (shouldUpdateCommentOptimistically) optimisticUpdate.onError();
         },
         onSettled: () => {
@@ -61,4 +67,4 @@ function useRemoveCommentLike(
     });
 }
 
-export default useRemoveCommentLike;
+export default useCreateCommentLike;

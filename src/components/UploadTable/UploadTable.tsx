@@ -2,7 +2,7 @@ import { Icon, Spinner } from "@chakra-ui/react";
 import { Ref, forwardRef, useImperativeHandle, useState } from "react";
 import { AiOutlineCheckCircle, AiOutlineClockCircle } from "react-icons/ai";
 import Upload from "../../entities/Upload";
-import useUploads, { UploadQuery } from "../../hooks/useUploads";
+import useUploads, { UploadQuery } from "../../hooks/uploads/useUploads";
 import { Ordering } from "../../services/BaseQuery";
 import { convertDateToString } from "../../utils";
 import Table, { ColumnDef, FilteringOption } from "../Table";

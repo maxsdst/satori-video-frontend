@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import Comment from "../../../../../entities/Comment";
-import useDeleteComment from "../../../../../hooks/useDeleteComment";
+import useDeleteComment from "../../../../../hooks/comments/useDeleteComment";
 
 interface Props {
     comment: Comment;

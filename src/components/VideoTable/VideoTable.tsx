@@ -8,8 +8,8 @@ import {
     useState,
 } from "react";
 import Video from "../../entities/Video";
-import useOwnProfile from "../../hooks/useOwnProfile";
-import useVideos, { VideoQuery } from "../../hooks/useVideos";
+import useOwnProfile from "../../hooks/profiles/useOwnProfile";
+import useVideos, { VideoQuery } from "../../hooks/videos/useVideos";
 import { Ordering } from "../../services/BaseQuery";
 import { convertDateToString } from "../../utils";
 import Table, { ColumnDef, FilteringOption } from "../Table";

@@ -10,7 +10,7 @@ import {
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineFlag } from "react-icons/ai";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Comment from "../../../../../entities/Comment";
-import useOwnProfile from "../../../../../hooks/useOwnProfile";
+import useOwnProfile from "../../../../../hooks/profiles/useOwnProfile";
 import DeleteCommentDialog from "./DeleteCommentDialog";
 import ReportModal from "./ReportModal";
 

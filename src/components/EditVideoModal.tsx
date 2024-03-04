@@ -25,7 +25,7 @@ import {
 import Video from "../entities/Video";
 import Input from "../forms/Input";
 import Textarea from "../forms/Textarea";
-import useUpdateVideo from "../hooks/useUpdateVideo";
+import useUpdateVideo from "../hooks/videos/useUpdateVideo";
 import Player from "./Player";
 
 const schema = z.object({
