@@ -12,14 +12,15 @@ import { HiOutlineDotsVertical } from "react-icons/hi";
 import { HiBookmark, HiOutlineBookmark } from "react-icons/hi2";
 import { PiTextAlignLeftFill } from "react-icons/pi";
 import { TbShare3 } from "react-icons/tb";
-import Video from "../../../entities/Video";
-import useCreateSavedVideo from "../../../hooks/saved_videos/useCreateSavedVideo";
-import useOwnProfile from "../../../hooks/profiles/useOwnProfile";
-import useRemoveVideoFromSaved from "../../../hooks/saved_videos/useRemoveVideoFromSaved";
-import { useWindowDimensions } from "../../../hooks/useWindowDimensions";
-import { isInPortraitMode } from "../../../utils";
-import PlayerButton from "../PlayerButton";
-import ShareModal from "../ShareModal";
+import Video from "../../../../entities/Video";
+import useOwnProfile from "../../../../hooks/profiles/useOwnProfile";
+import useCreateSavedVideo from "../../../../hooks/saved_videos/useCreateSavedVideo";
+import useRemoveVideoFromSaved from "../../../../hooks/saved_videos/useRemoveVideoFromSaved";
+import { useWindowDimensions } from "../../../../hooks/useWindowDimensions";
+import { isInPortraitMode } from "../../../../utils";
+import PlayerButton from "../../PlayerButton";
+import ReportModal from "./ReportModal";
+import ShareModal from "./ShareModal";
 
 interface Props {
     video: Video;
@@ -44,6 +45,12 @@ function MoreActionsMenu({ video, onOpenDescription }: Props) {
     const removeVideoFromSaved = useRemoveVideoFromSaved(video.id, {
         shouldUpdateVideoOptimistically: true,
     });
+
+    const {
+        isOpen: isReportModalOpen,
+        onOpen: openReportModal,
+        onClose: closeReportModal,
+    } = useDisclosure();
 
     if (isLoading || error) return null;
 
@@ -92,6 +99,7 @@ function MoreActionsMenu({ video, onOpenDescription }: Props) {
             <MenuItem
                 {...menuItemStyles}
                 icon={<Icon as={AiOutlineFlag} boxSize={5} />}
+                onClick={openReportModal}
             >
                 Report
             </MenuItem>
@@ -126,6 +134,11 @@ function MoreActionsMenu({ video, onOpenDescription }: Props) {
                 video={video}
                 isOpen={isShareModalOpen}
                 onClose={closeShareModal}
+            />
+            <ReportModal
+                video={video}
+                isOpen={isReportModalOpen}
+                onClose={closeReportModal}
             />
         </>
     );

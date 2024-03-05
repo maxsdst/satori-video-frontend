@@ -36,7 +36,7 @@ import {
     WhatsappShareButton,
     XIcon,
 } from "react-share";
-import Video from "../../entities/Video";
+import Video from "../../../../entities/Video";
 
 interface Props {
     video: Video;
