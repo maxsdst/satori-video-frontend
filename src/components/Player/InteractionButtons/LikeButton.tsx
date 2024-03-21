@@ -1,5 +1,8 @@
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import Video from "../../../entities/Video";
+import useCreateEvent, {
+    EventType,
+} from "../../../hooks/events/useCreateEvent";
 import useCreateLike from "../../../hooks/likes/useCreateLike";
 import useRemoveLike from "../../../hooks/likes/useRemoveLike";
 import { formatNumber } from "../../../utils";
@@ -17,15 +20,23 @@ function LikeButton({ video }: Props) {
         shouldUpdateVideoOptimistically: true,
     });
 
+    const createEvent = useCreateEvent({});
+
     return (
         <PlayerButton
             icon={video.is_liked ? AiFillHeart : AiOutlineHeart}
             iconColor={video.is_liked ? "red.500" : undefined}
-            onClick={() =>
-                video.is_liked
-                    ? removeLike.mutate(null)
-                    : createLike.mutate(null)
-            }
+            onClick={() => {
+                if (video.is_liked) {
+                    removeLike.mutate(null);
+                } else {
+                    createLike.mutate(null);
+                    createEvent.mutate({
+                        videoId: video.id,
+                        type: EventType.LIKE,
+                    });
+                }
+            }}
         >
             {formatNumber(video.like_count)}
         </PlayerButton>

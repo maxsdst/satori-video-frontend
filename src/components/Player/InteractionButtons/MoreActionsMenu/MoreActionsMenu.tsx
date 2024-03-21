@@ -13,6 +13,9 @@ import { HiBookmark, HiOutlineBookmark } from "react-icons/hi2";
 import { PiTextAlignLeftFill } from "react-icons/pi";
 import { TbShare3 } from "react-icons/tb";
 import Video from "../../../../entities/Video";
+import useCreateEvent, {
+    EventType,
+} from "../../../../hooks/events/useCreateEvent";
 import useOwnProfile from "../../../../hooks/profiles/useOwnProfile";
 import useCreateSavedVideo from "../../../../hooks/saved_videos/useCreateSavedVideo";
 import useRemoveVideoFromSaved from "../../../../hooks/saved_videos/useRemoveVideoFromSaved";
@@ -52,6 +55,8 @@ function MoreActionsMenu({ video, onOpenDescription }: Props) {
         onClose: closeReportModal,
     } = useDisclosure();
 
+    const createEvent = useCreateEvent({});
+
     if (isLoading || error) return null;
 
     const menuItemStyles = isFullscreen
@@ -73,7 +78,13 @@ function MoreActionsMenu({ video, onOpenDescription }: Props) {
             <MenuItem
                 {...menuItemStyles}
                 icon={<Icon as={TbShare3} boxSize={5} />}
-                onClick={openShareModal}
+                onClick={() => {
+                    openShareModal();
+                    createEvent.mutate({
+                        videoId: video.id,
+                        type: EventType.SHARE,
+                    });
+                }}
             >
                 Share
             </MenuItem>
@@ -87,11 +98,17 @@ function MoreActionsMenu({ video, onOpenDescription }: Props) {
                         />
                     }
                     closeOnSelect={false}
-                    onClick={() =>
-                        video.is_saved
-                            ? removeVideoFromSaved.mutate(null)
-                            : createSavedVideo.mutate(null)
-                    }
+                    onClick={() => {
+                        if (video.is_saved) {
+                            removeVideoFromSaved.mutate(null);
+                        } else {
+                            createSavedVideo.mutate(null);
+                            createEvent.mutate({
+                                videoId: video.id,
+                                type: EventType.SAVE,
+                            });
+                        }
+                    }}
                 >
                     {video.is_saved ? "Saved" : "Save"}
                 </MenuItem>

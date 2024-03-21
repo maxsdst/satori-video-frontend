@@ -2,8 +2,9 @@ import { Box, useBoolean } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { VIEW_DURATION_THRESHOLD_SECONDS } from "../../constants";
 import Video from "../../entities/Video";
-import useCreateView from "../../hooks/views/useCreateView";
+import useCreateEvent, { EventType } from "../../hooks/events/useCreateEvent";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
+import useCreateView from "../../hooks/views/useCreateView";
 import { MAIN_CONTENT_AREA_PADDING, TOPNAV_HEIGHT } from "../../styleConstants";
 import { isInPortraitMode, isTouchDevice } from "../../utils";
 import Player, { PlayerHandle } from "../Player";
@@ -39,6 +40,8 @@ function VideoSequence({ videos }: Props) {
     const createView = useCreateView({});
     const [isViewCreated, setIsViewCreated] = useState(false);
 
+    const createEvent = useCreateEvent({});
+
     useEffect(() => {
         setIsViewCreated(false);
         players.current?.forEach((player) => player?.collapseContent());
@@ -48,6 +51,10 @@ function VideoSequence({ videos }: Props) {
 
     function handleSlideChange(slideIndex: number) {
         setCurrentVideoIndex(slideIndex);
+        createEvent.mutate({
+            videoId: videos[slideIndex].id,
+            type: EventType.VIEW,
+        });
     }
 
     function handlePlayerProgress(
