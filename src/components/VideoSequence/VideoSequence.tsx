@@ -1,5 +1,6 @@
 import { Box, useBoolean } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { VIEW_DURATION_THRESHOLD_SECONDS } from "../../constants";
 import Video from "../../entities/Video";
 import useCreateEvent, { EventType } from "../../hooks/events/useCreateEvent";
@@ -13,12 +14,22 @@ import Navigation from "./Navigation";
 
 interface Props {
     videos: Video[];
+    initialVideoIndex?: number;
+    onFetchMore: () => void;
 }
 
-function VideoSequence({ videos }: Props) {
-    const { width, height } = useWindowDimensions();
+function VideoSequence({ videos, initialVideoIndex, onFetchMore }: Props) {
+    useEffect(() => {
+        if (videos.length === 0) onFetchMore();
+    }, [videos]);
+
+    const fetchThresholdSlidesFromEnd = 2;
 
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+
+    const navigate = useNavigate();
+
+    const { width, height } = useWindowDimensions();
 
     const slider = useRef<VerticalSliderHandle>(null);
     const [isSliderDisabled, { on: disableSlider, off: enableSlider }] =
@@ -49,14 +60,6 @@ function VideoSequence({ videos }: Props) {
 
     const currentVideo = videos[currentVideoIndex];
 
-    function handleSlideChange(slideIndex: number) {
-        setCurrentVideoIndex(slideIndex);
-        createEvent.mutate({
-            videoId: videos[slideIndex].id,
-            type: EventType.VIEW,
-        });
-    }
-
     function handlePlayerProgress(
         secondsPlayed: number,
         percentPlayed: number
@@ -69,6 +72,20 @@ function VideoSequence({ videos }: Props) {
             createView.mutate({ videoId: currentVideo.id });
             setIsViewCreated(true);
         }
+    }
+
+    function handleSlideChange(slideIndex: number) {
+        navigate("/videos/" + videos[slideIndex].id, { replace: true });
+
+        setCurrentVideoIndex(slideIndex);
+
+        if (videos.length - slideIndex <= fetchThresholdSlidesFromEnd)
+            onFetchMore();
+
+        createEvent.mutate({
+            videoId: videos[slideIndex].id,
+            type: EventType.VIEW,
+        });
     }
 
     if (isFullscreen)
@@ -90,6 +107,7 @@ function VideoSequence({ videos }: Props) {
                     spaceBetweenSlides="0"
                     onSlideChange={handleSlideChange}
                     isDisabled={isSliderDisabled}
+                    initialSlideIndex={initialVideoIndex}
                 >
                     {videos.map((video, index) => (
                         <Player
@@ -127,6 +145,7 @@ function VideoSequence({ videos }: Props) {
                     onSlideChange={handleSlideChange}
                     ref={slider}
                     isDisabled={false}
+                    initialSlideIndex={initialVideoIndex}
                 >
                     {videos.map((video, index) => (
                         <Player

@@ -1,8 +1,16 @@
-import { AbsoluteCenter, Box, HStack, Icon, VStack } from "@chakra-ui/react";
+import {
+    AbsoluteCenter,
+    Box,
+    HStack,
+    Icon,
+    Skeleton,
+    VStack,
+} from "@chakra-ui/react";
 import classNames from "classnames";
 import {
     Ref,
     forwardRef,
+    useContext,
     useEffect,
     useImperativeHandle,
     useReducer,
@@ -12,6 +20,7 @@ import {
 import { FaPlay } from "react-icons/fa";
 import ReactPlayer from "react-player/file";
 import useVideo from "../../hooks/videos/useVideo";
+import VideoPageContext from "../../pages/VideoPage/VideoPageContext";
 import { PLAYER_DROP_SHADOW } from "../../styleConstants";
 import Comments from "./Comments";
 import PlayerControls from "./Controls";
@@ -62,7 +71,16 @@ const Player = forwardRef(
         }: Props,
         ref: Ref<PlayerHandle>
     ) => {
-        const { data: video, isLoading, error } = useVideo(videoId);
+        const { fetchedVideos } = useContext(VideoPageContext);
+
+        const {
+            data: video,
+            isLoading,
+            error,
+        } = useVideo(videoId, {
+            initialData: fetchedVideos.find((video) => video.id === videoId),
+            staleTime: Infinity,
+        });
 
         const [
             {
@@ -108,10 +126,18 @@ const Player = forwardRef(
             collapseContent: () => dispatch({ type: "COLLAPSE_CONTENT" }),
         }));
 
-        if (isLoading || !video) return null;
-        if (error) throw error;
-
         const borderRadius = "6px";
+
+        if (isLoading || !video)
+            return (
+                <Skeleton
+                    width={width}
+                    height={height}
+                    minHeight={minHeight}
+                    borderRadius={!isFullscreen ? borderRadius : undefined}
+                />
+            );
+        if (error) throw error;
 
         return (
             <PlayerContext.Provider

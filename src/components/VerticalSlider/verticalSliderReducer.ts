@@ -11,8 +11,9 @@ interface SliderState {
 }
 
 interface GoToSlideAction {
-    type: "GO_TO_NEXT_SLIDE" | "GO_TO_PREV_SLIDE";
+    type: "GO_TO_NEXT_SLIDE" | "GO_TO_PREV_SLIDE" | "GO_TO_SLIDE";
     slides?: HTMLCollection;
+    slideIndex?: number;
 }
 
 interface HandleDragAction {
@@ -120,6 +121,19 @@ function verticalSliderReducer(
                 y: 0 - prevSlide.offsetTop,
                 currentSlideIndex: state.currentSlideIndex - 1,
                 transition: true,
+            };
+
+        case "GO_TO_SLIDE":
+            if (!action.slideIndex) return state;
+            const slide = getSlide(action.slideIndex, action.slides);
+            if (!slide) return state;
+
+            return {
+                ...state,
+                x: 0,
+                y: 0 - slide.offsetTop,
+                currentSlideIndex: action.slideIndex,
+                transition: false,
             };
 
         case "HANDLE_DRAG_START":

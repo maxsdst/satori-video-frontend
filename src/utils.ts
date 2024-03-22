@@ -1,4 +1,6 @@
+import { InfiniteData } from "@tanstack/react-query";
 import numbro from "numbro";
+import { PaginatedResponse } from "./services/ApiClient";
 import { PORTRAIT_MODE_ASPECT_RATIO } from "./styleConstants";
 
 export function isInPortraitMode(width: number, height: number) {
@@ -83,4 +85,14 @@ function isNumber(str: string) {
 
 function isPxValue(str: string) {
     return str.endsWith("px");
+}
+
+export function getAllResultsFromInfiniteQueryData<T>(
+    data: InfiniteData<PaginatedResponse<T>>
+): T[] {
+    const allResults = [];
+    for (const page of data.pages) {
+        allResults.push(...page.results);
+    }
+    return allResults;
 }

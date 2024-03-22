@@ -6,12 +6,12 @@ import ApiClient, {
 
 export const COMMENTS_CACHE_KEY = "comments";
 
-export default new ApiClient<Comment, PaginationType.Snapshot>(
+export default new ApiClient<Comment, PaginationType.Cursor>(
     "/videos/comments/",
     DATE_FIELDS
 );
 
 export type GetAllResponse = GenericGetAllResponse<
     Comment,
-    PaginationType.Snapshot
+    PaginationType.Cursor
 >;

@@ -1,4 +1,12 @@
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import {
+    Spinner,
+    Tab,
+    TabList,
+    TabPanel,
+    TabPanels,
+    Tabs,
+} from "@chakra-ui/react";
+import useVideos from "../hooks/videos/useVideos";
 import VideoGrid from "./VideoGrid";
 
 interface Props {
@@ -6,6 +14,9 @@ interface Props {
 }
 
 function UserVideosSection({ profileId }: Props) {
+    const { data: videos, isLoading, error } = useVideos({ profileId }, {});
+    if (error) throw error;
+
     return (
         <Tabs isLazy width="100%">
             <TabList>
@@ -18,18 +29,24 @@ function UserVideosSection({ profileId }: Props) {
             </TabList>
             <TabPanels>
                 <TabPanel padding={0} marginTop={4}>
-                    <VideoGrid
-                        videoQuery={{ profileId }}
-                        showUsers={false}
-                        showLikes={false}
-                    />
+                    {isLoading && <Spinner />}
+                    {videos?.results && (
+                        <VideoGrid
+                            videos={videos.results}
+                            showUsers={false}
+                            showLikes={false}
+                        />
+                    )}
                 </TabPanel>
                 <TabPanel padding={0} marginTop={4}>
-                    <VideoGrid
-                        videoQuery={{ profileId }}
-                        showUsers={false}
-                        showLikes={false}
-                    />
+                    {isLoading && <Spinner />}
+                    {videos?.results && (
+                        <VideoGrid
+                            videos={videos.results}
+                            showUsers={false}
+                            showLikes={false}
+                        />
+                    )}
                 </TabPanel>
             </TabPanels>
         </Tabs>

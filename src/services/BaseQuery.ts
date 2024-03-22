@@ -33,13 +33,13 @@ interface LimitOffsetPagination {
     offset?: number;
 }
 
-interface SnapshotPagination {
-    type: "snapshot";
+interface CursorPagination {
+    type: "cursor";
     pageSize?: number;
     cursor?: string;
 }
 
-export type Pagination = LimitOffsetPagination | SnapshotPagination;
+export type Pagination = LimitOffsetPagination | CursorPagination;
 
 export default interface BaseQuery {
     filters?: Filter[];

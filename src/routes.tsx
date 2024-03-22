@@ -1,13 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import HomePage from "./pages/HomePage";
 import Layout from "./pages/Layout";
 import LoginPage from "./pages/LoginPage";
 import MyVideosPage from "./pages/MyVideosPage";
 import ProfilePage from "./pages/ProfilePage";
 import SignupPage from "./pages/SignupPage";
 import UnauthenticatedRoutes from "./pages/UnauthenticatedRoutes";
-import VideoPage from "./pages/VideoPage";
+import VideoPage, { VideoSource } from "./pages/VideoPage";
 
 const router = createBrowserRouter([
     {
@@ -16,7 +15,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <HomePage />,
+                element: <VideoPage videoSource={VideoSource.Recommended} />,
             },
             {
                 element: <UnauthenticatedRoutes />,

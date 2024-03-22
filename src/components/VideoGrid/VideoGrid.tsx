@@ -1,18 +1,21 @@
-import { SimpleGrid, Spinner } from "@chakra-ui/react";
-import useVideos, { VideoQuery } from "../../hooks/videos/useVideos";
+import { SimpleGrid } from "@chakra-ui/react";
+import Video from "../../entities/Video";
+import { LocationState } from "../../pages/VideoPage";
 import Item from "./Item";
 
-interface Props {
-    videoQuery: VideoQuery;
-    showUsers: boolean;
-    showLikes: boolean;
+interface VideoLinkState {
+    videoSource?: LocationState["videoSource"];
+    query?: LocationState["query"];
 }
 
-function VideoGrid({ videoQuery, showUsers, showLikes }: Props) {
-    const { data: videos, isLoading, error } = useVideos(videoQuery, {});
-    if (isLoading) return <Spinner />;
-    if (error) throw error;
+interface Props {
+    videos: Video[];
+    showUsers: boolean;
+    showLikes: boolean;
+    videoLinkState?: VideoLinkState;
+}
 
+function VideoGrid({ videos, showUsers, showLikes, videoLinkState }: Props) {
     return (
         <SimpleGrid
             columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
@@ -20,12 +23,16 @@ function VideoGrid({ videoQuery, showUsers, showLikes }: Props) {
             spacingY={10}
             width="100%"
         >
-            {videos.results.map((video) => (
+            {videos.map((video, index) => (
                 <Item
                     key={video.id}
                     video={video}
                     showUser={showUsers}
                     showLikes={showLikes}
+                    videoLinkState={{
+                        ...videoLinkState,
+                        initialVideoIndex: index,
+                    }}
                 />
             ))}
         </SimpleGrid>

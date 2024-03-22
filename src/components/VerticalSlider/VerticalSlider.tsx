@@ -5,8 +5,10 @@ import {
     forwardRef,
     useEffect,
     useImperativeHandle,
+    useLayoutEffect,
     useReducer,
     useRef,
+    useState,
 } from "react";
 import Draggable from "react-draggable";
 import WheelIndicator from "wheel-indicator";
@@ -19,6 +21,7 @@ interface Props {
     spaceBetweenSlides: string;
     onSlideChange: (slideIndex: number) => void;
     isDisabled: boolean;
+    initialSlideIndex?: number;
 }
 
 export interface VerticalSliderHandle {
@@ -33,6 +36,7 @@ const VerticalSlider = forwardRef(function VerticalSlider(
         spaceBetweenSlides,
         onSlideChange,
         isDisabled,
+        initialSlideIndex,
     }: Props,
     ref: Ref<VerticalSliderHandle>
 ) {
@@ -42,7 +46,7 @@ const VerticalSlider = forwardRef(function VerticalSlider(
     const [state, dispatch] = useReducer(verticalSliderReducer, {
         x: 0,
         y: 0,
-        currentSlideIndex: 0,
+        currentSlideIndex: initialSlideIndex || 0,
         isDisabled,
     });
 
@@ -51,11 +55,6 @@ const VerticalSlider = forwardRef(function VerticalSlider(
             ? dispatch({ type: "DISABLE" })
             : dispatch({ type: "ENABLE" });
     }, [isDisabled]);
-
-    useEffect(
-        () => onSlideChange(state.currentSlideIndex),
-        [state.currentSlideIndex]
-    );
 
     const slidesContainer = useRef<HTMLDivElement>(null);
     const slides = slidesContainer.current?.children;
@@ -83,6 +82,29 @@ const VerticalSlider = forwardRef(function VerticalSlider(
             wheelIndicator.destroy();
         };
     }, [slidesContainer]);
+
+    const [isInitialized, setInitialized] = useState(false);
+
+    useLayoutEffect(() => {
+        if (isInitialized) return;
+        if (!slidesContainer.current || !children) return;
+
+        if (slidesContainer.current.children.length > 0) {
+            if (initialSlideIndex)
+                dispatch({
+                    type: "GO_TO_SLIDE",
+                    slides: slidesContainer.current.children,
+                    slideIndex: initialSlideIndex,
+                });
+
+            setInitialized(true);
+        }
+    }, [slidesContainer.current?.children.length]);
+
+    useEffect(() => {
+        if (!isInitialized) return;
+        onSlideChange(state.currentSlideIndex);
+    }, [state.currentSlideIndex, isInitialized]);
 
     const windowDimensions = useWindowDimensions();
 

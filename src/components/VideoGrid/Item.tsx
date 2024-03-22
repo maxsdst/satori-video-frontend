@@ -11,19 +11,21 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { PiPlay } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import Video from "../../entities/Video";
+import { LocationState } from "../../pages/VideoPage";
 import { formatNumber } from "../../utils";
 
 interface Props {
     video: Video;
     showUser: boolean;
     showLikes: boolean;
+    videoLinkState: LocationState;
 }
 
-function Item({ video, showUser, showLikes }: Props) {
+function Item({ video, showUser, showLikes, videoLinkState }: Props) {
     return (
         <VStack maxWidth="600px" alignItems="start">
             <AspectRatio width="100%" ratio={3 / 4}>
-                <Link to={"/videos/" + video.id}>
+                <Link to={"/videos/" + video.id} state={videoLinkState}>
                     <Image objectFit="cover" src={video.thumbnail} />
                     <VStack
                         position="absolute"
@@ -49,7 +51,11 @@ function Item({ video, showUser, showLikes }: Props) {
                 </Link>
             </AspectRatio>
             {video.title && (
-                <Link to={"/videos/" + video.id} style={{ width: "100%" }}>
+                <Link
+                    to={"/videos/" + video.id}
+                    style={{ width: "100%" }}
+                    state={videoLinkState}
+                >
                     <Text
                         fontSize="md"
                         noOfLines={1}

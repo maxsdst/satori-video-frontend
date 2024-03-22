@@ -66,7 +66,7 @@ function applyPagination(
             };
             break;
 
-        case "snapshot":
+        case "cursor":
             requestConfig.params = {
                 ...requestConfig.params,
                 page_size: pagination.pageSize,
@@ -88,24 +88,23 @@ function parseDates(object: any, dateFields: string[]) {
 
 export enum PaginationType {
     LimitOffset,
-    Snapshot,
+    Cursor,
 }
 
-interface LimitOffsetPaginationResponse<T> {
+export interface PaginatedResponse<T> {
+    previous: string | null;
+    next: string | null;
+    results: T[];
+}
+
+interface LimitOffsetPaginationResponse<T> extends PaginatedResponse<T> {
     count: number;
-    previous: string | null;
-    next: string | null;
-    results: T[];
 }
-interface SnapshotPaginationResponse<T> {
-    previous: string | null;
-    next: string | null;
-    results: T[];
-}
+interface CursorPaginationResponse<T> extends PaginatedResponse<T> {}
 
 export type GetAllResponse<T, PaginationT> =
-    PaginationT extends PaginationType.Snapshot
-        ? SnapshotPaginationResponse<T>
+    PaginationT extends PaginationType.Cursor
+        ? CursorPaginationResponse<T>
         : LimitOffsetPaginationResponse<T>;
 
 class ApiClient<

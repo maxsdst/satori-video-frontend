@@ -72,7 +72,7 @@ const CommentList = forwardRef(
                 videoId,
                 parentId,
                 ordering: queryOrdering,
-                pagination: { type: "snapshot", pageSize },
+                pagination: { type: "cursor", pageSize },
             };
         }, [videoId, parentId, ordering, pageSize]);
 
