@@ -5,7 +5,6 @@ import {
     AiOutlineHistory,
     AiOutlineHome,
     AiOutlinePlaySquare,
-    AiOutlineStar,
 } from "react-icons/ai";
 import { HiOutlineBookmark } from "react-icons/hi";
 import { MdOutlineSubscriptions } from "react-icons/md";
@@ -21,17 +20,28 @@ function SideNav() {
             maxWidth={{ base: "100%", md: "240px" }}
             backgroundColor="var(--chakra-colors-chakra-body-bg);"
         >
-            <SideNavButton icon={AiOutlineHome}>Home</SideNavButton>
-            <SideNavButton icon={AiOutlineStar}>Top</SideNavButton>
-            <SideNavButton icon={AiOutlineFire}>Hot</SideNavButton>
-            <SideNavButton icon={AiOutlineClockCircle}>Fresh</SideNavButton>
+            <SideNavButton icon={AiOutlineHome} link="/">
+                Home
+            </SideNavButton>
+            <SideNavButton icon={AiOutlineFire} link="/popular">
+                Popular
+            </SideNavButton>
+            <SideNavButton icon={AiOutlineClockCircle} link="/latest">
+                Latest
+            </SideNavButton>
             <Divider />
-            <SideNavButton icon={MdOutlineSubscriptions}>
+            <SideNavButton icon={MdOutlineSubscriptions} link="">
                 Subscriptions
             </SideNavButton>
-            <SideNavButton icon={HiOutlineBookmark}>Saved</SideNavButton>
-            <SideNavButton icon={AiOutlineHistory}>History</SideNavButton>
-            <SideNavButton icon={AiOutlinePlaySquare}>My videos</SideNavButton>
+            <SideNavButton icon={HiOutlineBookmark} link="">
+                Saved
+            </SideNavButton>
+            <SideNavButton icon={AiOutlineHistory} link="">
+                History
+            </SideNavButton>
+            <SideNavButton icon={AiOutlinePlaySquare} link="/my_videos">
+                My videos
+            </SideNavButton>
         </VStack>
     );
 }

@@ -29,6 +29,14 @@ const router = createBrowserRouter([
                 ],
             },
             {
+                path: "popular",
+                element: <VideoPage videoSource={VideoSource.Popular} />,
+            },
+            {
+                path: "latest",
+                element: <VideoPage videoSource={VideoSource.Latest} />,
+            },
+            {
                 path: "users/:username",
                 element: <ProfilePage />,
             },
