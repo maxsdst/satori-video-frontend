@@ -1,6 +1,7 @@
 import {
     AspectRatio,
     Avatar,
+    Box,
     HStack,
     Icon,
     Image,
@@ -24,32 +25,38 @@ interface Props {
 function Item({ video, showUser, showLikes, videoLinkState }: Props) {
     return (
         <VStack maxWidth="600px" alignItems="start">
-            <AspectRatio width="100%" ratio={3 / 4}>
-                <Link to={"/videos/" + video.id} state={videoLinkState}>
+            <Box
+                as={Link}
+                to={"/videos/" + video.id}
+                position="relative"
+                width="100%"
+                state={videoLinkState}
+            >
+                <AspectRatio width="100%" ratio={3 / 4}>
                     <Image objectFit="cover" src={video.thumbnail} />
-                    <VStack
-                        position="absolute"
-                        bottom={0}
+                </AspectRatio>
+                <VStack
+                    position="absolute"
+                    bottom={0}
+                    width="100%"
+                    height="100px"
+                    backgroundImage="linear-gradient(rgb(0, 0, 0, 0), rgb(0, 0, 0, 0.5))"
+                    justifyContent="end"
+                >
+                    <HStack
                         width="100%"
-                        height="100px"
-                        backgroundImage="linear-gradient(rgb(0, 0, 0, 0), rgb(0, 0, 0, 0.5))"
-                        justifyContent="end"
+                        justifyContent="space-between"
+                        padding={3}
                     >
-                        <HStack
-                            width="100%"
-                            justifyContent="space-between"
-                            padding={3}
-                        >
-                            <HStack spacing={1}>
-                                <Icon as={PiPlay} boxSize={4} />
-                                <Text fontSize="md">
-                                    {formatNumber(video.view_count)}
-                                </Text>
-                            </HStack>
+                        <HStack spacing={1}>
+                            <Icon as={PiPlay} boxSize={4} />
+                            <Text fontSize="md">
+                                {formatNumber(video.view_count)}
+                            </Text>
                         </HStack>
-                    </VStack>
-                </Link>
-            </AspectRatio>
+                    </HStack>
+                </VStack>
+            </Box>
             {video.title && (
                 <Link
                     to={"/videos/" + video.id}
