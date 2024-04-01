@@ -4,6 +4,7 @@ import Layout from "./pages/Layout";
 import LoginPage from "./pages/LoginPage";
 import MyVideosPage from "./pages/MyVideosPage";
 import ProfilePage from "./pages/ProfilePage";
+import SearchPage from "./pages/SearchPage";
 import SignupPage from "./pages/SignupPage";
 import UnauthenticatedRoutes from "./pages/UnauthenticatedRoutes";
 import VideoPage, { VideoSource } from "./pages/VideoPage";
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
             {
                 path: "uploads",
                 element: <MyVideosPage tabName="uploads" />,
+            },
+            {
+                path: "search",
+                element: <SearchPage />,
             },
         ],
     },

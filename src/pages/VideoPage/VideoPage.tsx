@@ -8,6 +8,7 @@ import useLatestVideos from "../../hooks/videos/useLatestVideos";
 import usePopularVideos from "../../hooks/videos/usePopularVideos";
 import useRecommendedVideos from "../../hooks/videos/useRecommendedVideos";
 import useVideo from "../../hooks/videos/useVideo";
+import useVideoSearch from "../../hooks/videos/useVideoSearch";
 import BaseQuery from "../../services/BaseQuery";
 import { MAIN_CONTENT_AREA_PADDING } from "../../styleConstants";
 import { getAllResultsFromInfiniteQueryData } from "../../utils";
@@ -21,6 +22,7 @@ export enum VideoSource {
     Recommended = "recommended",
     Popular = "popular",
     Latest = "latest",
+    Search = "search",
 }
 
 export interface LocationState {
@@ -111,6 +113,13 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
         { enabled: videoSource === VideoSource.Latest, staleTime: Infinity }
     );
 
+    const videoSearch = useVideoSearch(
+        query || {
+            pagination: { type: "cursor", pageSize: VIDEO_SEQUENCE_PAGE_SIZE },
+        },
+        { enabled: videoSource === VideoSource.Search, staleTime: Infinity }
+    );
+
     const videosQuery = (() => {
         switch (videoSource) {
             case VideoSource.Recommended:
@@ -119,6 +128,8 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
                 return popularVideos;
             case VideoSource.Latest:
                 return latestVideos;
+            case VideoSource.Search:
+                return videoSearch;
             default:
                 return null;
         }
@@ -126,10 +137,12 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
 
     function reset() {
         remove();
-        [recommendedVideos, popularVideos, latestVideos].forEach((x) => {
-            if (x === videosQuery && query) return;
-            x.remove();
-        });
+        [recommendedVideos, popularVideos, latestVideos, videoSearch].forEach(
+            (x) => {
+                if (x === videosQuery && query) return;
+                x.remove();
+            }
+        );
         setInitialVideoId(videoId);
         setVideoSource(
             videoSourceLocation || videoSourceProp || VideoSource.Recommended

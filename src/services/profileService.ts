@@ -4,17 +4,19 @@ import ApiClient, {
     GetAllResponse as GenericGetAllResponse,
     PaginationType,
 } from "./ApiClient";
+import BaseQuery from "./BaseQuery";
 
 export const PROFILES_CACHE_KEY = "profiles";
 export const OWN_PROFILE_CACHE_KEY = "own_profile";
+export const PROFILE_SEARCH_CACHE_KEY = "profile_search";
 
-export default new ApiClient<Profile, PaginationType.LimitOffset>(
+export default new ApiClient<Profile, PaginationType.Cursor>(
     "/profiles/profiles/"
 );
 
 export type GetAllResponse = GenericGetAllResponse<
     Profile,
-    PaginationType.LimitOffset
+    PaginationType.Cursor
 >;
 
 const ownProfileApiClient = new ApiClient<Profile>("/profiles/profiles/me/");
@@ -40,4 +42,15 @@ export function retrieveByUsername(username: string) {
         "/profiles/profiles/retrieve_by_username/"
     );
     return apiClient.get(username);
+}
+
+export function search(
+    searchQuery: string,
+    query?: BaseQuery,
+    fullUrl?: string
+) {
+    const apiClient = new ApiClient<Profile, PaginationType.Cursor>(
+        "/profiles/profiles/search/"
+    );
+    return apiClient.getAll({ params: { query: searchQuery } }, query, fullUrl);
 }
