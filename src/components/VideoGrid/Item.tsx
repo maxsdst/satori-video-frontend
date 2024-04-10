@@ -4,11 +4,17 @@ import {
     Box,
     HStack,
     Icon,
+    IconButton,
     Image,
+    Menu,
+    MenuButton,
     Text,
     VStack,
+    useDisclosure,
 } from "@chakra-ui/react";
+import { ReactNode } from "react";
 import { AiOutlineHeart } from "react-icons/ai";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import { PiPlay } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import Video from "../../entities/Video";
@@ -20,9 +26,22 @@ interface Props {
     showUser: boolean;
     showLikes: boolean;
     videoLinkState: LocationState;
+    actionMenuList?: (props: { video: Video }) => ReactNode;
 }
 
-function Item({ video, showUser, showLikes, videoLinkState }: Props) {
+function Item({
+    video,
+    showUser,
+    showLikes,
+    videoLinkState,
+    actionMenuList,
+}: Props) {
+    const {
+        isOpen: isActionMenuOpen,
+        onOpen: openActionMenu,
+        onClose: closeActionMenu,
+    } = useDisclosure();
+
     return (
         <VStack maxWidth="600px" alignItems="start">
             <Box
@@ -35,6 +54,27 @@ function Item({ video, showUser, showLikes, videoLinkState }: Props) {
                 <AspectRatio width="100%" ratio={3 / 4}>
                     <Image objectFit="cover" src={video.thumbnail} />
                 </AspectRatio>
+                {actionMenuList && (
+                    <Menu isOpen={isActionMenuOpen} onClose={closeActionMenu}>
+                        <MenuButton
+                            as={IconButton}
+                            icon={<Icon as={BsThreeDotsVertical} boxSize={5} />}
+                            variant="ghost"
+                            size="sm"
+                            borderRadius="50%"
+                            padding={0}
+                            aria-label="Action menu"
+                            position="absolute"
+                            top={2}
+                            right={2}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                openActionMenu();
+                            }}
+                        />
+                        {actionMenuList({ video })}
+                    </Menu>
+                )}
                 <VStack
                     position="absolute"
                     bottom={0}

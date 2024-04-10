@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import HistoryPage from "./pages/HistoryPage";
 import Layout from "./pages/Layout";
 import LoginPage from "./pages/LoginPage";
 import MyVideosPage from "./pages/MyVideosPage";
@@ -57,6 +58,7 @@ const router = createBrowserRouter([
                 path: "search",
                 element: <SearchPage />,
             },
+            { path: "history", element: <HistoryPage /> },
         ],
     },
 ]);

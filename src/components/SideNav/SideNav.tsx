@@ -36,7 +36,7 @@ function SideNav() {
             <SideNavButton icon={HiOutlineBookmark} link="">
                 Saved
             </SideNavButton>
-            <SideNavButton icon={AiOutlineHistory} link="">
+            <SideNavButton icon={AiOutlineHistory} link="/history">
                 History
             </SideNavButton>
             <SideNavButton icon={AiOutlinePlaySquare} link="/my_videos">

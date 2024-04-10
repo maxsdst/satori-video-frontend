@@ -1,4 +1,5 @@
 import { SimpleGrid } from "@chakra-ui/react";
+import { ReactNode } from "react";
 import Video from "../../entities/Video";
 import { LocationState } from "../../pages/VideoPage";
 import Item from "./Item";
@@ -13,9 +14,16 @@ interface Props {
     showUsers: boolean;
     showLikes: boolean;
     videoLinkState?: VideoLinkState;
+    actionMenuList?: (props: { video: Video }) => ReactNode;
 }
 
-function VideoGrid({ videos, showUsers, showLikes, videoLinkState }: Props) {
+function VideoGrid({
+    videos,
+    showUsers,
+    showLikes,
+    videoLinkState,
+    actionMenuList,
+}: Props) {
     return (
         <SimpleGrid
             columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
@@ -33,6 +41,7 @@ function VideoGrid({ videos, showUsers, showLikes, videoLinkState }: Props) {
                         ...videoLinkState,
                         initialVideoIndex: index,
                     }}
+                    actionMenuList={actionMenuList}
                 />
             ))}
         </SimpleGrid>

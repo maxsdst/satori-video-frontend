@@ -1,4 +1,6 @@
 import { InfiniteData } from "@tanstack/react-query";
+import { Locale, formatRelative } from "date-fns";
+import { enUS } from "date-fns/esm/locale";
 import numbro from "numbro";
 import { PaginatedResponse } from "./services/ApiClient";
 import { PORTRAIT_MODE_ASPECT_RATIO } from "./styleConstants";
@@ -95,4 +97,22 @@ export function getAllResultsFromInfiniteQueryData<T>(
         allResults.push(...page.results);
     }
     return allResults;
+}
+
+export function formatRelativeDateWithoutTime(date: Date, baseDate: Date) {
+    const formatRelativeLocale: Record<any, string> = {
+        lastWeek: "eeee",
+        yesterday: "'Yesterday'",
+        today: "'Today'",
+        tomorrow: "'Tomorrow'",
+        nextWeek: "'Next' eeee",
+        other: "P",
+    };
+
+    const locale: Locale = {
+        ...enUS,
+        formatRelative: (token) => formatRelativeLocale[token],
+    };
+
+    return formatRelative(date, baseDate, { locale });
 }
