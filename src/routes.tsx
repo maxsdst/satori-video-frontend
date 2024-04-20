@@ -5,6 +5,7 @@ import Layout from "./pages/Layout";
 import LoginPage from "./pages/LoginPage";
 import MyVideosPage from "./pages/MyVideosPage";
 import ProfilePage from "./pages/ProfilePage";
+import SavedVideosPage from "./pages/SavedVideosPage";
 import SearchPage from "./pages/SearchPage";
 import SignupPage from "./pages/SignupPage";
 import UnauthenticatedRoutes from "./pages/UnauthenticatedRoutes";
@@ -58,6 +59,7 @@ const router = createBrowserRouter([
                 path: "search",
                 element: <SearchPage />,
             },
+            { path: "saved", element: <SavedVideosPage /> },
             { path: "history", element: <HistoryPage /> },
         ],
     },

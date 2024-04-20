@@ -33,7 +33,7 @@ function SideNav() {
             <SideNavButton icon={MdOutlineSubscriptions} link="">
                 Subscriptions
             </SideNavButton>
-            <SideNavButton icon={HiOutlineBookmark} link="">
+            <SideNavButton icon={HiOutlineBookmark} link="/saved">
                 Saved
             </SideNavButton>
             <SideNavButton icon={AiOutlineHistory} link="/history">

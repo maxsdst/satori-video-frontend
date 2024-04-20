@@ -4,6 +4,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import VideoSequence from "../../components/VideoSequence";
 import { VIDEO_SEQUENCE_PAGE_SIZE } from "../../constants";
 import Video from "../../entities/Video";
+import useSavedVideos from "../../hooks/saved_videos/useSavedVideos";
 import useLatestVideos from "../../hooks/videos/useLatestVideos";
 import usePopularVideos from "../../hooks/videos/usePopularVideos";
 import useRecommendedVideos from "../../hooks/videos/useRecommendedVideos";
@@ -23,6 +24,7 @@ export enum VideoSource {
     Popular = "popular",
     Latest = "latest",
     Search = "search",
+    SavedVideos = "saved_videos",
 }
 
 export interface LocationState {
@@ -120,6 +122,19 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
         { enabled: videoSource === VideoSource.Search, staleTime: Infinity }
     );
 
+    const savedVideos = useSavedVideos(
+        query || {
+            pagination: {
+                type: "limit_offset",
+                limit: VIDEO_SEQUENCE_PAGE_SIZE,
+            },
+        },
+        {
+            enabled: videoSource === VideoSource.SavedVideos,
+            staleTime: Infinity,
+        }
+    );
+
     const videosQuery = (() => {
         switch (videoSource) {
             case VideoSource.Recommended:
@@ -130,6 +145,8 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
                 return latestVideos;
             case VideoSource.Search:
                 return videoSearch;
+            case VideoSource.SavedVideos:
+                return savedVideos;
             default:
                 return null;
         }
@@ -137,12 +154,16 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
 
     function reset() {
         remove();
-        [recommendedVideos, popularVideos, latestVideos, videoSearch].forEach(
-            (x) => {
-                if (x === videosQuery && query) return;
-                x.remove();
-            }
-        );
+        [
+            recommendedVideos,
+            popularVideos,
+            latestVideos,
+            videoSearch,
+            savedVideos,
+        ].forEach((x) => {
+            if (x === videosQuery && query) return;
+            x.remove();
+        });
         setInitialVideoId(videoId);
         setVideoSource(
             videoSourceLocation || videoSourceProp || VideoSource.Recommended

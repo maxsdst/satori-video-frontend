@@ -1,7 +1,10 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import Video from "../../entities/Video";
-import { removeVideoFromSaved } from "../../services/savedVideoService";
+import {
+    SAVED_VIDEOS_CACHE_KEY,
+    removeVideoFromSaved,
+} from "../../services/savedVideoService";
 import { VIDEOS_CACHE_KEY } from "../../services/videoService";
 import useOptimisticUpdate from "../useOptimisticUpdate";
 
@@ -11,12 +14,18 @@ interface ErrorData {
 
 interface UseRemoveVideoFromSavedOptions {
     shouldUpdateVideoOptimistically?: boolean;
+    shouldInvalidateQueries?: boolean;
 }
 
 function useRemoveVideoFromSaved(
     videoId: number,
-    { shouldUpdateVideoOptimistically }: UseRemoveVideoFromSavedOptions
+    {
+        shouldUpdateVideoOptimistically,
+        shouldInvalidateQueries,
+    }: UseRemoveVideoFromSavedOptions
 ) {
+    const queryClient = useQueryClient();
+
     const optimisticUpdate = useOptimisticUpdate<Video>({
         queryFilters: { queryKey: [VIDEOS_CACHE_KEY, videoId], exact: true },
         updater: (video) => video && { ...video, is_saved: false },
@@ -28,6 +37,12 @@ function useRemoveVideoFromSaved(
         onMutate: async () => {
             if (shouldUpdateVideoOptimistically)
                 await optimisticUpdate.onMutate();
+        },
+        onSuccess: () => {
+            if (shouldInvalidateQueries)
+                queryClient.invalidateQueries({
+                    queryKey: [SAVED_VIDEOS_CACHE_KEY],
+                });
         },
         onError: () => {
             if (shouldUpdateVideoOptimistically) optimisticUpdate.onError();
