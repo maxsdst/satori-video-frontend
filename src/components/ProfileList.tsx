@@ -1,6 +1,7 @@
 import { Avatar, HStack, Text, VStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import Profile from "../entities/Profile";
+import { formatNumber } from "../utils";
 
 interface Props {
     profiles: Profile[];
@@ -39,7 +40,7 @@ function ProfileList({ profiles }: Props) {
                                         fontWeight: "600",
                                     }}
                                 >
-                                    12.3K
+                                    {formatNumber(profile.follower_count)}
                                 </span>{" "}
                                 Followers
                             </Text>

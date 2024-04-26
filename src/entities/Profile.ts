@@ -6,4 +6,7 @@ export default interface Profile {
     full_name: string;
     description: string;
     avatar: string | null;
+    following_count: number;
+    follower_count: number;
+    is_following: boolean;
 }

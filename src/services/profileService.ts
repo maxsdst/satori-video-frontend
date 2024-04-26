@@ -9,6 +9,8 @@ import BaseQuery from "./BaseQuery";
 export const PROFILES_CACHE_KEY = "profiles";
 export const OWN_PROFILE_CACHE_KEY = "own_profile";
 export const PROFILE_SEARCH_CACHE_KEY = "profile_search";
+export const FOLLOWING_CACHE_KEY = "following";
+export const FOLLOWERS_CACHE_KEY = "followers";
 
 export default new ApiClient<Profile, PaginationType.Cursor>(
     "/profiles/profiles/"
@@ -53,4 +55,40 @@ export function search(
         "/profiles/profiles/search/"
     );
     return apiClient.getAll({ params: { query: searchQuery } }, query, fullUrl);
+}
+
+export function follow(username: string) {
+    const apiClient = new ApiClient<null>(
+        `/profiles/profiles/follow/${username}/`
+    );
+    return apiClient.post(undefined);
+}
+
+export function unfollow(username: string) {
+    const apiClient = new ApiClient<null>(
+        `/profiles/profiles/unfollow/${username}/`
+    );
+    return apiClient.post(undefined);
+}
+
+export function following(
+    username: string,
+    query?: BaseQuery,
+    fullUrl?: string
+) {
+    const apiClient = new ApiClient<Profile, PaginationType.Cursor>(
+        `/profiles/profiles/following/${username}/`
+    );
+    return apiClient.getAll({}, query, fullUrl);
+}
+
+export function followers(
+    username: string,
+    query?: BaseQuery,
+    fullUrl?: string
+) {
+    const apiClient = new ApiClient<Profile, PaginationType.Cursor>(
+        `/profiles/profiles/followers/${username}/`
+    );
+    return apiClient.getAll({}, query, fullUrl);
 }
