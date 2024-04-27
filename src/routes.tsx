@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import FollowingPage from "./pages/FollowingPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import HistoryPage from "./pages/HistoryPage";
 import Layout from "./pages/Layout";
@@ -61,6 +62,7 @@ const router = createBrowserRouter([
             },
             { path: "saved", element: <SavedVideosPage /> },
             { path: "history", element: <HistoryPage /> },
+            { path: "following", element: <FollowingPage /> },
         ],
     },
 ]);

@@ -7,7 +7,7 @@ import {
     AiOutlinePlaySquare,
 } from "react-icons/ai";
 import { HiOutlineBookmark } from "react-icons/hi";
-import { MdOutlineSubscriptions } from "react-icons/md";
+import { RiUserReceivedLine } from "react-icons/ri";
 import SideNavButton from "./SideNavButton";
 
 function SideNav() {
@@ -21,7 +21,7 @@ function SideNav() {
             backgroundColor="var(--chakra-colors-chakra-body-bg);"
         >
             <SideNavButton icon={AiOutlineHome} link="/">
-                Home
+                For You
             </SideNavButton>
             <SideNavButton icon={AiOutlineFire} link="/popular">
                 Popular
@@ -30,8 +30,8 @@ function SideNav() {
                 Latest
             </SideNavButton>
             <Divider />
-            <SideNavButton icon={MdOutlineSubscriptions} link="">
-                Subscriptions
+            <SideNavButton icon={RiUserReceivedLine} link="/following">
+                Following
             </SideNavButton>
             <SideNavButton icon={HiOutlineBookmark} link="/saved">
                 Saved
