@@ -1,4 +1,6 @@
 import {
+    BackgroundProps,
+    Box,
     IconButton as ChakraIconButton,
     Icon,
     IconProps,
@@ -15,11 +17,22 @@ interface Props {
     size?: "sm" | "md";
     onClick?: () => void;
     link?: string;
+    badgeText?: string;
+    badgeColor?: BackgroundProps["backgroundColor"];
 }
 
 const IconButton = forwardRef(
     (
-        { icon, iconColor, size, label, onClick, link }: Props,
+        {
+            icon,
+            iconColor,
+            size,
+            label,
+            onClick,
+            link,
+            badgeText,
+            badgeColor,
+        }: Props,
         ref: Ref<HTMLButtonElement>
     ) => {
         const buttonSize = size ?? "md";
@@ -30,12 +43,30 @@ const IconButton = forwardRef(
             <Tooltip placement="bottom" label={label}>
                 <ChakraIconButton
                     ref={ref}
+                    position="relative"
                     icon={
-                        <Icon
-                            as={icon}
-                            boxSize={iconBoxSize}
-                            color={iconColor}
-                        />
+                        <>
+                            <Icon
+                                as={icon}
+                                boxSize={iconBoxSize}
+                                color={iconColor}
+                            />
+                            {badgeText && (
+                                <Box position="absolute" top={0} right={3}>
+                                    <Box
+                                        position="absolute"
+                                        backgroundColor={badgeColor}
+                                        fontSize="xs"
+                                        borderRadius="18px"
+                                        paddingX="7px"
+                                        paddingY="1px"
+                                        lineHeight="short"
+                                    >
+                                        {badgeText}
+                                    </Box>
+                                </Box>
+                            )}
+                        </>
                     }
                     aria-label={label}
                     variant="ghost"

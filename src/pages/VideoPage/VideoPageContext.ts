@@ -2,7 +2,7 @@ import { createContext } from "react";
 import Video from "../../entities/Video";
 
 interface VideoPageContextType {
-    fetchedVideos: Video[];
+    fetchedVideos?: Video[];
 }
 
 const VideoPageContext = createContext<VideoPageContextType>(

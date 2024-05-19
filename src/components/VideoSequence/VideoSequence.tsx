@@ -16,9 +16,17 @@ interface Props {
     videos: Video[];
     initialVideoIndex?: number;
     onFetchMore: () => void;
+    highlightedCommentId?: number;
+    highlightedCommentParentId?: number;
 }
 
-function VideoSequence({ videos, initialVideoIndex, onFetchMore }: Props) {
+function VideoSequence({
+    videos,
+    initialVideoIndex,
+    onFetchMore,
+    highlightedCommentId,
+    highlightedCommentParentId,
+}: Props) {
     useEffect(() => {
         if (videos.length === 0) onFetchMore();
     }, [videos]);
@@ -55,7 +63,10 @@ function VideoSequence({ videos, initialVideoIndex, onFetchMore }: Props) {
 
     useEffect(() => {
         setIsViewCreated(false);
-        players.current?.forEach((player) => player?.collapseContent());
+        players.current?.forEach(
+            (player, index) =>
+                index !== currentVideoIndex && player?.collapseContent()
+        );
     }, [currentVideoIndex]);
 
     const currentVideo = videos[currentVideoIndex];
@@ -127,6 +138,14 @@ function VideoSequence({ videos, initialVideoIndex, onFetchMore }: Props) {
                             isFullscreen={true}
                             onContentExpanded={disableSlider}
                             onContentCollapsed={enableSlider}
+                            highlightedCommentId={
+                                index === 0 ? highlightedCommentId : undefined
+                            }
+                            highlightedCommentParentId={
+                                index === 0
+                                    ? highlightedCommentParentId
+                                    : undefined
+                            }
                         />
                     ))}
                 </VerticalSlider>
@@ -165,6 +184,14 @@ function VideoSequence({ videos, initialVideoIndex, onFetchMore }: Props) {
                             roundCorners={true}
                             onProgress={handlePlayerProgress}
                             isFullscreen={false}
+                            highlightedCommentId={
+                                index === 0 ? highlightedCommentId : undefined
+                            }
+                            highlightedCommentParentId={
+                                index === 0
+                                    ? highlightedCommentParentId
+                                    : undefined
+                            }
                         />
                     ))}
                 </VerticalSlider>

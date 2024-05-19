@@ -1,26 +1,31 @@
 import { QueryFilters, QueryKey, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
-interface UseOptimisticUpdateOptions<T> {
+interface UseOptimisticUpdateOptions<TData, TVariables> {
     queryFilters: QueryFilters;
-    updater: (data: T | undefined) => T | undefined;
+    updater: (
+        data: TData | undefined,
+        variables?: TVariables
+    ) => TData | undefined;
     shouldInvalidateQueries?: boolean;
 }
 
-function useOptimisticUpdate<T>({
+function useOptimisticUpdate<TData, TVariables = void>({
     queryFilters,
     updater,
     shouldInvalidateQueries,
-}: UseOptimisticUpdateOptions<T>) {
+}: UseOptimisticUpdateOptions<TData, TVariables>) {
     const queryClient = useQueryClient();
     const [previousData, setPreviousData] = useState<
-        [QueryKey, T | undefined][] | null
+        [QueryKey, TData | undefined][] | null
     >(null);
 
-    async function onMutate() {
+    async function onMutate(variables?: TVariables) {
         await queryClient.cancelQueries(queryFilters);
-        const data = queryClient.getQueriesData<T>(queryFilters);
-        queryClient.setQueriesData<T>(queryFilters, updater);
+        const data = queryClient.getQueriesData<TData>(queryFilters);
+        queryClient.setQueriesData<TData>(queryFilters, (data) =>
+            updater(data, variables)
+        );
         setPreviousData(data);
     }
 

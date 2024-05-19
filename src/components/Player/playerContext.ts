@@ -7,6 +7,8 @@ interface PlayerContextType {
     minHeight?: string;
     isFullscreen: boolean;
     borderRadius: string;
+    highlightedCommentId?: number;
+    highlightedCommentParentId?: number;
 }
 
 const PlayerContext = createContext<PlayerContextType>({} as PlayerContextType);

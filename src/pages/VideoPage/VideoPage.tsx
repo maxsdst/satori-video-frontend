@@ -33,6 +33,8 @@ export interface LocationState {
     videoSource?: VideoSource;
     query?: BaseQuery;
     initialVideoIndex?: number;
+    highlightedCommentId?: number;
+    highlightedCommentParentId?: number;
 }
 
 interface Props {
@@ -45,9 +47,17 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
         videoSource: videoSourceLocation,
         query: queryLocation,
         initialVideoIndex: initialVideoIndexLocation,
+        highlightedCommentId: highlightedCommentIdLocation,
+        highlightedCommentParentId: highlightedCommentParentIdLocation,
     } = useMemo<LocationState>(() => {
         if (!location.state) return {};
-        const { videoSource, query, initialVideoIndex } = location.state;
+        const {
+            videoSource,
+            query,
+            initialVideoIndex,
+            highlightedCommentId,
+            highlightedCommentParentId,
+        } = location.state;
         return {
             videoSource: Object.values(VideoSource).includes(videoSource)
                 ? videoSource
@@ -56,6 +66,14 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
             initialVideoIndex:
                 typeof initialVideoIndex === "number"
                     ? initialVideoIndex
+                    : undefined,
+            highlightedCommentId:
+                typeof highlightedCommentId === "number"
+                    ? highlightedCommentId
+                    : undefined,
+            highlightedCommentParentId:
+                typeof highlightedCommentParentId === "number"
+                    ? highlightedCommentParentId
                     : undefined,
         };
     }, [location.state]);
@@ -73,6 +91,11 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
     const [initialVideoIndex, setInitialVideoIndex] = useState(
         videoSourceLocation && queryLocation ? initialVideoIndexLocation : 0
     );
+    const [highlightedCommentId, setHighlightedCommentId] = useState(
+        highlightedCommentIdLocation
+    );
+    const [highlightedCommentParentId, setHighlightedCommentParentId] =
+        useState(highlightedCommentParentIdLocation);
 
     const { videoId } = useParams();
     const [initialVideoId, setInitialVideoId] = useState(videoId);
@@ -182,6 +205,8 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
         );
         setQuery(queryLocation);
         setInitialVideoIndex(initialVideoIndexLocation);
+        setHighlightedCommentId(highlightedCommentIdLocation);
+        setHighlightedCommentParentId(highlightedCommentParentIdLocation);
         setVideoQueryEnabled(
             videoSourceLocation
                 ? typeof initialVideoIndexLocation !== "number"
@@ -238,6 +263,8 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
                         videos={allVideos}
                         onFetchMore={() => videosQuery?.fetchNextPage()}
                         initialVideoIndex={initialVideoIndex}
+                        highlightedCommentId={highlightedCommentId}
+                        highlightedCommentParentId={highlightedCommentParentId}
                     />
                 )}
             </Flex>

@@ -7,6 +7,7 @@ import {
     RefObject,
     forwardRef,
     useCallback,
+    useContext,
     useImperativeHandle,
     useMemo,
     useState,
@@ -14,11 +15,13 @@ import {
 import { BsArrowReturnRight } from "react-icons/bs";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Comment from "../../../entities/Comment";
+import useComment from "../../../hooks/comments/useComment";
 import useComments, {
     CommentQuery,
     useHandleCommentDeleted,
     useHandleCommentUpdated,
 } from "../../../hooks/comments/useComments";
+import PlayerContext from "../playerContext";
 import EditCommentForm from "./EditCommentForm";
 import { Ordering } from "./Header";
 import Item from "./Item";
@@ -56,6 +59,21 @@ const CommentList = forwardRef(
         }: Props,
         ref: Ref<CommentListHandle>
     ) => {
+        const { highlightedCommentId, highlightedCommentParentId } =
+            useContext(PlayerContext);
+        const isCommentHighlighted = !!highlightedCommentId;
+
+        const { data: highlightedComment } = useComment(highlightedCommentId!, {
+            enabled: isCommentHighlighted,
+        });
+
+        const { data: highlightedCommentParent } = useComment(
+            highlightedCommentParentId!,
+            {
+                enabled: !!highlightedCommentParentId,
+            }
+        );
+
         const query = useMemo<CommentQuery>(() => {
             const queryOrdering: CommentQuery["ordering"] = (() => {
                 switch (ordering) {
@@ -134,7 +152,7 @@ const CommentList = forwardRef(
             [handleCommentDeleted, createdComments, setCreatedComments]
         );
 
-        function renderComment(comment: Comment) {
+        function renderComment(comment: Comment, isHighlighted?: boolean) {
             if (comment.id === editedCommentId)
                 return (
                     <EditCommentForm
@@ -155,6 +173,7 @@ const CommentList = forwardRef(
                     onReplyToReplyCreated={onReplyToReplyCreated}
                     onEdit={onEditComment}
                     onDeleted={onCommentDeleted}
+                    isHighlighted={isHighlighted}
                 />
             );
         }
@@ -163,15 +182,38 @@ const CommentList = forwardRef(
             return createdComments.map((comment) => renderComment(comment));
         }
 
+        function renderHighlightedComment() {
+            if (!isCommentHighlighted || !highlightedComment) return null;
+            if (!isReplyList) {
+                if (highlightedComment.parent) {
+                    if (!highlightedCommentParent) return null;
+                    return renderComment(highlightedCommentParent, false);
+                }
+                return renderComment(highlightedComment, true);
+            }
+            if (isReplyList) {
+                if (parentId === highlightedComment.parent)
+                    return renderComment(highlightedComment, true);
+            }
+            return null;
+        }
+
         function renderComments() {
             return (
                 <>
+                    {renderHighlightedComment()}
                     {!isReplyList && renderCreatedComments()}
                     {showFetchedComments &&
                         comments?.pages.map((page, index) => (
                             <Fragment key={index}>
                                 {page.results.map((comment) => {
                                     if (isInCreatedComments(comment))
+                                        return null;
+                                    if (
+                                        comment.id === highlightedCommentId ||
+                                        comment.id ===
+                                            highlightedCommentParentId
+                                    )
                                         return null;
                                     return renderComment(comment);
                                 })}
@@ -195,9 +237,12 @@ const CommentList = forwardRef(
                 <VStack
                     width="100%"
                     display={
-                        !showFetchedComments && createdComments.length === 0
-                            ? "none"
-                            : "flex"
+                        showFetchedComments ||
+                        createdComments.length > 0 ||
+                        (isCommentHighlighted &&
+                            parentId === highlightedComment?.parent)
+                            ? "flex"
+                            : "none"
                     }
                     style={{ ...styles }}
                 >

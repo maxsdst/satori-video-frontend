@@ -1,5 +1,6 @@
 import { HStack, Text, useDisclosure } from "@chakra-ui/react";
 import { AiOutlineEdit } from "react-icons/ai";
+import { useLocation } from "react-router-dom";
 import Upload from "../../entities/Upload";
 import EditVideoModal from "../EditVideoModal";
 import IconButton from "../IconButton";
@@ -10,11 +11,16 @@ interface Props {
 }
 
 function FileCell({ upload, onVideoMutated }: Props) {
+    const location = useLocation();
+
     const {
         isOpen: isEditVideoModalOpen,
         onOpen: openEditVideoModal,
         onClose: closeEditVideoModal,
-    } = useDisclosure();
+    } = useDisclosure({
+        defaultIsOpen:
+            !!upload.video && location.state?.editedVideoId === upload.video.id,
+    });
 
     return (
         <>

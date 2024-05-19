@@ -45,6 +45,8 @@ interface Props {
     onProgress?: (secondsPlayed: number, percentPlayed: number) => void;
     onContentExpanded?: () => void;
     onContentCollapsed?: () => void;
+    highlightedCommentId?: number;
+    highlightedCommentParentId?: number;
 }
 
 export interface PlayerHandle {
@@ -68,6 +70,8 @@ const Player = forwardRef(
             onProgress,
             onContentExpanded,
             onContentCollapsed,
+            highlightedCommentId,
+            highlightedCommentParentId,
         }: Props,
         ref: Ref<PlayerHandle>
     ) => {
@@ -78,7 +82,7 @@ const Player = forwardRef(
             isLoading,
             error,
         } = useVideo(videoId, {
-            initialData: fetchedVideos.find((video) => video.id === videoId),
+            initialData: fetchedVideos?.find((video) => video.id === videoId),
             staleTime: Infinity,
         });
 
@@ -94,9 +98,9 @@ const Player = forwardRef(
         ] = useReducer(playerReducer, {
             isPlaying: isPlayingProp,
             isMuted: true,
-            areCommentsOpen: false,
+            areCommentsOpen: !!highlightedCommentId,
             isDescriptionOpen: false,
-            isContentExpanded: false,
+            isContentExpanded: !!highlightedCommentId,
         });
 
         const player = useRef<ReactPlayer>(null);
@@ -148,6 +152,8 @@ const Player = forwardRef(
                     minHeight,
                     isFullscreen,
                     borderRadius,
+                    highlightedCommentId,
+                    highlightedCommentParentId,
                 }}
             >
                 <HStack height={height} minHeight={minHeight} spacing={0}>
