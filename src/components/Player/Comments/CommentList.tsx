@@ -76,6 +76,9 @@ const CommentList = forwardRef(
 
         const query = useMemo<CommentQuery>(() => {
             const queryOrdering: CommentQuery["ordering"] = (() => {
+                if (isReplyList)
+                    return { field: "creation_date", direction: "ASC" };
+
                 switch (ordering) {
                     case "top":
                         return { field: "popularity_score", direction: "DESC" };
