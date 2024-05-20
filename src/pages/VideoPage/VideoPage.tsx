@@ -13,6 +13,7 @@ import usePopularVideos from "../../hooks/videos/usePopularVideos";
 import useRecommendedVideos from "../../hooks/videos/useRecommendedVideos";
 import useVideo from "../../hooks/videos/useVideo";
 import useVideoSearch from "../../hooks/videos/useVideoSearch";
+import useVideos from "../../hooks/videos/useVideos";
 import BaseQuery from "../../services/BaseQuery";
 import { MAIN_CONTENT_AREA_PADDING } from "../../styleConstants";
 import { getAllResultsFromInfiniteQueryData } from "../../utils";
@@ -23,6 +24,7 @@ interface ObjectWithVideoField {
 }
 
 export enum VideoSource {
+    Videos = "videos",
     Recommended = "recommended",
     Popular = "popular",
     Latest = "latest",
@@ -119,6 +121,19 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
         staleTime: Infinity,
     });
 
+    const videos = useVideos(
+        query || {
+            pagination: {
+                type: "limit_offset",
+                limit: VIDEO_SEQUENCE_PAGE_SIZE,
+            },
+        },
+        {
+            enabled: videoSource === VideoSource.Videos,
+            staleTime: Infinity,
+        }
+    );
+
     const recommendedVideos = useRecommendedVideos(
         query || {
             pagination: { type: "cursor", pageSize: VIDEO_SEQUENCE_PAGE_SIZE },
@@ -172,6 +187,8 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
 
     const videosQuery = (() => {
         switch (videoSource) {
+            case VideoSource.Videos:
+                return videos;
             case VideoSource.Recommended:
                 return recommendedVideos;
             case VideoSource.Popular:
@@ -195,6 +212,7 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
         remove();
         if (videoId && videoId === initialVideoId) refetch();
         [
+            videos,
             recommendedVideos,
             popularVideos,
             latestVideos,

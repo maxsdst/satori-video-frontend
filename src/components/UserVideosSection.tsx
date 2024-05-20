@@ -6,7 +6,12 @@ import {
     TabPanels,
     Tabs,
 } from "@chakra-ui/react";
-import useVideos from "../hooks/videos/useVideos";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useEffectOnce } from "react-use";
+import { VIDEO_SEQUENCE_PAGE_SIZE } from "../constants";
+import useVideos, { VideoQuery } from "../hooks/videos/useVideos";
+import { VideoSource } from "../pages/VideoPage";
+import { getAllResultsFromInfiniteQueryData } from "../utils";
 import VideoGrid from "./VideoGrid";
 
 interface Props {
@@ -14,8 +19,30 @@ interface Props {
 }
 
 function UserVideosSection({ profileId }: Props) {
-    const { data: videos, isLoading, error } = useVideos({ profileId }, {});
+    const query: VideoQuery = {
+        profileId,
+        pagination: { type: "limit_offset", limit: VIDEO_SEQUENCE_PAGE_SIZE },
+    };
+    const {
+        data,
+        isLoading,
+        error,
+        fetchNextPage,
+        hasNextPage,
+        remove,
+        refetch,
+    } = useVideos(query, { staleTime: Infinity });
+
+    useEffectOnce(() => {
+        if (data) {
+            remove();
+            refetch();
+        }
+    });
+
     if (error) throw error;
+
+    const videos = data ? getAllResultsFromInfiniteQueryData(data) : [];
 
     return (
         <Tabs isLazy width="100%">
@@ -29,25 +56,29 @@ function UserVideosSection({ profileId }: Props) {
             </TabList>
             <TabPanels>
                 <TabPanel padding={0} marginTop={4}>
-                    {isLoading && <Spinner />}
-                    {videos?.results && (
+                    <InfiniteScroll
+                        next={fetchNextPage}
+                        hasMore={!!hasNextPage}
+                        loader={null}
+                        dataLength={videos.length}
+                        scrollThreshold="50px"
+                        style={{ overflowX: "hidden" }}
+                    >
                         <VideoGrid
-                            videos={videos.results}
+                            videos={videos}
                             showUsers={false}
                             showLikes={false}
+                            videoLinkState={{
+                                videoSource: VideoSource.Videos,
+                                query,
+                            }}
                         />
-                    )}
+                        {(hasNextPage || isLoading) && (
+                            <Spinner marginTop={4} />
+                        )}
+                    </InfiniteScroll>
                 </TabPanel>
-                <TabPanel padding={0} marginTop={4}>
-                    {isLoading && <Spinner />}
-                    {videos?.results && (
-                        <VideoGrid
-                            videos={videos.results}
-                            showUsers={false}
-                            showLikes={false}
-                        />
-                    )}
-                </TabPanel>
+                <TabPanel padding={0} marginTop={4}></TabPanel>
             </TabPanels>
         </Tabs>
     );

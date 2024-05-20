@@ -11,7 +11,10 @@ import Video from "../../entities/Video";
 import useOwnProfile from "../../hooks/profiles/useOwnProfile";
 import useVideos, { VideoQuery } from "../../hooks/videos/useVideos";
 import { Ordering } from "../../services/BaseQuery";
-import { convertDateToString } from "../../utils";
+import {
+    convertDateToString,
+    getAllResultsFromInfiniteQueryData,
+} from "../../utils";
 import Table, { ColumnDef, FilteringOption } from "../Table";
 import VideoCell from "./VideoCell";
 import "./VideoTable.css";
@@ -45,7 +48,7 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
     }, [ownProfile]);
 
     const {
-        data: videos,
+        data,
         isLoading: areVideosLoading,
         error: videosError,
         refetch: refetchVideos,
@@ -112,6 +115,9 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
         },
     ];
 
+    const videos = getAllResultsFromInfiniteQueryData(data);
+    const totalVideos = data.pages.length > 0 ? data.pages[0].count : 0;
+
     return (
         <Table
             columnDefs={columnDefs}
@@ -128,8 +134,8 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
             onPaginationChange={(pagination) =>
                 setVideoQuery({ ...videoQuery, pagination })
             }
-            data={videos.results}
-            totalItems={videos.count}
+            data={videos}
+            totalItems={totalVideos}
         />
     );
 });

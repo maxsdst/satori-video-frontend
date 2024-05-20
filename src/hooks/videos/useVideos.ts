@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import BaseQuery from "../../services/BaseQuery";
 import videoService, {
     GetAllResponse,
@@ -19,20 +19,23 @@ function useVideos(
     query: VideoQuery,
     { staleTime, enabled, keepPreviousData }: UseVideosOptions
 ) {
-    return useQuery<GetAllResponse, Error>({
+    return useInfiniteQuery<GetAllResponse, Error>({
         queryKey: [VIDEOS_CACHE_KEY, query],
         staleTime,
-        queryFn: () =>
-            videoService.getAll(
+        enabled,
+        keepPreviousData,
+        queryFn: ({ pageParam }) => {
+            if (pageParam) return videoService.getAll({}, {}, pageParam);
+            return videoService.getAll(
                 {
                     params: {
                         profile: query.profileId,
                     },
                 },
                 query
-            ),
-        enabled,
-        keepPreviousData,
+            );
+        },
+        getNextPageParam: (lastPage) => lastPage.next || undefined,
     });
 }
 
