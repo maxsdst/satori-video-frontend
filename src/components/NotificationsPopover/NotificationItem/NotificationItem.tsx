@@ -1,6 +1,7 @@
 import { AiFillCheckCircle } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import Notification from "../../../entities/Notification";
+import { VideoSource } from "../../../pages/VideoPage";
 import Content from "./Content";
 
 interface Props {
@@ -64,6 +65,7 @@ function NotificationItem({ notification }: Props) {
                             onClick={() =>
                                 navigate("/videos/" + notification.video.id, {
                                     state: {
+                                        videoSource: VideoSource.Recommended,
                                         highlightedCommentId:
                                             notification.comment.id,
                                         highlightedCommentParentId:
@@ -82,7 +84,11 @@ function NotificationItem({ notification }: Props) {
                             text={`uploaded new video: ${notification.video.title}`}
                             videoThumbnail={notification.video.thumbnail}
                             onClick={() =>
-                                navigate("/videos/" + notification.video.id)
+                                navigate("/videos/" + notification.video.id, {
+                                    state: {
+                                        videoSource: VideoSource.Recommended,
+                                    },
+                                })
                             }
                         />
                     );
@@ -99,6 +105,7 @@ function NotificationItem({ notification }: Props) {
                             onClick={() =>
                                 navigate("/videos/" + notification.video.id, {
                                     state: {
+                                        videoSource: VideoSource.Recommended,
                                         highlightedCommentId:
                                             notification.comment.id,
                                         highlightedCommentParentId:
@@ -119,6 +126,7 @@ function NotificationItem({ notification }: Props) {
                             onClick={() =>
                                 navigate("/videos/" + notification.video.id, {
                                     state: {
+                                        videoSource: VideoSource.Recommended,
                                         highlightedCommentId:
                                             notification.reply.id,
                                         highlightedCommentParentId:

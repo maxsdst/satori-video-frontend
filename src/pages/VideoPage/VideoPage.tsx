@@ -1,7 +1,9 @@
 import { AbsoluteCenter, Flex, Spinner } from "@chakra-ui/react";
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import VideoSequence from "../../components/VideoSequence";
+import VideoSequence, {
+    VideoSequenceHandle,
+} from "../../components/VideoSequence";
 import { VIDEO_SEQUENCE_PAGE_SIZE } from "../../constants";
 import Video from "../../entities/Video";
 import useSavedVideos from "../../hooks/saved_videos/useSavedVideos";
@@ -111,6 +113,7 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
         isLoading,
         error,
         remove,
+        refetch,
     } = useVideo(parseInt(initialVideoId!), {
         enabled: isVideoQueryEnabled,
         staleTime: Infinity,
@@ -186,8 +189,11 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
         }
     })();
 
+    const videoSequence = useRef<VideoSequenceHandle>(null);
+
     function reset() {
         remove();
+        if (videoId && videoId === initialVideoId) refetch();
         [
             recommendedVideos,
             popularVideos,
@@ -212,11 +218,17 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
                 ? typeof initialVideoIndexLocation !== "number"
                 : !!videoId
         );
+        videoSequence.current?.reset();
     }
 
     useLayoutEffect(() => {
-        if (videoSourceLocation || videoSourceProp) reset();
-    }, [videoSourceProp, videoSourceLocation]);
+        if (
+            videoSourceLocation ||
+            videoSourceProp ||
+            highlightedCommentIdLocation
+        )
+            reset();
+    }, [videoSourceProp, videoSourceLocation, highlightedCommentIdLocation]);
 
     const allVideos = useMemo<Video[]>(() => {
         const videos = [];
@@ -260,6 +272,7 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
                     </AbsoluteCenter>
                 ) : (
                     <VideoSequence
+                        ref={videoSequence}
                         videos={allVideos}
                         onFetchMore={() => videosQuery?.fetchNextPage()}
                         initialVideoIndex={initialVideoIndex}

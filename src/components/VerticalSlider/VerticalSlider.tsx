@@ -13,7 +13,7 @@ import {
 import Draggable from "react-draggable";
 import WheelIndicator from "wheel-indicator";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
-import verticalSliderReducer from "./verticalSliderReducer";
+import verticalSliderReducer, { SliderState } from "./verticalSliderReducer";
 
 interface Props {
     children?: ReactElement[];
@@ -27,6 +27,7 @@ interface Props {
 export interface VerticalSliderHandle {
     goToNext: () => void;
     goToPrev: () => void;
+    reset: () => void;
 }
 
 const VerticalSlider = forwardRef(function VerticalSlider(
@@ -43,12 +44,14 @@ const VerticalSlider = forwardRef(function VerticalSlider(
     const NEXT_SLIDE_KEYS = ["ArrowDown", "PageDown"];
     const PREV_SLIDE_KEYS = ["ArrowUp", "PageUp"];
 
-    const [state, dispatch] = useReducer(verticalSliderReducer, {
+    const initialState: SliderState = {
         x: 0,
         y: 0,
         currentSlideIndex: initialSlideIndex || 0,
         isDisabled,
-    });
+    };
+
+    const [state, dispatch] = useReducer(verticalSliderReducer, initialState);
 
     useEffect(() => {
         isDisabled
@@ -124,6 +127,13 @@ const VerticalSlider = forwardRef(function VerticalSlider(
                 type: "GO_TO_PREV_SLIDE",
                 slides: slidesContainer.current?.children,
             });
+        },
+        reset() {
+            dispatch({
+                type: "RESET",
+                state: initialState,
+            });
+            setInitialized(false);
         },
     }));
 

@@ -1,6 +1,6 @@
 import { DraggableData } from "react-draggable";
 
-interface SliderState {
+export interface SliderState {
     x: number;
     y: number;
     currentSlideIndex: number;
@@ -31,11 +31,17 @@ interface HandleWindowResizedAction {
     slides?: HTMLCollection;
 }
 
+interface ResetAction {
+    type: "RESET";
+    state: SliderState;
+}
+
 type Action =
     | GoToSlideAction
     | HandleDragAction
     | SetDisabledAction
-    | HandleWindowResizedAction;
+    | HandleWindowResizedAction
+    | ResetAction;
 
 function getSlide(index: number, slides?: HTMLCollection): HTMLElement | null {
     return slides?.[index] ? (slides[index] as HTMLElement) : null;
@@ -90,6 +96,8 @@ function verticalSliderReducer(
     action: Action
 ): SliderState {
     switch (action.type) {
+        case "RESET":
+            return action.state;
         case "DISABLE":
             return { ...state, isDisabled: true };
         case "ENABLE":
