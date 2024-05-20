@@ -22,6 +22,7 @@ function UserVideosSection({ profileId }: Props) {
     const query: VideoQuery = {
         profileId,
         pagination: { type: "limit_offset", limit: VIDEO_SEQUENCE_PAGE_SIZE },
+        ordering: { field: "upload_date", direction: "DESC" },
     };
     const {
         data,
