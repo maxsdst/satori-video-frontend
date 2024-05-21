@@ -6,6 +6,7 @@ import VideoSequence, {
 } from "../../components/VideoSequence";
 import { VIDEO_SEQUENCE_PAGE_SIZE } from "../../constants";
 import Video from "../../entities/Video";
+import useLikes from "../../hooks/likes/useLikes";
 import useSavedVideos from "../../hooks/saved_videos/useSavedVideos";
 import useFollowingVideos from "../../hooks/videos/useFollowingVideos";
 import useLatestVideos from "../../hooks/videos/useLatestVideos";
@@ -31,6 +32,7 @@ export enum VideoSource {
     Search = "search",
     SavedVideos = "saved_videos",
     Following = "following",
+    Likes = "likes",
 }
 
 export interface LocationState {
@@ -185,6 +187,13 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
         { enabled: videoSource === VideoSource.Following, staleTime: Infinity }
     );
 
+    const likes = useLikes(
+        query || {
+            pagination: { type: "cursor", pageSize: VIDEO_SEQUENCE_PAGE_SIZE },
+        },
+        { enabled: videoSource === VideoSource.Likes, staleTime: Infinity }
+    );
+
     const videosQuery = (() => {
         switch (videoSource) {
             case VideoSource.Videos:
@@ -201,6 +210,8 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
                 return savedVideos;
             case VideoSource.Following:
                 return followingVideos;
+            case VideoSource.Likes:
+                return likes;
             default:
                 return null;
         }
@@ -219,6 +230,7 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
             videoSearch,
             savedVideos,
             followingVideos,
+            likes,
         ].forEach((x) => {
             if (x === videosQuery && query) return;
             x.remove();

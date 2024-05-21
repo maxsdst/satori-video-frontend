@@ -9,6 +9,7 @@ import {
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useEffectOnce } from "react-use";
 import { VIDEO_SEQUENCE_PAGE_SIZE } from "../constants";
+import useLikes, { LikesQuery } from "../hooks/likes/useLikes";
 import useVideos, { VideoQuery } from "../hooks/videos/useVideos";
 import { VideoSource } from "../pages/VideoPage";
 import { getAllResultsFromInfiniteQueryData } from "../utils";
@@ -34,16 +35,40 @@ function UserVideosSection({ profileId }: Props) {
         refetch,
     } = useVideos(query, { staleTime: Infinity });
 
+    const queryLikes: LikesQuery = {
+        profileId,
+        pagination: { type: "cursor", pageSize: VIDEO_SEQUENCE_PAGE_SIZE },
+    };
+    const {
+        data: dataLikes,
+        isLoading: isLoadingLikes,
+        error: errorLikes,
+        fetchNextPage: fetchNextPageLikes,
+        hasNextPage: hasNextPageLikes,
+        remove: removeLikes,
+        refetch: refetchLikes,
+    } = useLikes(queryLikes, { staleTime: Infinity });
+
     useEffectOnce(() => {
         if (data) {
             remove();
             refetch();
         }
+        if (dataLikes) {
+            removeLikes();
+            refetchLikes();
+        }
     });
 
     if (error) throw error;
+    if (errorLikes) throw errorLikes;
 
     const videos = data ? getAllResultsFromInfiniteQueryData(data) : [];
+    const likedVideos = dataLikes
+        ? getAllResultsFromInfiniteQueryData(dataLikes).map(
+              (item) => item.video
+          )
+        : [];
 
     return (
         <Tabs isLazy width="100%">
@@ -79,7 +104,29 @@ function UserVideosSection({ profileId }: Props) {
                         )}
                     </InfiniteScroll>
                 </TabPanel>
-                <TabPanel padding={0} marginTop={4}></TabPanel>
+                <TabPanel padding={0} marginTop={4}>
+                    <InfiniteScroll
+                        next={fetchNextPageLikes}
+                        hasMore={!!hasNextPageLikes}
+                        loader={null}
+                        dataLength={likedVideos.length}
+                        scrollThreshold="50px"
+                        style={{ overflowX: "hidden" }}
+                    >
+                        <VideoGrid
+                            videos={likedVideos}
+                            showUsers={true}
+                            showLikes={false}
+                            videoLinkState={{
+                                videoSource: VideoSource.Likes,
+                                query: queryLikes,
+                            }}
+                        />
+                        {(hasNextPageLikes || isLoadingLikes) && (
+                            <Spinner marginTop={4} />
+                        )}
+                    </InfiniteScroll>
+                </TabPanel>
             </TabPanels>
         </Tabs>
     );
