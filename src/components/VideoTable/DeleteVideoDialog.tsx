@@ -18,7 +18,7 @@ import {
 import { useRef } from "react";
 import Video from "../../entities/Video";
 import useDeleteVideo from "../../hooks/videos/useDeleteVideo";
-import { formatNumber } from "../../utils";
+import { convertDateToString, formatNumber } from "../../utils";
 
 interface Props {
     video: Video;
@@ -78,7 +78,8 @@ function DeleteVideoDialog({ video, isOpen, onClose, onVideoDeleted }: Props) {
                                         {video.title}
                                     </Text>
                                     <Text color="gray.400">
-                                        Uploaded Aug 23, 2023
+                                        Uploaded{" "}
+                                        {convertDateToString(video.upload_date)}
                                     </Text>
                                     <Text color="gray.400">
                                         {formatNumber(video.view_count)} views
