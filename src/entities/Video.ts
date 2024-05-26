@@ -1,3 +1,4 @@
+import { DateFields } from "../services/ApiClient";
 import Profile from "./Profile";
 
 export default interface Video {
@@ -16,4 +17,4 @@ export default interface Video {
     is_saved: boolean;
 }
 
-export const DATE_FIELDS = ["upload_date"];
+export const DATE_FIELDS: DateFields<Video> = { own: ["upload_date"] };

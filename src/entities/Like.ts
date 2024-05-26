@@ -1,5 +1,6 @@
+import { DateFields } from "../services/ApiClient";
 import Profile from "./Profile";
-import Video from "./Video";
+import Video, { DATE_FIELDS as VIDEO_DATE_FIELDS } from "./Video";
 
 export default interface Like {
     id: number;
@@ -8,4 +9,9 @@ export default interface Like {
     creation_date: Date;
 }
 
-export const DATE_FIELDS = ["creation_date"];
+export const DATE_FIELDS: DateFields<Like> = {
+    own: ["creation_date"],
+    nested: {
+        video: VIDEO_DATE_FIELDS,
+    },
+};

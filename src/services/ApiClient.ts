@@ -79,11 +79,19 @@ function applyPagination(
     }
 }
 
-function parseDates(object: any, dateFields: string[]) {
+function parseDates<T>(object: any, dateFields: DateFields<T>) {
     if (typeof object !== "object" || object === null) return;
-    for (const field of dateFields)
+
+    for (const field of dateFields.own)
         if (object.hasOwnProperty(field))
             object[field] = new Date(object[field]);
+
+    if (!dateFields.nested) return;
+
+    for (const field of Object.keys(dateFields.nested) as Array<
+        keyof DateFields<T>["nested"]
+    >)
+        parseDates(object[field], dateFields.nested[field]);
 }
 
 export enum PaginationType {
@@ -107,14 +115,23 @@ export type GetAllResponse<T, PaginationT> =
         ? CursorPaginationResponse<T>
         : LimitOffsetPaginationResponse<T>;
 
+export interface DateFields<T> {
+    own: T extends null ? never : (keyof T)[];
+    nested?: T extends null
+        ? never
+        : {
+              [K in keyof T]?: DateFields<T[K]>;
+          };
+}
+
 class ApiClient<
     T,
     PaginationT extends PaginationType = PaginationType.LimitOffset
 > {
     endpoint: string;
-    dateFields?: string[];
+    dateFields?: DateFields<T>;
 
-    constructor(endpoint: string, dateFields?: string[]) {
+    constructor(endpoint: string, dateFields?: DateFields<T>) {
         if (!endpoint.endsWith("/")) endpoint += "/";
         this.endpoint = endpoint;
         this.dateFields = dateFields;

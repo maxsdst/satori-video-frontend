@@ -1,3 +1,4 @@
+import { DateFields } from "../services/ApiClient";
 import Profile from "./Profile";
 
 export default interface Comment {
@@ -14,4 +15,4 @@ export default interface Comment {
     is_liked: boolean;
 }
 
-export const DATE_FIELDS = ["creation_date"];
+export const DATE_FIELDS: DateFields<Comment> = { own: ["creation_date"] };

@@ -1,6 +1,7 @@
-import Comment from "./Comment";
+import { DateFields } from "../services/ApiClient";
+import Comment, { DATE_FIELDS as COMMENT_DATE_FIELDS } from "./Comment";
 import Profile from "./Profile";
-import Video from "./Video";
+import Video, { DATE_FIELDS as VIDEO_DATE_FIELDS } from "./Video";
 
 interface BaseNotification {
     id: number;
@@ -37,4 +38,11 @@ type Notification =
 
 export default Notification;
 
-export const DATE_FIELDS = ["creation_date"];
+export const DATE_FIELDS: DateFields<Notification> = {
+    own: ["creation_date"],
+    nested: {
+        video: VIDEO_DATE_FIELDS,
+        comment: COMMENT_DATE_FIELDS,
+        reply: COMMENT_DATE_FIELDS,
+    },
+};
