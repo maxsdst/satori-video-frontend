@@ -2,7 +2,6 @@ import {
     Avatar,
     Box,
     Button,
-    Flex,
     HStack,
     Heading,
     Text,
@@ -101,45 +100,53 @@ function Profile({ profile }: Props) {
                 maxWidth="800px"
                 spacing={5}
             >
-                <Flex
-                    direction="row"
-                    width="100%"
-                    justifyContent="space-between"
-                    alignItems="end"
-                >
+                <HStack width="100%" spacing={5}>
                     <Avatar size="2xl" src={profile.avatar || undefined} />
-                    {isOwnProfile ? (
-                        <Button
-                            variant="outline"
-                            colorScheme="blue"
-                            size="md"
-                            fontWeight="bold"
-                            onClick={() => openEditModal()}
-                        >
-                            Edit profile
-                        </Button>
-                    ) : (
-                        <Button
-                            variant={profile.is_following ? "outline" : "solid"}
-                            colorScheme="blue"
-                            size="md"
-                            fontWeight="bold"
-                            onClick={() => {
-                                if (!isAuthenticated) openLoginRequestModal();
-                                else if (profile.is_following)
-                                    unfollow.mutate(null);
-                                else follow.mutate(null);
-                            }}
-                        >
-                            {profile.is_following ? "Unfollow" : "Follow"}
-                        </Button>
-                    )}
-                </Flex>
-                <VStack alignItems="start" spacing={1} width="100%">
-                    <Heading size="md">{profile.full_name}</Heading>
-                    <Text fontSize="md">@{profile.user.username}</Text>
-                </VStack>
-                {profile.description && <Text>{profile.description}</Text>}
+                    <VStack alignItems="start" spacing={4}>
+                        <VStack alignItems="start" spacing={1} width="100%">
+                            <Heading size="md" overflowWrap="anywhere">
+                                {profile.full_name}
+                            </Heading>
+                            <Text fontSize="md" overflowWrap="anywhere">
+                                @{profile.user.username}
+                            </Text>
+                        </VStack>
+                        {isOwnProfile ? (
+                            <Button
+                                variant="outline"
+                                colorScheme="blue"
+                                size="md"
+                                fontWeight="bold"
+                                onClick={() => openEditModal()}
+                            >
+                                Edit profile
+                            </Button>
+                        ) : (
+                            <Button
+                                variant={
+                                    profile.is_following ? "outline" : "solid"
+                                }
+                                colorScheme="blue"
+                                size="md"
+                                fontWeight="bold"
+                                onClick={() => {
+                                    if (!isAuthenticated)
+                                        openLoginRequestModal();
+                                    else if (profile.is_following)
+                                        unfollow.mutate(null);
+                                    else follow.mutate(null);
+                                }}
+                            >
+                                {profile.is_following ? "Unfollow" : "Follow"}
+                            </Button>
+                        )}
+                    </VStack>
+                </HStack>
+                {profile.description && (
+                    <Text overflowWrap="anywhere" whiteSpace="pre-line">
+                        {profile.description}
+                    </Text>
+                )}
                 <HStack spacing={5} fontSize="sm">
                     <Box
                         _hover={{
