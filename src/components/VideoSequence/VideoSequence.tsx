@@ -135,6 +135,7 @@ const VideoSequence = forwardRef(
                     paddingBottom={0}
                     overflow="hidden"
                     backgroundColor="black"
+                    zIndex={2}
                 >
                     <VerticalSlider
                         isDraggable={isTouchDevice()}

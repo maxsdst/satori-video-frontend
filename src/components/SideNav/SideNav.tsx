@@ -8,16 +8,19 @@ import {
 } from "react-icons/ai";
 import { HiOutlineBookmark } from "react-icons/hi";
 import { RiUserReceivedLine } from "react-icons/ri";
+import { SIDENAV_WIDTH } from "../../styleConstants";
 import SideNavButton from "./SideNavButton";
 
 function SideNav() {
     return (
         <VStack
+            position="fixed"
             alignItems="start"
             padding={2}
-            position={{ base: "absolute", md: "static" }}
             width="100%"
-            maxWidth={{ base: "100%", md: "240px" }}
+            maxWidth={{ base: "100%", md: SIDENAV_WIDTH }}
+            height="100%"
+            zIndex={1}
             backgroundColor="var(--chakra-colors-chakra-body-bg);"
         >
             <SideNavButton icon={AiOutlineHome} link="/">

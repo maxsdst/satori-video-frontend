@@ -24,7 +24,7 @@ function AdaptivePanel({ onClose, header, children }: Props) {
             backgroundColor="gray.700"
             position={isFullscreen ? "fixed" : "relative"}
             top={isFullscreen ? 0 : undefined}
-            zIndex={2}
+            zIndex={3}
             borderRightRadius={!isFullscreen ? borderRadius : undefined}
             onTouchStartCapture={(e) => e.stopPropagation()}
         >

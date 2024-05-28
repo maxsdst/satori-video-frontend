@@ -9,7 +9,7 @@ import {
 import { Outlet } from "react-router-dom";
 import SideNav from "../components/SideNav";
 import TopNav from "../components/TopNav";
-import { TOPNAV_HEIGHT } from "../styleConstants";
+import { SIDENAV_WIDTH, TOPNAV_HEIGHT } from "../styleConstants";
 
 function Layout() {
     const shouldOpenSidenav = useBreakpointValue(
@@ -36,7 +36,18 @@ function Layout() {
             <GridItem area="main">
                 <Flex direction="row" width="100%" height="100%">
                     {isSidenavOpen && <SideNav />}
-                    <Box width="100%" height="100%">
+                    <Box
+                        width="100%"
+                        height="100%"
+                        display={{
+                            base: isSidenavOpen ? "none" : "block",
+                            md: "block",
+                        }}
+                        marginLeft={{
+                            base: 0,
+                            md: isSidenavOpen ? SIDENAV_WIDTH : 0,
+                        }}
+                    >
                         <Outlet />
                     </Box>
                 </Flex>

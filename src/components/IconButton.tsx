@@ -14,6 +14,7 @@ interface Props {
     icon: IconType;
     iconColor?: IconProps["color"];
     label: string;
+    disableTooltip?: boolean;
     size?: "sm" | "md";
     onClick?: () => void;
     link?: string;
@@ -28,6 +29,7 @@ const IconButton = forwardRef(
             iconColor,
             size,
             label,
+            disableTooltip,
             onClick,
             link,
             badgeText,
@@ -39,46 +41,51 @@ const IconButton = forwardRef(
         const iconBoxSizes = { sm: 5, md: 6 };
         const iconBoxSize = iconBoxSizes[buttonSize];
 
-        const button = (
-            <Tooltip placement="bottom" label={label}>
-                <ChakraIconButton
-                    ref={ref}
-                    position="relative"
-                    icon={
-                        <>
-                            <Icon
-                                as={icon}
-                                boxSize={iconBoxSize}
-                                color={iconColor}
-                            />
-                            {badgeText && (
-                                <Box position="absolute" top={0} right={3}>
-                                    <Box
-                                        position="absolute"
-                                        backgroundColor={badgeColor}
-                                        fontSize="xs"
-                                        borderRadius="18px"
-                                        paddingX="7px"
-                                        paddingY="1px"
-                                        lineHeight="short"
-                                    >
-                                        {badgeText}
-                                    </Box>
+        let button = (
+            <ChakraIconButton
+                ref={ref}
+                position="relative"
+                icon={
+                    <>
+                        <Icon
+                            as={icon}
+                            boxSize={iconBoxSize}
+                            color={iconColor}
+                        />
+                        {badgeText && (
+                            <Box position="absolute" top={0} right={3}>
+                                <Box
+                                    position="absolute"
+                                    backgroundColor={badgeColor}
+                                    fontSize="xs"
+                                    borderRadius="18px"
+                                    paddingX="7px"
+                                    paddingY="1px"
+                                    lineHeight="short"
+                                >
+                                    {badgeText}
                                 </Box>
-                            )}
-                        </>
-                    }
-                    aria-label={label}
-                    variant="ghost"
-                    borderRadius="50%"
-                    padding={0}
-                    onClick={onClick}
-                    size={size}
-                />
-            </Tooltip>
+                            </Box>
+                        )}
+                    </>
+                }
+                aria-label={label}
+                variant="ghost"
+                borderRadius="50%"
+                padding={0}
+                onClick={onClick}
+                size={size}
+            />
         );
 
-        if (link) return <Link to={link}>{button}</Link>;
+        if (!disableTooltip)
+            button = (
+                <Tooltip placement="bottom" label={label}>
+                    {button}
+                </Tooltip>
+            );
+
+        if (link) button = <Link to={link}>{button}</Link>;
 
         return button;
     }

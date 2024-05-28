@@ -1,4 +1,11 @@
-import { Button, HStack, Hide, Image, useBoolean } from "@chakra-ui/react";
+import {
+    Button,
+    HStack,
+    Hide,
+    Image,
+    StackProps,
+    useBoolean,
+} from "@chakra-ui/react";
 import {
     AiOutlineArrowLeft,
     AiOutlineSearch,
@@ -23,11 +30,18 @@ function TopNav({ isSidenavOpen, toggleSidenav }: Props) {
     const [isSearchModeOn, { on: setSearchModeOn, off: setSearchModeOff }] =
         useBoolean(false);
 
-    const padding = 2;
+    const styles: StackProps = {
+        position: "fixed",
+        top: 0,
+        width: "100%",
+        padding: 2,
+        zIndex: 1,
+        backgroundColor: "var(--chakra-colors-chakra-body-bg);",
+    };
 
     if (isSearchModeOn)
         return (
-            <HStack padding={padding} justifyContent="center">
+            <HStack {...styles} justifyContent="center">
                 <IconButton
                     label="Search"
                     icon={AiOutlineArrowLeft}
@@ -38,12 +52,13 @@ function TopNav({ isSidenavOpen, toggleSidenav }: Props) {
         );
 
     return (
-        <HStack padding={padding} justifyContent="space-between">
+        <HStack {...styles} justifyContent="space-between">
             <HStack>
                 <IconButton
                     label={
                         isSidenavOpen ? "Hide navigation" : "Show navigation"
                     }
+                    disableTooltip={true}
                     icon={RxHamburgerMenu}
                     onClick={() => toggleSidenav()}
                 />

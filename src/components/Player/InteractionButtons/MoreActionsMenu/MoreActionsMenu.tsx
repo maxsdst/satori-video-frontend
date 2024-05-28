@@ -138,6 +138,7 @@ function MoreActionsMenu({ video, onOpenDescription }: Props) {
                             marginBottom="24px"
                             bottom={0}
                             borderRadius="12px"
+                            zIndex={10}
                         >
                             {menuItems}
                         </MenuList>
