@@ -11,38 +11,67 @@ import { RiUserReceivedLine } from "react-icons/ri";
 import { SIDENAV_WIDTH } from "../../styleConstants";
 import SideNavButton from "./SideNavButton";
 
-function SideNav() {
+interface Props {
+    isFullscreen: boolean;
+    onClose: () => void;
+}
+
+function SideNav({ isFullscreen, onClose }: Props) {
+    function close() {
+        if (isFullscreen) onClose();
+    }
+
     return (
         <VStack
             position="fixed"
             alignItems="start"
             padding={2}
             width="100%"
-            maxWidth={{ base: "100%", md: SIDENAV_WIDTH }}
+            maxWidth={isFullscreen ? "100%" : SIDENAV_WIDTH}
             height="100%"
             zIndex={1}
             backgroundColor="var(--chakra-colors-chakra-body-bg);"
         >
-            <SideNavButton icon={AiOutlineHome} link="/">
+            <SideNavButton icon={AiOutlineHome} link="/" onClick={close}>
                 For You
             </SideNavButton>
-            <SideNavButton icon={AiOutlineFire} link="/popular">
+            <SideNavButton icon={AiOutlineFire} link="/popular" onClick={close}>
                 Popular
             </SideNavButton>
-            <SideNavButton icon={AiOutlineClockCircle} link="/latest">
+            <SideNavButton
+                icon={AiOutlineClockCircle}
+                link="/latest"
+                onClick={close}
+            >
                 Latest
             </SideNavButton>
             <Divider />
-            <SideNavButton icon={RiUserReceivedLine} link="/following">
+            <SideNavButton
+                icon={RiUserReceivedLine}
+                link="/following"
+                onClick={close}
+            >
                 Following
             </SideNavButton>
-            <SideNavButton icon={HiOutlineBookmark} link="/saved">
+            <SideNavButton
+                icon={HiOutlineBookmark}
+                link="/saved"
+                onClick={close}
+            >
                 Saved
             </SideNavButton>
-            <SideNavButton icon={AiOutlineHistory} link="/history">
+            <SideNavButton
+                icon={AiOutlineHistory}
+                link="/history"
+                onClick={close}
+            >
                 History
             </SideNavButton>
-            <SideNavButton icon={AiOutlinePlaySquare} link="/my_videos">
+            <SideNavButton
+                icon={AiOutlinePlaySquare}
+                link="/my_videos"
+                onClick={close}
+            >
                 My videos
             </SideNavButton>
         </VStack>

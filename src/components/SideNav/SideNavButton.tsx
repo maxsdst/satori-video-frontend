@@ -6,9 +6,10 @@ interface Props {
     icon: IconType;
     children: string;
     link: string;
+    onClick: () => void;
 }
 
-function SideNavButton({ icon, children, link }: Props) {
+function SideNavButton({ icon, children, link, onClick }: Props) {
     return (
         <Link to={link} style={{ width: "100%" }}>
             <Button
@@ -17,6 +18,7 @@ function SideNavButton({ icon, children, link }: Props) {
                 justifyContent="left"
                 iconSpacing={4}
                 leftIcon={<Icon as={icon} boxSize={6} />}
+                onClick={onClick}
             >
                 {children}
             </Button>

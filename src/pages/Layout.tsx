@@ -17,8 +17,10 @@ function Layout() {
         { ssr: false, fallback: "md" }
     );
 
-    const [isSidenavOpen, { toggle: toggleSidenav }] =
+    const [isSidenavOpen, { toggle: toggleSidenav, off: closeSidenav }] =
         useBoolean(shouldOpenSidenav);
+
+    const isSidenavFullscreen = useBreakpointValue({ base: true, md: false });
 
     return (
         <Grid
@@ -35,7 +37,12 @@ function Layout() {
             </GridItem>
             <GridItem area="main">
                 <Flex direction="row" width="100%" height="100%">
-                    {isSidenavOpen && <SideNav />}
+                    {isSidenavOpen && (
+                        <SideNav
+                            isFullscreen={!!isSidenavFullscreen}
+                            onClose={closeSidenav}
+                        />
+                    )}
                     <Box
                         width="100%"
                         height="100%"
