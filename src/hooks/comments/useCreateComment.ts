@@ -1,7 +1,9 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import Comment from "../../entities/Comment";
-import commentService from "../../services/commentService";
+import commentService, {
+    COMMENTS_CACHE_KEY,
+} from "../../services/commentService";
 
 interface CommentData {
     videoId: number;
@@ -22,6 +24,8 @@ interface UseCreateCommentOptions {
 }
 
 function useCreateComment({ onError }: UseCreateCommentOptions) {
+    const queryClient = useQueryClient();
+
     return useMutation<Comment, AxiosError<ErrorData>, CommentData>({
         mutationFn: (data) =>
             commentService.post({
@@ -33,6 +37,8 @@ function useCreateComment({ onError }: UseCreateCommentOptions) {
         onError: (error) => {
             if (error.response?.data) onError?.(error.response.data);
         },
+        onSuccess: (comment) =>
+            queryClient.setQueryData([COMMENTS_CACHE_KEY, comment.id], comment),
     });
 }
 

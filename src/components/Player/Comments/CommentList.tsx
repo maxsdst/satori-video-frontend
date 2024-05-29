@@ -15,19 +15,16 @@ import {
 import { BsArrowReturnRight } from "react-icons/bs";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Comment from "../../../entities/Comment";
+import useCachedComments from "../../../hooks/comments/useCachedComments";
 import useComment from "../../../hooks/comments/useComment";
-import useComments, {
-    CommentQuery,
-    useHandleCommentDeleted,
-    useHandleCommentUpdated,
-} from "../../../hooks/comments/useComments";
+import useComments, { CommentQuery } from "../../../hooks/comments/useComments";
 import PlayerContext from "../playerContext";
 import EditCommentForm from "./EditCommentForm";
 import { Ordering } from "./Header";
 import Item from "./Item";
 
 export interface CommentListHandle {
-    addCreatedComment: (comment: Comment) => void;
+    addCreatedCommentId: (commentId: number) => void;
 }
 
 interface Props {
@@ -105,39 +102,34 @@ const CommentList = forwardRef(
             isFetchingNextPage,
         } = useComments(query, { enabled: showFetchedComments });
 
-        const handleCommentUpdated = useHandleCommentUpdated(query);
-        const handleCommentDeleted = useHandleCommentDeleted(query);
+        const [createdCommentIds, setCreatedCommentIds] = useState<number[]>(
+            []
+        );
 
-        const [createdComments, setCreatedComments] = useState<Comment[]>([]);
+        const createdComments = useCachedComments(createdCommentIds);
+
         const [editedCommentId, setEditedCommentId] = useState<number | null>(
             null
         );
 
         useImperativeHandle(ref, () => ({
-            addCreatedComment: (comment) =>
+            addCreatedCommentId: (commentId) =>
                 isReplyList
-                    ? setCreatedComments([...createdComments, comment])
-                    : setCreatedComments([comment, ...createdComments]),
+                    ? setCreatedCommentIds([...createdCommentIds, commentId])
+                    : setCreatedCommentIds([commentId, ...createdCommentIds]),
         }));
 
-        function _handleCommentUpdated(comment: Comment) {
-            handleCommentUpdated(comment);
-            setCreatedComments(
-                createdComments.map((item) =>
-                    item.id === comment.id ? comment : item
-                )
-            );
-        }
-
         function isInCreatedComments(comment: Comment) {
-            return createdComments.some((item) => item.id === comment.id);
+            return createdCommentIds.some(
+                (commentId) => commentId === comment.id
+            );
         }
 
         const onReplyToReplyCreated = useCallback(
             (comment: Comment) => {
-                setCreatedComments([...createdComments, comment]);
+                setCreatedCommentIds([...createdCommentIds, comment.id]);
             },
-            [createdComments, setCreatedComments]
+            [createdCommentIds, setCreatedCommentIds]
         );
 
         const onEditComment = useCallback(
@@ -147,12 +139,13 @@ const CommentList = forwardRef(
 
         const onCommentDeleted = useCallback(
             (comment: Comment) => {
-                handleCommentDeleted(comment.id);
-                setCreatedComments(
-                    createdComments.filter((item) => item.id !== comment.id)
+                setCreatedCommentIds(
+                    createdCommentIds.filter(
+                        (commentId) => commentId !== comment.id
+                    )
                 );
             },
-            [handleCommentDeleted, createdComments, setCreatedComments]
+            [createdCommentIds, setCreatedCommentIds]
         );
 
         function renderComment(comment: Comment, isHighlighted?: boolean) {
@@ -161,10 +154,7 @@ const CommentList = forwardRef(
                     <EditCommentForm
                         comment={comment}
                         isReply={isReplyList}
-                        onCommentEdited={(comment) => {
-                            setEditedCommentId(null);
-                            _handleCommentUpdated(comment);
-                        }}
+                        onCommentEdited={() => setEditedCommentId(null)}
                         onClose={() => setEditedCommentId(null)}
                     />
                 );
@@ -182,7 +172,9 @@ const CommentList = forwardRef(
         }
 
         function renderCreatedComments() {
-            return createdComments.map((comment) => renderComment(comment));
+            return createdComments.map(
+                (comment) => comment && renderComment(comment)
+            );
         }
 
         function renderHighlightedComment() {

@@ -1,10 +1,4 @@
-import {
-    InfiniteData,
-    useInfiniteQuery,
-    useQueryClient,
-} from "@tanstack/react-query";
-import { useCallback } from "react";
-import Comment from "../../entities/Comment";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import BaseQuery from "../../services/BaseQuery";
 import commentService, {
     COMMENTS_CACHE_KEY,
@@ -46,54 +40,3 @@ function useComments(
 }
 
 export default useComments;
-
-export function useHandleCommentUpdated(query: CommentQuery) {
-    const queryClient = useQueryClient();
-
-    return (updatedComment: Comment) => {
-        queryClient.setQueryData(
-            [COMMENTS_CACHE_KEY, query],
-            (data: InfiniteData<GetAllResponse> | undefined) => {
-                if (!data) return data;
-
-                return {
-                    ...data,
-                    pages: data.pages.map((page) => ({
-                        ...page,
-                        results: page.results.map((item) =>
-                            item.id === updatedComment.id
-                                ? updatedComment
-                                : item
-                        ),
-                    })),
-                };
-            }
-        );
-    };
-}
-
-export function useHandleCommentDeleted(query: CommentQuery) {
-    const queryClient = useQueryClient();
-
-    return useCallback(
-        (deletedCommentId: number) => {
-            queryClient.setQueryData(
-                [COMMENTS_CACHE_KEY, query],
-                (data: InfiniteData<GetAllResponse> | undefined) => {
-                    if (!data) return data;
-
-                    return {
-                        ...data,
-                        pages: data.pages.map((page) => ({
-                            ...page,
-                            results: page.results.filter(
-                                (item) => item.id !== deletedCommentId
-                            ),
-                        })),
-                    };
-                }
-            );
-        },
-        [query, queryClient]
-    );
-}

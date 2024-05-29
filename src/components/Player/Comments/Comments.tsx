@@ -35,7 +35,9 @@ function Comments({ video, onClose }: Props) {
                         <CreateCommentForm
                             videoId={video.id}
                             onCommentCreated={(comment) =>
-                                commentList.current?.addCreatedComment(comment)
+                                commentList.current?.addCreatedCommentId(
+                                    comment.id
+                                )
                             }
                         />
                     </Box>

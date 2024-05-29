@@ -140,8 +140,8 @@ function Item({
                                 onReplyCreated={(reply) =>
                                     isReply
                                         ? onReplyToReplyCreated?.(reply)
-                                        : commentList.current?.addCreatedComment(
-                                              reply
+                                        : commentList.current?.addCreatedCommentId(
+                                              reply.id
                                           )
                                 }
                                 onClose={closeReplyForm}
