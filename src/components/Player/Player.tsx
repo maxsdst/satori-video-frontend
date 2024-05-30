@@ -36,6 +36,8 @@ interface Props {
     showInteractionButtons: boolean;
     showVideoInfo: boolean;
     isPlaying: boolean;
+    isMuted: boolean;
+    onMuteStateChange?: (isMuted: boolean) => void;
     width: string;
     height: string;
     minWidth?: string;
@@ -61,6 +63,8 @@ const Player = forwardRef(
             showInteractionButtons,
             showVideoInfo,
             isPlaying: isPlayingProp,
+            isMuted: isMutedProp,
+            onMuteStateChange,
             width,
             height,
             minWidth,
@@ -97,7 +101,7 @@ const Player = forwardRef(
             dispatch,
         ] = useReducer(playerReducer, {
             isPlaying: isPlayingProp,
-            isMuted: true,
+            isMuted: isMutedProp,
             areCommentsOpen: !!highlightedCommentId,
             isDescriptionOpen: false,
             isContentExpanded: !!highlightedCommentId,
@@ -118,6 +122,15 @@ const Player = forwardRef(
         useEffect(() => {
             if (isPlaying) player.current?.setState({ showPreview: false });
         }, [isPlaying]);
+
+        useEffect(() => {
+            if (isMutedProp) dispatch({ type: "MUTE" });
+            else dispatch({ type: "UNMUTE" });
+        }, [isMutedProp]);
+
+        useEffect(() => {
+            onMuteStateChange?.(isMuted);
+        }, [isMuted]);
 
         const [duration, setDuration] = useState<number>();
 

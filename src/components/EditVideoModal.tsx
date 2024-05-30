@@ -108,6 +108,7 @@ function EditVideoModal({ video, isOpen, onClose, onVideoEdited }: Props) {
             showInteractionButtons={false}
             showVideoInfo={false}
             isPlaying={false}
+            isMuted={true}
             width={playerWidth}
             height={playerHeight}
             roundCorners={false}

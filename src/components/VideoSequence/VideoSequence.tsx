@@ -60,6 +60,8 @@ const VideoSequence = forwardRef(
 
         const players = useRef<(PlayerHandle | null)[]>([]);
 
+        const [arePlayersMuted, setPlayersMuted] = useState(true);
+
         const isFullscreen = isInPortraitMode(width, height);
 
         useEffect(() => {
@@ -155,6 +157,10 @@ const VideoSequence = forwardRef(
                                 showInteractionButtons={true}
                                 showVideoInfo={true}
                                 isPlaying={currentVideoIndex === index}
+                                isMuted={arePlayersMuted}
+                                onMuteStateChange={(isMuted) =>
+                                    setPlayersMuted(isMuted)
+                                }
                                 width={`${width}px`}
                                 height={`${height}px`}
                                 roundCorners={false}
@@ -203,6 +209,10 @@ const VideoSequence = forwardRef(
                                 showInteractionButtons={true}
                                 showVideoInfo={true}
                                 isPlaying={currentVideoIndex === index}
+                                isMuted={arePlayersMuted}
+                                onMuteStateChange={(isMuted) =>
+                                    setPlayersMuted(isMuted)
+                                }
                                 width={playerWidth}
                                 height={playerHeight}
                                 minWidth="315px"
