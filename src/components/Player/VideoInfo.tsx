@@ -17,6 +17,7 @@ function VideoInfo({ video }: Props) {
             filter={PLAYER_DROP_SHADOW}
             width="100%"
             zIndex={2}
+            onTouchStartCapture={(e) => e.stopPropagation()}
         >
             <Link to={"/users/" + video.profile.user.username}>
                 <HStack>
