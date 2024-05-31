@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import FollowingPage from "./pages/FollowingPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import HistoryPage from "./pages/HistoryPage";
+import HomePage from "./pages/HomePage";
 import Layout from "./pages/Layout";
 import LoginPage from "./pages/LoginPage";
 import MyVideosPage from "./pages/MyVideosPage";
@@ -19,7 +20,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <VideoPage videoSource={VideoSource.Recommended} />,
+                element: <HomePage />,
             },
             {
                 element: <UnauthenticatedRoutes />,
