@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import Layout from "./pages/Layout";
 import LoginPage from "./pages/LoginPage";
 import MyVideosPage from "./pages/MyVideosPage";
+import PopularPage from "./pages/PopularPage";
 import ProfilePage from "./pages/ProfilePage";
 import SavedVideosPage from "./pages/SavedVideosPage";
 import SearchPage from "./pages/SearchPage";
@@ -35,7 +36,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "popular",
-                element: <VideoPage videoSource={VideoSource.Popular} />,
+                element: <PopularPage />,
             },
             {
                 path: "latest",
