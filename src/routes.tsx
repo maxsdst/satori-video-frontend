@@ -3,6 +3,7 @@ import FollowingPage from "./pages/FollowingPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import HistoryPage from "./pages/HistoryPage";
 import HomePage from "./pages/HomePage";
+import LatestPage from "./pages/LatestPage";
 import Layout from "./pages/Layout";
 import LoginPage from "./pages/LoginPage";
 import MyVideosPage from "./pages/MyVideosPage";
@@ -12,7 +13,7 @@ import SavedVideosPage from "./pages/SavedVideosPage";
 import SearchPage from "./pages/SearchPage";
 import SignupPage from "./pages/SignupPage";
 import UnauthenticatedRoutes from "./pages/UnauthenticatedRoutes";
-import VideoPage, { VideoSource } from "./pages/VideoPage";
+import VideoPage from "./pages/VideoPage";
 
 const router = createBrowserRouter([
     {
@@ -40,7 +41,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "latest",
-                element: <VideoPage videoSource={VideoSource.Latest} />,
+                element: <LatestPage />,
             },
             {
                 path: "users/:username",
