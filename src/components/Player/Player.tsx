@@ -117,7 +117,7 @@ const Player = forwardRef(
                 player.current?.setState({ showPreview: true });
                 dispatch({ type: "PAUSE" });
             }
-        }, [isPlayingProp]);
+        }, [isPlayingProp, player.current, video]);
 
         useEffect(() => {
             if (isPlaying) player.current?.setState({ showPreview: false });
