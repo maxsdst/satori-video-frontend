@@ -1,4 +1,4 @@
-import { Box, useBoolean } from "@chakra-ui/react";
+import { Box, Image, useBoolean } from "@chakra-ui/react";
 import {
     Ref,
     forwardRef,
@@ -7,7 +7,7 @@ import {
     useRef,
     useState,
 } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { VIEW_DURATION_THRESHOLD_SECONDS } from "../../constants";
 import Video from "../../entities/Video";
 import useCreateEvent, { EventType } from "../../hooks/events/useCreateEvent";
@@ -139,6 +139,16 @@ const VideoSequence = forwardRef(
                     backgroundColor="black"
                     zIndex={2}
                 >
+                    <Link to="/">
+                        <Image
+                            src={""}
+                            boxSize={10}
+                            position="absolute"
+                            top={2}
+                            left={2}
+                            zIndex={1}
+                        />
+                    </Link>
                     <VerticalSlider
                         isDraggable={isTouchDevice()}
                         spaceBetweenSlides="0"
