@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import AuthenticatedRoutes from "./pages/AuthenticatedRoutes";
 import FollowingPage from "./pages/FollowingPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import HistoryPage from "./pages/HistoryPage";
@@ -25,6 +26,31 @@ const router = createBrowserRouter([
                 element: <HomePage />,
             },
             {
+                path: "popular",
+                element: <PopularPage />,
+            },
+            {
+                path: "latest",
+                element: <LatestPage />,
+            },
+            {
+                element: <AuthenticatedRoutes />,
+                children: [
+                    { path: "following", element: <FollowingPage /> },
+
+                    { path: "saved", element: <SavedVideosPage /> },
+                    { path: "history", element: <HistoryPage /> },
+                    {
+                        path: "my_videos",
+                        element: <MyVideosPage tabName="videos" />,
+                    },
+                    {
+                        path: "uploads",
+                        element: <MyVideosPage tabName="uploads" />,
+                    },
+                ],
+            },
+            {
                 element: <UnauthenticatedRoutes />,
                 children: [
                     { path: "login", element: <LoginPage /> },
@@ -36,14 +62,6 @@ const router = createBrowserRouter([
                 ],
             },
             {
-                path: "popular",
-                element: <PopularPage />,
-            },
-            {
-                path: "latest",
-                element: <LatestPage />,
-            },
-            {
                 path: "users/:username",
                 element: <ProfilePage />,
             },
@@ -52,20 +70,9 @@ const router = createBrowserRouter([
                 element: <VideoPage />,
             },
             {
-                path: "my_videos",
-                element: <MyVideosPage tabName="videos" />,
-            },
-            {
-                path: "uploads",
-                element: <MyVideosPage tabName="uploads" />,
-            },
-            {
                 path: "search",
                 element: <SearchPage />,
             },
-            { path: "saved", element: <SavedVideosPage /> },
-            { path: "history", element: <HistoryPage /> },
-            { path: "following", element: <FollowingPage /> },
         ],
     },
 ]);
