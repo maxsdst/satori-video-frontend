@@ -1,10 +1,12 @@
-import { HStack, Text } from "@chakra-ui/react";
+import { HStack, Text, useDisclosure } from "@chakra-ui/react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import Comment from "../../../../entities/Comment";
 import useCreateCommentLike from "../../../../hooks/comment_likes/useCreateCommentLike";
 import useRemoveCommentLike from "../../../../hooks/comment_likes/useRemoveCommentLike";
+import useIsAuthenticated from "../../../../hooks/useIsAuthenticated";
 import { formatNumber } from "../../../../utils";
 import IconButton from "../../../IconButton";
+import LoginRequestModal from "../../../LoginRequestModal";
 
 interface Props {
     comment: Comment;
@@ -18,23 +20,45 @@ function LikeButton({ comment }: Props) {
         shouldUpdateCommentOptimistically: true,
     });
 
+    const {
+        isOpen: isLoginRequestModalOpen,
+        onOpen: openLoginRequestModal,
+        onClose: closeLoginRequestModal,
+    } = useDisclosure();
+
+    const isAuthenticated = useIsAuthenticated();
+
+    if (isAuthenticated === undefined) return null;
+
     return (
-        <HStack spacing={0}>
-            <IconButton
-                icon={comment.is_liked ? AiFillHeart : AiOutlineHeart}
-                iconColor={comment.is_liked ? "red.500" : undefined}
-                label="Like"
-                size="sm"
-                onClick={() =>
-                    comment.is_liked
-                        ? removeCommentLike.mutate(null)
-                        : createCommentLike.mutate(null)
-                }
-            />
-            <Text fontSize="xs" opacity={0.8}>
-                {formatNumber(comment.like_count)}
-            </Text>
-        </HStack>
+        <>
+            <HStack spacing={0}>
+                <IconButton
+                    icon={comment.is_liked ? AiFillHeart : AiOutlineHeart}
+                    iconColor={comment.is_liked ? "red.500" : undefined}
+                    label="Like"
+                    size="sm"
+                    onClick={() => {
+                        if (!isAuthenticated) openLoginRequestModal();
+                        else if (comment.is_liked)
+                            removeCommentLike.mutate(null);
+                        else createCommentLike.mutate(null);
+                    }}
+                />
+                <Text fontSize="xs" opacity={0.8}>
+                    {formatNumber(comment.like_count)}
+                </Text>
+            </HStack>
+            {!isAuthenticated && (
+                <LoginRequestModal
+                    isOpen={isLoginRequestModalOpen}
+                    onClose={closeLoginRequestModal}
+                    header="Want to like this comment?"
+                >
+                    Sign in to like this comment.
+                </LoginRequestModal>
+            )}
+        </>
     );
 }
 

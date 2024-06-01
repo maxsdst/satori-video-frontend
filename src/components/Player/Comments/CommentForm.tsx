@@ -50,6 +50,7 @@ interface Props {
     defaultTextareaValue?: string;
     submitButtonText: string;
     mentionedUsername?: string;
+    onInput?: () => void;
 }
 
 const CommentForm = forwardRef(
@@ -65,6 +66,7 @@ const CommentForm = forwardRef(
             defaultTextareaValue,
             submitButtonText,
             mentionedUsername,
+            onInput,
         }: Props,
         ref: Ref<CommentFormHandle>
     ) => {
@@ -132,6 +134,7 @@ const CommentForm = forwardRef(
                                 autoFocus={textareaAutoFocus}
                                 placeholder={textareaPlaceholder}
                                 onInput={(e) => {
+                                    onInput?.();
                                     e.currentTarget.value
                                         ? enableSubmitButton()
                                         : disableSubmitButton();
