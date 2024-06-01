@@ -4,6 +4,8 @@ import { AxiosError, HttpStatusCode } from "axios";
 const NO_RETRY_STATUS_CODES = [
     HttpStatusCode.Unauthorized,
     HttpStatusCode.NotFound,
+    HttpStatusCode.BadRequest,
+    HttpStatusCode.InternalServerError,
 ];
 
 const queryClient = new QueryClient({
