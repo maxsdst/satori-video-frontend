@@ -18,6 +18,7 @@ const queryClient = new QueryClient({
                 if (failureCount >= 3) return false;
                 return true;
             },
+            refetchOnWindowFocus: false,
         },
     },
 });
