@@ -1,6 +1,7 @@
 import { Alert, AlertIcon, Button, VStack } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useLocation } from "react-router-dom";
 import { z } from "zod";
 import Input from "../../forms/Input";
 import useLogin from "../hooks/useLogin";
@@ -13,6 +14,12 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 function LoginForm() {
+    const location = useLocation();
+    const next =
+        location.state && typeof location.state.next === "string"
+            ? location.state.next
+            : "/";
+
     const {
         register,
         handleSubmit,
@@ -27,7 +34,7 @@ function LoginForm() {
         <form
             onSubmit={handleSubmit((data) =>
                 login.mutate(data, {
-                    onSuccess: () => window.location.replace("/"),
+                    onSuccess: () => window.location.replace(next),
                 })
             )}
         >

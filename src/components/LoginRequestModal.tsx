@@ -27,7 +27,7 @@ function LoginRequestModal({ header, isOpen, onClose, children }: Props) {
                 <ModalCloseButton />
                 <ModalBody>{children}</ModalBody>
                 <ModalFooter>
-                    <Link to="/login">
+                    <Link to="/login" state={{ next: window.location.href }}>
                         <Button colorScheme="blue">Sign in</Button>
                     </Link>
                 </ModalFooter>
