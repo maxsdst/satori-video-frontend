@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import MyVideosPage from "./pages/MyVideosPage";
 import PopularPage from "./pages/PopularPage";
 import ProfilePage from "./pages/ProfilePage";
+import RootErrorBoundary from "./pages/RootErrorBoundary";
 import SavedVideosPage from "./pages/SavedVideosPage";
 import SearchPage from "./pages/SearchPage";
 import SignupPage from "./pages/SignupPage";
@@ -19,6 +20,11 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <Layout />,
+        errorElement: (
+            <Layout>
+                <RootErrorBoundary />
+            </Layout>
+        ),
         children: [
             {
                 index: true,

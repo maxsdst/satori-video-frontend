@@ -6,12 +6,17 @@ import {
     useBoolean,
     useBreakpointValue,
 } from "@chakra-ui/react";
+import { ReactNode } from "react";
 import { Outlet } from "react-router-dom";
 import SideNav from "../components/SideNav";
 import TopNav from "../components/TopNav";
 import { SIDENAV_WIDTH, TOPNAV_HEIGHT } from "../styleConstants";
 
-function Layout() {
+interface Props {
+    children?: ReactNode;
+}
+
+function Layout({ children }: Props) {
     const shouldOpenSidenav = useBreakpointValue(
         { md: false, lg: true },
         { ssr: false, fallback: "md" }
@@ -55,7 +60,7 @@ function Layout() {
                             md: isSidenavOpen ? SIDENAV_WIDTH : 0,
                         }}
                     >
-                        <Outlet />
+                        {children ?? <Outlet />}
                     </Box>
                 </Flex>
             </GridItem>
