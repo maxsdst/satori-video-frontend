@@ -1,6 +1,5 @@
 import { Box, Button, Divider, HStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import ForgotPasswordForm from "./ForgotPasswordForm";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
 
@@ -18,22 +17,16 @@ function AuthBox({ mode }: Props) {
         >
             {mode === "login" && <LoginForm />}
             {mode === "signup" && <SignupForm />}
-            {mode === "forgot_password" && <ForgotPasswordForm />}
             <Divider orientation="horizontal" paddingY={2} />
-            <HStack justifyContent="space-evenly" gap={10} marginTop={4}>
+            <HStack justifyContent="start" marginTop={4}>
                 {mode !== "login" && (
-                    <Button variant="link">
+                    <Button variant="link" colorScheme="blue">
                         <Link to="/login">Log in</Link>
                     </Button>
                 )}
                 {mode !== "signup" && (
-                    <Button variant="link">
+                    <Button variant="link" colorScheme="blue">
                         <Link to="/signup">Sign up</Link>
-                    </Button>
-                )}
-                {mode !== "forgot_password" && (
-                    <Button variant="link">
-                        <Link to="/forgot_password">Forgot password</Link>
                     </Button>
                 )}
             </HStack>
