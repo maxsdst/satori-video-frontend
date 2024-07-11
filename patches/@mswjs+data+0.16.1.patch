@@ -1,0 +1,21 @@
+diff --git a/node_modules/@mswjs/data/lib/db/Database.js b/node_modules/@mswjs/data/lib/db/Database.js
+index 8b465a8..d76bae5 100644
+--- a/node_modules/@mswjs/data/lib/db/Database.js
++++ b/node_modules/@mswjs/data/lib/db/Database.js
+@@ -21,6 +21,7 @@ var strict_event_emitter_1 = require("strict-event-emitter");
+ var glossary_1 = require("../glossary");
+ exports.SERIALIZED_INTERNAL_PROPERTIES_KEY = 'SERIALIZED_INTERNAL_PROPERTIES';
+ var callOrder = 0;
++const seed = Math.random() * 10_000_000;
+ var Database = /** @class */ (function () {
+     function Database(dictionary) {
+         this.events = new strict_event_emitter_1.Emitter();
+@@ -39,7 +40,7 @@ var Database = /** @class */ (function () {
+     Database.prototype.generateId = function () {
+         var stack = new Error().stack;
+         var callFrame = stack === null || stack === void 0 ? void 0 : stack.split('\n')[4];
+-        var salt = callOrder + "-" + (callFrame === null || callFrame === void 0 ? void 0 : callFrame.trim());
++        var salt = callOrder + "-" + (callFrame === null || callFrame === void 0 ? void 0 : callFrame.trim()) + "-" + Math.round(seed);
+         return md5_1["default"](salt);
+     };
+     Database.prototype.serializeEntity = function (entity) {
