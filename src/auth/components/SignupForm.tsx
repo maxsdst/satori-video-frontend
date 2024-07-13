@@ -1,6 +1,7 @@
 import { Button, VStack } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import Input from "../../forms/Input";
 import useLogin from "../hooks/useLogin";
@@ -40,6 +41,8 @@ function SignupForm() {
 
     const login = useLogin();
 
+    const navigate = useNavigate();
+
     return (
         <form
             onSubmit={handleSubmit((data) =>
@@ -50,7 +53,9 @@ function SignupForm() {
                                 username: data.username,
                                 password: data.password,
                             },
-                            { onSuccess: () => window.location.replace("/") }
+                            {
+                                onSuccess: () => navigate("/"),
+                            }
                         );
                     },
                 })

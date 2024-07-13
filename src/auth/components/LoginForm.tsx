@@ -1,7 +1,7 @@
 import { Alert, AlertIcon, Button, VStack } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import Input from "../../forms/Input";
 import useLogin from "../hooks/useLogin";
@@ -20,6 +20,8 @@ function LoginForm() {
             ? location.state.next
             : "/";
 
+    const navigate = useNavigate();
+
     const {
         register,
         handleSubmit,
@@ -32,9 +34,10 @@ function LoginForm() {
 
     return (
         <form
+            aria-label="Login form"
             onSubmit={handleSubmit((data) =>
                 login.mutate(data, {
-                    onSuccess: () => window.location.replace(next),
+                    onSuccess: () => navigate(next),
                 })
             )}
         >

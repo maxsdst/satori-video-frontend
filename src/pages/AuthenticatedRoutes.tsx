@@ -1,12 +1,14 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import useOwnProfile from "../hooks/profiles/useOwnProfile";
 
 function AuthenticatedRoutes() {
-    const { data: profile, isLoading } = useOwnProfile();
+    const location = useLocation();
 
-    if (isLoading) return null;
+    const { data: profile, isFetching } = useOwnProfile();
+
+    if (isFetching) return null;
     if (!profile)
-        return <Navigate to="/login" state={{ next: window.location.href }} />;
+        return <Navigate to="/login" state={{ next: location.pathname }} />;
 
     return <Outlet />;
 }
