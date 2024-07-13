@@ -9,7 +9,7 @@ import {
     ModalOverlay,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 interface Props {
     isOpen: boolean;
@@ -19,15 +19,17 @@ interface Props {
 }
 
 function LoginRequestModal({ header, isOpen, onClose, children }: Props) {
+    const location = useLocation();
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent data-testid="login-request-modal">
                 <ModalHeader>{header}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>{children}</ModalBody>
                 <ModalFooter>
-                    <Link to="/login" state={{ next: window.location.href }}>
+                    <Link to="/login" state={{ next: location.pathname }}>
                         <Button colorScheme="blue">Sign in</Button>
                     </Link>
                 </ModalFooter>

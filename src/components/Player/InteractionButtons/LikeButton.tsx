@@ -38,6 +38,7 @@ function LikeButton({ video }: Props) {
     return (
         <>
             <PlayerButton
+                ariaLabel={video.is_liked ? "Remove like" : "Like"}
                 icon={video.is_liked ? AiFillHeart : AiOutlineHeart}
                 iconColor={video.is_liked ? "red.500" : undefined}
                 onClick={() => {

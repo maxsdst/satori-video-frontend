@@ -21,14 +21,23 @@ function VideoInfo({ video }: Props) {
         >
             <Link to={"/users/" + video.profile.user.username}>
                 <HStack>
-                    <Avatar size="xs" src={video.profile.avatar || undefined} />
-                    <Heading fontSize="sm">
+                    <Avatar
+                        aria-label="Author's avatar"
+                        size="xs"
+                        src={video.profile.avatar || undefined}
+                    />
+                    <Heading aria-label="Author's username" fontSize="sm">
                         {video.profile.user.username}
                     </Heading>
                 </HStack>
             </Link>
             {video.title && (
-                <Text fontSize="sm" noOfLines={1} width="100%">
+                <Text
+                    aria-label="Video title"
+                    fontSize="sm"
+                    noOfLines={1}
+                    width="100%"
+                >
                     {video.title}
                 </Text>
             )}

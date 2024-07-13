@@ -168,9 +168,7 @@ const VideoSequence = forwardRef(
                                 showVideoInfo={true}
                                 isPlaying={currentVideoIndex === index}
                                 isMuted={arePlayersMuted}
-                                onMuteStateChange={(isMuted) =>
-                                    setPlayersMuted(isMuted)
-                                }
+                                onMuteStateChange={setPlayersMuted}
                                 width={`${width}px`}
                                 height={`${height}px`}
                                 roundCorners={false}
@@ -220,9 +218,7 @@ const VideoSequence = forwardRef(
                                 showVideoInfo={true}
                                 isPlaying={currentVideoIndex === index}
                                 isMuted={arePlayersMuted}
-                                onMuteStateChange={(isMuted) =>
-                                    setPlayersMuted(isMuted)
-                                }
+                                onMuteStateChange={setPlayersMuted}
                                 width={playerWidth}
                                 height={playerHeight}
                                 minWidth="315px"

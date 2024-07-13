@@ -16,7 +16,7 @@ import SignupPage from "./pages/SignupPage";
 import UnauthenticatedRoutes from "./pages/UnauthenticatedRoutes";
 import VideoPage from "./pages/VideoPage";
 
-const router = createBrowserRouter([
+export const routes = [
     {
         path: "/",
         element: <Layout />,
@@ -76,6 +76,6 @@ const router = createBrowserRouter([
             },
         ],
     },
-]);
+];
 
-export default router;
+export const router = createBrowserRouter(routes);

@@ -19,6 +19,7 @@ function Comments({ video, onClose }: Props) {
 
     return (
         <AdaptivePanel
+            dataTestId="comments"
             onClose={onClose}
             header={<Header video={video} onOrderingChange={setOrdering} />}
         >

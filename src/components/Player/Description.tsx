@@ -12,6 +12,7 @@ interface Props {
 function Description({ video, onClose }: Props) {
     return (
         <AdaptivePanel
+            dataTestId="description"
             onClose={onClose}
             header={
                 <HStack height="100%">
@@ -31,6 +32,7 @@ function Description({ video, onClose }: Props) {
                 spacing={4}
             >
                 <Text
+                    aria-label="Video title"
                     fontSize="lg"
                     fontWeight="semibold"
                     overflowWrap="anywhere"
@@ -40,16 +42,21 @@ function Description({ video, onClose }: Props) {
                 <Link to={"/users/" + video.profile.user.username}>
                     <HStack>
                         <Avatar
+                            aria-label="Author's avatar"
                             size="sm"
                             src={video.profile.avatar || undefined}
                         />
-                        <Text fontSize="sm" fontWeight="semibold">
+                        <Text
+                            aria-label="Author's username"
+                            fontSize="sm"
+                            fontWeight="semibold"
+                        >
                             {video.profile.user.username}
                         </Text>
                     </HStack>
                 </Link>
                 <HStack width="100%" justifyContent="space-evenly">
-                    <VStack spacing={0}>
+                    <VStack spacing={0} aria-label="Number of likes">
                         <Text fontSize="lg" fontWeight="semibold">
                             {formatNumber(video.like_count)}
                         </Text>
@@ -57,7 +64,7 @@ function Description({ video, onClose }: Props) {
                             Likes
                         </Text>
                     </VStack>
-                    <VStack spacing={0}>
+                    <VStack spacing={0} aria-label="Number of views">
                         <Text fontSize="lg" fontWeight="semibold">
                             {formatNumber(video.view_count)}
                         </Text>
@@ -65,7 +72,7 @@ function Description({ video, onClose }: Props) {
                             Views
                         </Text>
                     </VStack>
-                    <VStack spacing={0}>
+                    <VStack spacing={0} aria-label="Upload date">
                         <Text
                             fontSize="lg"
                             fontWeight="semibold"
@@ -84,6 +91,7 @@ function Description({ video, onClose }: Props) {
                         borderRadius="12px"
                     >
                         <Text
+                            aria-label="Video description"
                             fontSize="sm"
                             opacity={0.9}
                             wordBreak="break-word"

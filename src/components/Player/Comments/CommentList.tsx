@@ -230,6 +230,7 @@ const CommentList = forwardRef(
         if (loadMoreTrigger === "button")
             return (
                 <VStack
+                    as="ul"
                     width="100%"
                     display={
                         showFetchedComments ||
@@ -276,6 +277,7 @@ const CommentList = forwardRef(
 
         return (
             <InfiniteScroll
+                as="ul"
                 next={fetchNextPage}
                 hasMore={!!hasNextPage}
                 loader={null}

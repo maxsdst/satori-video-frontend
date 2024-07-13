@@ -6,11 +6,19 @@ interface Props {
     iconColor?: IconProps["color"];
     children?: string;
     onClick: () => void;
+    ariaLabel?: string;
 }
 
-function PlayerButton({ icon, iconColor, children, onClick }: Props) {
+function PlayerButton({
+    icon,
+    iconColor,
+    children,
+    onClick,
+    ariaLabel,
+}: Props) {
     return (
         <Button
+            aria-label={ariaLabel}
             variant="ghost"
             width="60px"
             height="60px"

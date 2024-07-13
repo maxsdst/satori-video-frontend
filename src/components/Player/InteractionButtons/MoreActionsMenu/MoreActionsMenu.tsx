@@ -4,6 +4,7 @@ import {
     MenuButton,
     MenuItem,
     MenuList,
+    MenuListProps,
     Portal,
     useDisclosure,
 } from "@chakra-ui/react";
@@ -125,27 +126,36 @@ function MoreActionsMenu({ video, onOpenDescription }: Props) {
 
     const menuMarginX = "8px";
 
+    const menuListProps: MenuListProps = {
+        "aria-label": "More actions menu",
+        position: "fixed",
+        zIndex: 10,
+    };
+
     return (
         <>
             <Menu>
-                <MenuButton as={PlayerButton} icon={HiOutlineDotsVertical} />
+                <MenuButton
+                    as={PlayerButton}
+                    ariaLabel="More actions"
+                    icon={HiOutlineDotsVertical}
+                />
                 {isFullscreen && (
                     <Portal>
                         <MenuList
-                            position="fixed"
+                            {...menuListProps}
                             width={`calc(100% - (${menuMarginX} * 2))`}
                             marginX={menuMarginX}
                             marginBottom="24px"
                             bottom={0}
                             borderRadius="12px"
-                            zIndex={10}
                         >
                             {menuItems}
                         </MenuList>
                     </Portal>
                 )}
                 {!isFullscreen && (
-                    <MenuList position="fixed">{menuItems}</MenuList>
+                    <MenuList {...menuListProps}>{menuItems}</MenuList>
                 )}
             </Menu>
             <ShareModal

@@ -20,7 +20,11 @@ function InteractionButtons({
     return (
         <VStack spacing={0} zIndex={4}>
             <LikeButton video={video} />
-            <PlayerButton icon={AiOutlineComment} onClick={onOpenComments}>
+            <PlayerButton
+                ariaLabel="Comments"
+                icon={AiOutlineComment}
+                onClick={onOpenComments}
+            >
                 {formatNumber(video.comment_count)}
             </PlayerButton>
             <MoreActionsMenu

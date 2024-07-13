@@ -94,7 +94,7 @@ function ReportModal({ video, isOpen, onClose }: Props) {
     return (
         <Modal isOpen={isOpen} onClose={handleClose} isCentered>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent data-testid="report-modal">
                 <form
                     onSubmit={handleSubmit((data) => {
                         createReport.mutate(
@@ -116,7 +116,10 @@ function ReportModal({ video, isOpen, onClose }: Props) {
                                     <VStack alignItems="start" spacing={4}>
                                         {Object.values(ReportReason).map(
                                             (reason) => (
-                                                <Radio value={reason}>
+                                                <Radio
+                                                    key={reason}
+                                                    value={reason}
+                                                >
                                                     {
                                                         REPORT_REASON_DESCRIPTIONS[
                                                             reason

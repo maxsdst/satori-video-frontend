@@ -8,9 +8,10 @@ interface Props {
     onClose: () => void;
     header: ReactNode;
     children: ReactNode;
+    dataTestId?: string;
 }
 
-function AdaptivePanel({ onClose, header, children }: Props) {
+function AdaptivePanel({ onClose, header, children, dataTestId }: Props) {
     const { width, height, minHeight, isFullscreen, borderRadius } =
         useContext(PlayerContext);
 
@@ -18,13 +19,14 @@ function AdaptivePanel({ onClose, header, children }: Props) {
 
     const panel = (
         <Box
+            data-testid={dataTestId}
             width={isFullscreen ? width : "450px"}
             height={height}
             minHeight={minHeight}
             backgroundColor="gray.700"
             position={isFullscreen ? "fixed" : "relative"}
             top={isFullscreen ? 0 : undefined}
-            zIndex={3}
+            zIndex={isFullscreen ? 3 : undefined}
             borderRightRadius={!isFullscreen ? borderRadius : undefined}
             onTouchStartCapture={(e) => e.stopPropagation()}
         >

@@ -30,6 +30,7 @@ function PlayerControls({
 
     return (
         <Box
+            data-testid="play-pause-trigger"
             ref={element}
             position="relative"
             width="100%"
@@ -41,6 +42,7 @@ function PlayerControls({
                 <PlayerButton
                     icon={isMuted ? BsVolumeMuteFill : BsFillVolumeUpFill}
                     onClick={isMuted ? onUnmute : onMute}
+                    ariaLabel={isMuted ? "Unmute" : "Mute"}
                 />
             </Box>
         </Box>

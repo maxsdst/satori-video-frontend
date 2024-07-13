@@ -67,7 +67,7 @@ function ShareModal({ video, isOpen, onClose }: Props) {
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered size="sm">
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent data-testid="share-modal">
                 <ModalHeader>Share</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody paddingX={2}>

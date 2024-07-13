@@ -19,6 +19,7 @@ import {
 } from "react";
 import { FaPlay } from "react-icons/fa";
 import ReactPlayer from "react-player/file";
+import { useUpdateEffect } from "react-use";
 import useVideo from "../../hooks/videos/useVideo";
 import VideoPageContext from "../../pages/VideoPage/VideoPageContext";
 import { PLAYER_DROP_SHADOW } from "../../styleConstants";
@@ -117,7 +118,7 @@ const Player = forwardRef(
                 player.current?.setState({ showPreview: true });
                 dispatch({ type: "PAUSE" });
             }
-        }, [isPlayingProp, player.current, video]);
+        }, [isPlayingProp, video]);
 
         useEffect(() => {
             if (isPlaying) player.current?.setState({ showPreview: false });
@@ -128,15 +129,15 @@ const Player = forwardRef(
             else dispatch({ type: "UNMUTE" });
         }, [isMutedProp]);
 
-        useEffect(() => {
+        useUpdateEffect(() => {
             onMuteStateChange?.(isMuted);
-        }, [isMuted]);
+        }, [isMuted, onMuteStateChange]);
 
         const [duration, setDuration] = useState<number>();
 
-        useEffect(() => {
+        useUpdateEffect(() => {
             isContentExpanded ? onContentExpanded?.() : onContentCollapsed?.();
-        }, [isContentExpanded]);
+        }, [isContentExpanded, onContentExpanded, onContentCollapsed]);
 
         useImperativeHandle(ref, () => ({
             isContentExpanded,
@@ -152,6 +153,8 @@ const Player = forwardRef(
                     height={height}
                     minHeight={minHeight}
                     borderRadius={!isFullscreen ? borderRadius : undefined}
+                    role="progressbar"
+                    aria-label="Loading video"
                 />
             );
         if (error) throw error;
@@ -171,6 +174,7 @@ const Player = forwardRef(
             >
                 <HStack height={height} minHeight={minHeight} spacing={0}>
                     <Box
+                        data-testid="player-wrapper"
                         className={classNames({
                             "player-wrapper": true,
                             "video-round-corners": roundCorners,
@@ -245,6 +249,7 @@ const Player = forwardRef(
                             {showVideoInfo && <VideoInfo video={video} />}
                         </VStack>
                         <ReactPlayer
+                            config={{ attributes: { "data-testid": "video" } }}
                             url={video.source}
                             playing={isPlaying}
                             muted={isMuted}
@@ -259,11 +264,11 @@ const Player = forwardRef(
                             progressInterval={
                                 duration && duration < 10
                                     ? (duration / 10) * 1000
-                                    : 1000
+                                    : 500
                             }
-                            onProgress={({ playedSeconds, played }) =>
-                                onProgress?.(playedSeconds, played * 100)
-                            }
+                            onProgress={({ playedSeconds, played }) => {
+                                onProgress?.(playedSeconds, played * 100);
+                            }}
                         />
                     </Box>
                     {areCommentsOpen && (

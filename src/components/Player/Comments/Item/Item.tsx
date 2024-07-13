@@ -61,7 +61,18 @@ function Item({
 
     return (
         <>
-            <VStack alignItems="start" width="100%">
+            <VStack
+                as="li"
+                aria-label={
+                    isHighlighted
+                        ? isReply
+                            ? "Highlighted reply"
+                            : "Highlighted comment"
+                        : undefined
+                }
+                alignItems="start"
+                width="100%"
+            >
                 {isHighlighted && (
                     <Badge>
                         {isReply ? "Highlighted reply" : "Highlighted comment"}
