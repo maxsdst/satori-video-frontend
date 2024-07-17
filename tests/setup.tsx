@@ -84,3 +84,5 @@ function simulatePlayback(mediaElement: HTMLMediaElement) {
         }
     }, intervalSeconds * 1000);
 }
+
+Navigator.prototype.share = vi.fn();

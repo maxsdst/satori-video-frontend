@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { render } from "@testing-library/react";
 import { HttpStatusCode } from "axios";
 import { HttpResponse, http } from "msw";
 import { ReactNode } from "react";
+import * as reactDeviceDetect from "react-device-detect";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { routes as appRoutes } from "../src/routes";
 import AllProviders from "./AllProviders";
@@ -37,6 +39,21 @@ export function simulateUnauthenticated() {
                 new HttpResponse(null, { status: HttpStatusCode.Unauthorized })
         )
     );
+}
+
+export async function simulateMobileDevice(
+    callback: () => void | Promise<void>
+) {
+    const originalValue = reactDeviceDetect.isMobile;
+
+    try {
+        // @ts-ignore
+        reactDeviceDetect.isMobile = true;
+        await callback();
+    } finally {
+        // @ts-ignore
+        reactDeviceDetect.isMobile = originalValue;
+    }
 }
 
 export function isVideoLiked(videoId: number): boolean {

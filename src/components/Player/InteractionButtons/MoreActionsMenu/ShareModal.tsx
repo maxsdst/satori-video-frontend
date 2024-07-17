@@ -45,7 +45,7 @@ interface Props {
 }
 
 function ShareModal({ video, isOpen, onClose }: Props) {
-    const url = window.origin + "/videos/" + video.id;
+    const url = window.location.origin + "/videos/" + video.id;
 
     const { onCopy, hasCopied } = useClipboard(url, 2000);
 
@@ -129,7 +129,7 @@ function ShareModal({ video, isOpen, onClose }: Props) {
                                 as="button"
                                 {...buttonProps}
                                 onClick={() =>
-                                    navigator.share({
+                                    void navigator.share({
                                         url,
                                         title: video.title,
                                     })
@@ -146,8 +146,9 @@ function ShareModal({ video, isOpen, onClose }: Props) {
                 </ModalBody>
                 <ModalFooter>
                     <HStack width="100%">
-                        <Input value={url} readOnly />
+                        <Input aria-label="Video link" value={url} readOnly />
                         <Button
+                            aria-label="Copy link"
                             onClick={onCopy}
                             colorScheme={hasCopied ? "green" : "blue"}
                             minWidth="4.5rem"
