@@ -8,7 +8,7 @@ import * as reactDeviceDetect from "react-device-detect";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { routes as appRoutes } from "../src/routes";
 import AllProviders from "./AllProviders";
-import { EventType, db, getOwnProfile } from "./mocks/db";
+import { EventType, ReportReason, db, getOwnProfile } from "./mocks/db";
 import { BASE_URL } from "./mocks/handlers/constants";
 import { server } from "./mocks/server";
 
@@ -40,6 +40,25 @@ export function simulateUnauthenticated() {
         )
     );
 }
+
+interface SimulateErrorOptions {
+    body?: Record<string, any>;
+    statusCode?: number;
+}
+
+export const simulateError = (
+    endpoint: string,
+    method: "post" | "get" | "patch" | "delete",
+    { body, statusCode }: SimulateErrorOptions
+) => {
+    server.use(
+        http[method](endpoint, () =>
+            HttpResponse.json(body, {
+                status: statusCode ?? HttpStatusCode.BadRequest,
+            })
+        )
+    );
+};
 
 export async function simulateMobileDevice(
     callback: () => void | Promise<void>
@@ -85,6 +104,15 @@ export function countEvents(videoId: number, type: EventType) {
         where: {
             video: { id: { equals: videoId } },
             type: { equals: type },
+        },
+    });
+}
+
+export function countReports(videoId: number, reason: ReportReason) {
+    return db.report.count({
+        where: {
+            video: { id: { equals: videoId } },
+            reason: { equals: reason },
         },
     });
 }

@@ -131,8 +131,7 @@ function ReportModal({ video, isOpen, onClose }: Props) {
                                         {createReport.error && (
                                             <Alert status="error">
                                                 <AlertIcon />
-                                                {createReport.error.message ||
-                                                    "Something went wrong"}
+                                                Something went wrong
                                             </Alert>
                                         )}
                                     </VStack>
