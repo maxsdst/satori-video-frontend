@@ -116,7 +116,10 @@ function ReportModal({ comment, isOpen, onClose }: Props) {
                                     <VStack alignItems="start" spacing={4}>
                                         {Object.values(ReportReason).map(
                                             (reason) => (
-                                                <Radio value={reason}>
+                                                <Radio
+                                                    key={reason}
+                                                    value={reason}
+                                                >
                                                     {
                                                         REPORT_REASON_DESCRIPTIONS[
                                                             reason
@@ -128,9 +131,7 @@ function ReportModal({ comment, isOpen, onClose }: Props) {
                                         {createCommentReport.error && (
                                             <Alert status="error">
                                                 <AlertIcon />
-                                                {createCommentReport.error
-                                                    .message ||
-                                                    "Something went wrong"}
+                                                Something went wrong
                                             </Alert>
                                         )}
                                     </VStack>

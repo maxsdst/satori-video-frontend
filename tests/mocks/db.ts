@@ -120,6 +120,7 @@ export const db = factory({
         reply_count: () => faker.number.int({ min: 1, max: 100 }),
         like_count: () => faker.number.int({ min: 1, max: 100 }),
         is_liked: Boolean,
+        popularity_score: () => faker.number.int({ min: 1, max: 100 }),
     },
     commentLike: {
         id: primaryKey(faker.number.int),

@@ -24,6 +24,7 @@ function EditCommentForm({
 
     return (
         <CommentForm
+            ariaLabel="Edit comment"
             onSubmit={({ text }) => {
                 updateComment.mutate(
                     { text },

@@ -11,7 +11,7 @@ interface Props {
 function Header({ video, onOrderingChange }: Props) {
     return (
         <HStack justifyContent="space-between" width="100%">
-            <HStack spacing={3}>
+            <HStack spacing={3} aria-label="Number of comments">
                 <Text fontSize="lg" fontWeight="semibold">
                     Comments
                 </Text>

@@ -20,6 +20,7 @@ function CreateReplyForm({ comment, onReplyCreated, onClose }: Props) {
 
     return (
         <CommentForm
+            ariaLabel="Add a reply"
             onSubmit={({ text }) => {
                 createComment.mutate(
                     {

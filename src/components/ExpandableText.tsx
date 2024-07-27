@@ -14,6 +14,7 @@ interface Props {
     fontSize?: ChakraProps["fontSize"];
     expandButtonSize?: ThemingProps<"Button">["size"];
     children: ReactNode;
+    ariaLabel?: string;
 }
 
 function ExpandableText({
@@ -21,6 +22,7 @@ function ExpandableText({
     fontSize,
     expandButtonSize,
     children,
+    ariaLabel,
 }: Props) {
     const [isTextTooLong, setTextTooLong] = useState(false);
     const [isExpanded, { toggle: toggleExpanded }] = useBoolean(false);
@@ -39,6 +41,7 @@ function ExpandableText({
     return (
         <VStack width="100%" alignItems="start" spacing={1}>
             <Box
+                aria-label={ariaLabel}
                 ref={text}
                 fontSize={fontSize}
                 noOfLines={isTextTooLong && !isExpanded ? noOfLines : undefined}
@@ -49,6 +52,7 @@ function ExpandableText({
             </Box>
             {isTextTooLong && (
                 <Button
+                    aria-label={isExpanded ? "Show less" : "Show more"}
                     variant="link"
                     size={expandButtonSize}
                     onClick={toggleExpanded}

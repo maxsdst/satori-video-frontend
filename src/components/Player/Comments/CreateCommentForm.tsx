@@ -33,6 +33,7 @@ function CreateCommentForm({ videoId, onCommentCreated }: Props) {
     return (
         <>
             <CommentForm
+                ariaLabel="Add a comment"
                 ref={commentForm}
                 onSubmit={({ text }) => {
                     createComment.mutate(

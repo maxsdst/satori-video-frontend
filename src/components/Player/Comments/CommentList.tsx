@@ -92,7 +92,7 @@ const CommentList = forwardRef(
                 ordering: queryOrdering,
                 pagination: { type: "cursor", pageSize },
             };
-        }, [videoId, parentId, ordering, pageSize]);
+        }, [videoId, parentId, ordering, pageSize, isReplyList]);
 
         const {
             data: comments,
@@ -152,6 +152,7 @@ const CommentList = forwardRef(
             if (comment.id === editedCommentId)
                 return (
                     <EditCommentForm
+                        key={comment.id}
                         comment={comment}
                         isReply={isReplyList}
                         onCommentEdited={() => setEditedCommentId(null)}
@@ -230,6 +231,7 @@ const CommentList = forwardRef(
         if (loadMoreTrigger === "button")
             return (
                 <VStack
+                    aria-label={isReplyList ? "Replies" : "Comments"}
                     as="ul"
                     width="100%"
                     display={
@@ -253,7 +255,7 @@ const CommentList = forwardRef(
                                 leftIcon={
                                     <Icon as={BsArrowReturnRight} boxSize={5} />
                                 }
-                                onClick={() => fetchNextPage()}
+                                onClick={() => void fetchNextPage()}
                             >
                                 {loadMoreButtonText}
                             </Button>
@@ -277,7 +279,6 @@ const CommentList = forwardRef(
 
         return (
             <InfiniteScroll
-                as="ul"
                 next={fetchNextPage}
                 hasMore={!!hasNextPage}
                 loader={null}
@@ -286,16 +287,22 @@ const CommentList = forwardRef(
                     containerRef.current as unknown as ReactElement
                 }
                 scrollThreshold="50px"
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    width: "100%",
-                    ...styles,
-                }}
             >
-                {renderComments()}
-                {(hasNextPage || isLoading) && <Spinner />}
+                <VStack
+                    aria-label={isReplyList ? "Replies" : "Comments"}
+                    as="ul"
+                    alignItems="center"
+                    width="100%"
+                    style={{ ...styles }}
+                >
+                    {renderComments()}
+                    {(hasNextPage || isLoading) && (
+                        <Spinner
+                            role="progressbar"
+                            aria-label="Loading comments"
+                        />
+                    )}
+                </VStack>
             </InfiniteScroll>
         );
     }

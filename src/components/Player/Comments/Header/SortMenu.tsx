@@ -13,7 +13,7 @@ function SortMenu({ onOrderingChange }: Props) {
     return (
         <Menu>
             <MenuButton as={IconButton} icon={MdOutlineSort} label="Sort" />
-            <MenuList>
+            <MenuList aria-label="Sort comments">
                 <MenuItem onClick={() => onOrderingChange("top")}>
                     Top comments
                 </MenuItem>

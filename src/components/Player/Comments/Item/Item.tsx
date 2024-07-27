@@ -74,13 +74,14 @@ function Item({
                 width="100%"
             >
                 {isHighlighted && (
-                    <Badge>
+                    <Badge role="status">
                         {isReply ? "Highlighted reply" : "Highlighted comment"}
                     </Badge>
                 )}
                 <HStack alignItems="start" spacing={2} width="100%">
                     <Link to={"/users/" + comment.profile.user.username}>
                         <Avatar
+                            aria-label="Author's avatar"
                             size={isReply ? "sm" : "md"}
                             _hover={{ cursor: "pointer" }}
                             src={comment.profile.avatar || undefined}
@@ -105,13 +106,18 @@ function Item({
                                         }
                                     >
                                         <Text
+                                            aria-label="Author's username"
                                             fontSize="sm"
                                             fontWeight="semibold"
                                         >
                                             @{comment.profile.user.username}
                                         </Text>
                                     </Link>
-                                    <Text fontSize="xs" opacity={0.8}>
+                                    <Text
+                                        aria-label="Date"
+                                        fontSize="xs"
+                                        opacity={0.8}
+                                    >
                                         {formatDistanceToNowStrict(
                                             comment.creation_date
                                         )}{" "}
@@ -119,6 +125,7 @@ function Item({
                                     </Text>
                                 </HStack>
                                 <ExpandableText
+                                    ariaLabel="Content"
                                     noOfLines={4}
                                     fontSize="sm"
                                     expandButtonSize="sm"
@@ -126,6 +133,7 @@ function Item({
                                     {comment.mentioned_profile_username &&
                                         (comment.mentioned_profile ? (
                                             <ChakraLink
+                                                aria-label="Mentioned user"
                                                 as={Link}
                                                 color="blue.200"
                                                 _hover={{ cursor: "pointer" }}
@@ -140,7 +148,10 @@ function Item({
                                                 }{" "}
                                             </ChakraLink>
                                         ) : (
-                                            <Text as="span">
+                                            <Text
+                                                aria-label="Mentioned user"
+                                                as="span"
+                                            >
                                                 @
                                                 {
                                                     comment.mentioned_profile_username
@@ -189,6 +200,7 @@ function Item({
                         )}
                         {comment.reply_count > 0 && (
                             <Button
+                                aria-label="Open replies"
                                 variant="ghost"
                                 size="sm"
                                 borderRadius="18px"

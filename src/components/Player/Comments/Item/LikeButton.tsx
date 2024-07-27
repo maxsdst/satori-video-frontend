@@ -36,7 +36,7 @@ function LikeButton({ comment }: Props) {
                 <IconButton
                     icon={comment.is_liked ? AiFillHeart : AiOutlineHeart}
                     iconColor={comment.is_liked ? "red.500" : undefined}
-                    label="Like"
+                    label={comment.is_liked ? "Remove like" : "Like"}
                     size="sm"
                     onClick={() => {
                         if (!isAuthenticated) openLoginRequestModal();
@@ -45,7 +45,7 @@ function LikeButton({ comment }: Props) {
                         else createCommentLike.mutate(null);
                     }}
                 />
-                <Text fontSize="xs" opacity={0.8}>
+                <Text aria-label="Number of likes" fontSize="xs" opacity={0.8}>
                     {formatNumber(comment.like_count)}
                 </Text>
             </HStack>

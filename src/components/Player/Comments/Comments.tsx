@@ -44,6 +44,7 @@ function Comments({ video, onClose }: Props) {
                     </Box>
                 </Box>
                 <Box
+                    data-testid="comment-list-container"
                     ref={commentListContainer}
                     width="100%"
                     overflowY="auto"

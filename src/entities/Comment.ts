@@ -13,6 +13,7 @@ export default interface Comment {
     reply_count: number;
     like_count: number;
     is_liked: boolean;
+    popularity_score: number;
 }
 
 export const DATE_FIELDS: DateFields<Comment> = { own: ["creation_date"] };

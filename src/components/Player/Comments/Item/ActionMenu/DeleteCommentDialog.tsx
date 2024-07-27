@@ -45,8 +45,7 @@ function DeleteCommentDialog({ comment, isOpen, onClose, onDeleted }: Props) {
                             {deleteComment.error && (
                                 <Alert status="error">
                                     <AlertIcon />
-                                    {deleteComment.error.response?.data
-                                        .detail || deleteComment.error.message}
+                                    Something went wrong
                                 </Alert>
                             )}
                         </VStack>

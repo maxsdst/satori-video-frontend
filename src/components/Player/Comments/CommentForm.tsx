@@ -51,6 +51,7 @@ interface Props {
     submitButtonText: string;
     mentionedUsername?: string;
     onInput?: () => void;
+    ariaLabel?: string;
 }
 
 const CommentForm = forwardRef(
@@ -67,6 +68,7 @@ const CommentForm = forwardRef(
             submitButtonText,
             mentionedUsername,
             onInput,
+            ariaLabel,
         }: Props,
         ref: Ref<CommentFormHandle>
     ) => {
@@ -83,7 +85,7 @@ const CommentForm = forwardRef(
         useEffect(() => {
             if (errorData?.text)
                 setError("text", { message: errorData.text.join(" ") });
-        }, [errorData]);
+        }, [errorData, setError]);
 
         const { data: ownProfile, isLoading, error } = useOwnProfile();
 
@@ -100,7 +102,10 @@ const CommentForm = forwardRef(
         if (isLoading || error) return null;
 
         return (
-            <form onSubmit={handleSubmit((data) => onSubmit(data))}>
+            <form
+                aria-label={ariaLabel}
+                onSubmit={handleSubmit((data) => onSubmit(data))}
+            >
                 <HStack spacing={4} alignItems="start">
                     <Avatar
                         src={ownProfile?.avatar || undefined}
@@ -109,6 +114,7 @@ const CommentForm = forwardRef(
                     <VStack width="100%" alignItems="end">
                         {mentionedUsername && (
                             <Box
+                                aria-label="Mentioned user"
                                 alignSelf="start"
                                 fontSize="sm"
                                 backgroundColor="gray.600"

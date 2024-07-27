@@ -1,5 +1,7 @@
 import { HttpHandler } from "msw";
 import auth from "./auth";
+import commentLikes from "./commentLikes";
+import commentReports from "./commentReports";
 import comments from "./comments";
 import events from "./events";
 import likes from "./likes";
@@ -16,6 +18,8 @@ const handlers: HttpHandler[] = [
     ...likes,
     ...reports,
     ...comments,
+    ...commentLikes,
+    ...commentReports,
     ...savedVideos,
     ...events,
     ...notifications,

@@ -50,7 +50,7 @@ function ActionMenu({ comment, onEdit, onDeleted }: Props) {
                     aria-label="Action menu"
                 />
                 {comment.profile.id === ownProfile?.id && (
-                    <MenuList>
+                    <MenuList aria-label="Actions">
                         <MenuItem
                             icon={
                                 <Icon
@@ -72,7 +72,7 @@ function ActionMenu({ comment, onEdit, onDeleted }: Props) {
                     </MenuList>
                 )}
                 {comment.profile.id !== ownProfile?.id && (
-                    <MenuList>
+                    <MenuList aria-label="Actions">
                         <MenuItem
                             icon={<Icon as={AiOutlineFlag} boxSize={5} />}
                             onClick={openReportModal}
