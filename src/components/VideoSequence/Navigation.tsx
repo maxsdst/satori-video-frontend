@@ -23,12 +23,18 @@ function Navigation({ showUp, showDown, onUp, onDown }: Props) {
     return (
         <>
             {showUp && (
-                <Button top="0" onClick={onUp} {...buttonProps}>
+                <Button
+                    aria-label="Previous"
+                    top="0"
+                    onClick={onUp}
+                    {...buttonProps}
+                >
                     <Icon as={AiOutlineArrowUp} boxSize={iconBoxSize} />
                 </Button>
             )}
             {showDown && (
                 <Button
+                    aria-label="Next"
                     bottom={MAIN_CONTENT_AREA_PADDING}
                     onClick={onDown}
                     {...buttonProps}

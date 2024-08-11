@@ -43,45 +43,10 @@ export interface LocationState {
     highlightedCommentParentId?: number;
 }
 
-interface Props {
-    videoSource?: VideoSource;
-}
-
-function VideoPage({ videoSource: videoSourceProp }: Props) {
+function VideoPage() {
     const location = useLocation();
-    const {
-        videoSource: videoSourceLocation,
-        query: queryLocation,
-        initialVideoIndex: initialVideoIndexLocation,
-        highlightedCommentId: highlightedCommentIdLocation,
-        highlightedCommentParentId: highlightedCommentParentIdLocation,
-    } = useMemo<LocationState>(() => {
-        if (!location.state) return {};
-        const {
-            videoSource,
-            query,
-            initialVideoIndex,
-            highlightedCommentId,
-            highlightedCommentParentId,
-        } = location.state;
-        return {
-            videoSource: Object.values(VideoSource).includes(videoSource)
-                ? videoSource
-                : undefined,
-            query: query as BaseQuery,
-            initialVideoIndex:
-                typeof initialVideoIndex === "number"
-                    ? initialVideoIndex
-                    : undefined,
-            highlightedCommentId:
-                typeof highlightedCommentId === "number"
-                    ? highlightedCommentId
-                    : undefined,
-            highlightedCommentParentId:
-                typeof highlightedCommentParentId === "number"
-                    ? highlightedCommentParentId
-                    : undefined,
-        };
+    const locationState = useMemo<LocationState>(() => {
+        return location.state ? (location.state as LocationState) : {};
     }, [location.state]);
 
     const navigate = useNavigate();
@@ -91,25 +56,27 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
     }, [location.state]);
 
     const [videoSource, setVideoSource] = useState<VideoSource>(
-        videoSourceLocation || videoSourceProp || VideoSource.Recommended
+        locationState.videoSource || VideoSource.Recommended
     );
-    const [query, setQuery] = useState(queryLocation);
+    const [query, setQuery] = useState(locationState.query);
     const [initialVideoIndex, setInitialVideoIndex] = useState(
-        videoSourceLocation && queryLocation ? initialVideoIndexLocation : 0
+        locationState.videoSource &&
+            locationState.query &&
+            locationState.initialVideoIndex
+            ? locationState.initialVideoIndex
+            : 0
     );
     const [highlightedCommentId, setHighlightedCommentId] = useState(
-        highlightedCommentIdLocation
+        locationState.highlightedCommentId
     );
     const [highlightedCommentParentId, setHighlightedCommentParentId] =
-        useState(highlightedCommentParentIdLocation);
+        useState(locationState.highlightedCommentParentId);
 
     const { videoId } = useParams();
     const [initialVideoId, setInitialVideoId] = useState(videoId);
 
     const [isVideoQueryEnabled, setVideoQueryEnabled] = useState(
-        videoSourceLocation
-            ? typeof initialVideoIndexLocation !== "number"
-            : !!videoId
+        !locationState.videoSource
     );
 
     const {
@@ -221,7 +188,7 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
 
     function reset() {
         remove();
-        if (videoId && videoId === initialVideoId) refetch();
+        if (videoId && videoId === initialVideoId) void refetch();
         [
             videos,
             recommendedVideos,
@@ -236,29 +203,19 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
             x.remove();
         });
         setInitialVideoId(videoId);
-        setVideoSource(
-            videoSourceLocation || videoSourceProp || VideoSource.Recommended
-        );
-        setQuery(queryLocation);
-        setInitialVideoIndex(initialVideoIndexLocation);
-        setHighlightedCommentId(highlightedCommentIdLocation);
-        setHighlightedCommentParentId(highlightedCommentParentIdLocation);
-        setVideoQueryEnabled(
-            videoSourceLocation
-                ? typeof initialVideoIndexLocation !== "number"
-                : !!videoId
-        );
+        setVideoSource(locationState.videoSource || VideoSource.Recommended);
+        setQuery(locationState.query);
+        setInitialVideoIndex(locationState.initialVideoIndex || 0);
+        setHighlightedCommentId(locationState.highlightedCommentId);
+        setHighlightedCommentParentId(locationState.highlightedCommentParentId);
+        setVideoQueryEnabled(!locationState.videoSource);
         videoSequence.current?.reset();
     }
 
     useLayoutEffect(() => {
-        if (
-            videoSourceLocation ||
-            videoSourceProp ||
-            highlightedCommentIdLocation
-        )
+        if (locationState.videoSource || locationState.highlightedCommentId)
             reset();
-    }, [videoSourceProp, videoSourceLocation, highlightedCommentIdLocation]);
+    }, [locationState.videoSource, locationState.highlightedCommentId]);
 
     const allVideos = useMemo<Video[]>(() => {
         const videos = [];
@@ -298,13 +255,13 @@ function VideoPage({ videoSource: videoSourceProp }: Props) {
             >
                 {showSpinner ? (
                     <AbsoluteCenter>
-                        <Spinner />
+                        <Spinner role="progressbar" />
                     </AbsoluteCenter>
                 ) : (
                     <VideoSequence
                         ref={videoSequence}
                         videos={allVideos}
-                        onFetchMore={() => videosQuery?.fetchNextPage()}
+                        onFetchMore={() => void videosQuery?.fetchNextPage()}
                         initialVideoIndex={initialVideoIndex}
                         highlightedCommentId={highlightedCommentId}
                         highlightedCommentParentId={highlightedCommentParentId}

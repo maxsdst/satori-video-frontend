@@ -132,7 +132,7 @@ interface LimitOffsetPaginationResponse<T> extends PaginatedResponse<T> {
 }
 interface CursorPaginationResponse<T> extends PaginatedResponse<T> {}
 
-function paginateResults(
+export function paginateResults(
     request: StrictRequest<DefaultBodyType>,
     paginationType: PaginationType,
     results: any[]

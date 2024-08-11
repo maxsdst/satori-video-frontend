@@ -25,6 +25,9 @@ const handlers: HttpHandler[] = [
             video,
         };
     }),
+
+    generator.list("limit_offset"),
+
     http.post(
         BASE_URL + "/videos/saved_videos/remove_video_from_saved/",
         async ({ request }) => {

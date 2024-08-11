@@ -3,6 +3,7 @@ import { faker } from "@faker-js/faker";
 import { factory, nullable, oneOf, primaryKey } from "@mswjs/data";
 import Profile from "../../src/entities/Profile";
 import User from "../../src/entities/User";
+import Video from "../../src/entities/Video";
 
 export type ReportReason =
     | "sex"
@@ -212,6 +213,46 @@ export function deleteOwnProfile() {
         db.user.delete({ where: { id: { equals: ownProfileUser.id } } });
     ownProfile = undefined;
     ownProfileUser = undefined;
+}
+
+let recommendedVideos: Video[] = [];
+
+export function getRecommendedVideos() {
+    return recommendedVideos;
+}
+
+export function setRecommendedVideos(videos: Video[]) {
+    recommendedVideos = videos;
+}
+
+let popularVideos: Video[] = [];
+
+export function getPopularVideos() {
+    return popularVideos;
+}
+
+export function setPopularVideos(videos: Video[]) {
+    popularVideos = videos;
+}
+
+let latestVideos: Video[] = [];
+
+export function getLatestVideos() {
+    return latestVideos;
+}
+
+export function setLatestVideos(videos: Video[]) {
+    latestVideos = videos;
+}
+
+let followingVideos: Video[] = [];
+
+export function getFollowingVideos() {
+    return followingVideos;
+}
+
+export function setFollowingVideos(videos: Video[]) {
+    followingVideos = videos;
 }
 
 function randomUrl() {

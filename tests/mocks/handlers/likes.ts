@@ -22,6 +22,18 @@ const handlers: HttpHandler[] = [
             video,
         };
     }),
+
+    generator.list("cursor", (queryParams) => {
+        const videoId = queryParams.get("video");
+        const profileId = queryParams.get("profile");
+        return {
+            video: videoId ? { id: { equals: parseInt(videoId) } } : undefined,
+            profile: profileId
+                ? { id: { equals: parseInt(profileId) } }
+                : undefined,
+        };
+    }),
+
     http.post(BASE_URL + "/videos/likes/remove_like/", async ({ request }) => {
         const data = (await request.json()) as { video: number };
         const videoId = data.video;

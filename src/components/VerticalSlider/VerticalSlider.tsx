@@ -137,8 +137,15 @@ const VerticalSlider = forwardRef(function VerticalSlider(
         },
     }));
 
+    const slider = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (slider.current) slider.current?.focus();
+    }, [slider, state.currentSlideIndex]);
+
     return (
         <Box
+            ref={slider}
             height="100%"
             position="relative"
             overflowY="hidden"
@@ -171,6 +178,7 @@ const VerticalSlider = forwardRef(function VerticalSlider(
                 }
             >
                 <VStack
+                    data-testid="slides-container"
                     position="relative"
                     spacing={spaceBetweenSlides}
                     transition={state.transition ? "transform 0.5s" : undefined}

@@ -10,11 +10,13 @@ import profiles from "./profiles";
 import reports from "./reports";
 import savedVideos from "./savedVideos";
 import videos from "./videos";
+import views from "./views";
 
 const handlers: HttpHandler[] = [
     ...auth,
     ...profiles,
     ...videos,
+    ...views,
     ...likes,
     ...reports,
     ...comments,

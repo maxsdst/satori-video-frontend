@@ -18,6 +18,58 @@ export function createProfile({ username }: CreateProfileOptions): Profile {
     return db.profile.create({ user }) as Profile;
 }
 
+interface CreateVideoOptions {
+    profile?: Profile;
+    uploadDate?: Date;
+    title?: string;
+    description?: string;
+    viewCount?: number;
+    likeCount?: number;
+    isLiked?: boolean;
+    commentCount?: number;
+    isSaved?: boolean;
+}
+
+export function createVideo({
+    profile,
+    uploadDate,
+    title,
+    description,
+    viewCount,
+    likeCount,
+    isLiked,
+    commentCount,
+    isSaved,
+}: CreateVideoOptions): Video {
+    if (!profile) profile = createProfile({});
+
+    return db.video.create({
+        profile,
+        upload_date: uploadDate,
+        title,
+        description,
+        view_count: viewCount,
+        like_count: likeCount,
+        is_liked: isLiked,
+        comment_count: commentCount,
+        is_saved: isSaved,
+    }) as Video;
+}
+
+export function createVideos(
+    quantity: number,
+    options: CreateVideoOptions
+): Video[] {
+    const videos: Video[] = [];
+
+    for (let i = 0; i < quantity; i++) {
+        const video = createVideo(options);
+        videos.push(video);
+    }
+
+    return videos;
+}
+
 export function isVideoLiked(videoId: number): boolean {
     const ownProfile = getOwnProfile();
     return (
@@ -193,6 +245,14 @@ export function countCommentReports(
         where: {
             comment: { id: { equals: commentId } },
             reason: { equals: reason },
+        },
+    });
+}
+
+export function countViews(videoId: number) {
+    return db.view.count({
+        where: {
+            video: { id: { equals: videoId } },
         },
     });
 }

@@ -2,7 +2,14 @@
 import { drop } from "@mswjs/data";
 import "@testing-library/jest-dom/vitest";
 import { PropertySymbol } from "happy-dom";
-import { db, deleteOwnProfile } from "./mocks/db";
+import {
+    db,
+    deleteOwnProfile,
+    setFollowingVideos,
+    setLatestVideos,
+    setPopularVideos,
+    setRecommendedVideos,
+} from "./mocks/db";
 import { server } from "./mocks/server";
 
 afterEach(() => {
@@ -14,7 +21,13 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 afterEach(() => drop(db));
-afterEach(() => deleteOwnProfile());
+afterEach(() => {
+    deleteOwnProfile();
+    setRecommendedVideos([]);
+    setPopularVideos([]);
+    setLatestVideos([]);
+    setFollowingVideos([]);
+});
 
 vi.mock("react-player/lazy", () => {
     return vi.importActual("react-player");

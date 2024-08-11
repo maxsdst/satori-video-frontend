@@ -172,7 +172,12 @@ const Player = forwardRef(
                     highlightedCommentParentId,
                 }}
             >
-                <HStack height={height} minHeight={minHeight} spacing={0}>
+                <HStack
+                    data-testid="player"
+                    height={height}
+                    minHeight={minHeight}
+                    spacing={0}
+                >
                     <Box
                         data-testid="player-wrapper"
                         className={classNames({

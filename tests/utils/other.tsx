@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { RenderResult, act, fireEvent, render } from "@testing-library/react";
@@ -7,6 +8,7 @@ import { ReactNode } from "react";
 import * as reactDeviceDetect from "react-device-detect";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { routes as appRoutes } from "../../src/routes";
+import * as utils from "../../src/utils";
 import AllProviders from "../AllProviders";
 import { BASE_URL } from "../mocks/handlers/constants";
 import { server } from "../mocks/server";
@@ -44,6 +46,18 @@ export function renderWithRouter(ui: ReactNode, useAppRoutes?: boolean) {
         getLocation: () => router.state.location,
     };
 }
+
+export const navigateTo = (path: string, state?: any) => {
+    const router = createMemoryRouter(appRoutes, {
+        initialEntries: [{ pathname: path, state }],
+    });
+
+    render(<RouterProvider router={router} />, { wrapper: AllProviders });
+
+    return {
+        getLocation: () => router.state.location,
+    };
+};
 
 export function simulateUnauthenticated() {
     server.use(
@@ -89,6 +103,38 @@ export async function simulateMobileDevice(
     }
 }
 
+export function simulateTouchDevice() {
+    vi.spyOn(utils, "isTouchDevice").mockReturnValue(true);
+}
+
+export async function simulateSwipe(
+    element: HTMLElement,
+    direction: "up" | "down"
+) {
+    const SWIPE_MIN_DISTANCE_PX = 10;
+
+    const startY = direction === "up" ? SWIPE_MIN_DISTANCE_PX : 0;
+    const endY = direction === "up" ? 0 : SWIPE_MIN_DISTANCE_PX;
+
+    fireEvent(
+        element,
+        new MouseEvent("touchstart", {
+            clientX: 0,
+            clientY: startY,
+        })
+    );
+
+    await sleep(10);
+
+    fireEvent(
+        element,
+        new MouseEvent("touchend", {
+            clientX: 0,
+            clientY: endY,
+        })
+    );
+}
+
 export function simulateTooLongText() {
     vi.spyOn(HTMLElement.prototype, "scrollHeight", "get").mockImplementation(
         () => 10000
@@ -112,4 +158,8 @@ export function replaceQueryParam(url: string, name: string, value: string) {
     const urlObj = new URL(url);
     urlObj.searchParams.set(name, value);
     return urlObj.toString();
+}
+
+export function sleep(ms: number) {
+    return act(() => new Promise((r) => setTimeout(r, ms)));
 }
