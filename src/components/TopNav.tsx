@@ -1,10 +1,10 @@
 import {
     Button,
     HStack,
-    Hide,
     Image,
     StackProps,
     useBoolean,
+    useBreakpointValue,
 } from "@chakra-ui/react";
 import {
     AiOutlineArrowLeft,
@@ -27,6 +27,8 @@ interface Props {
 function TopNav({ isSidenavOpen, toggleSidenav }: Props) {
     const { data: profile, isLoading } = useOwnProfile();
 
+    const shouldHideSearchInput = useBreakpointValue({ base: true, md: false });
+
     const [isSearchModeOn, { on: setSearchModeOn, off: setSearchModeOff }] =
         useBoolean(false);
 
@@ -43,7 +45,7 @@ function TopNav({ isSidenavOpen, toggleSidenav }: Props) {
         return (
             <HStack {...styles} justifyContent="center">
                 <IconButton
-                    label="Search"
+                    label="Back"
                     icon={AiOutlineArrowLeft}
                     onClick={() => setSearchModeOff()}
                 />
@@ -62,25 +64,20 @@ function TopNav({ isSidenavOpen, toggleSidenav }: Props) {
                     icon={RxHamburgerMenu}
                     onClick={() => toggleSidenav()}
                 />
-                <Image src={""} boxSize="40px" />
+                <Link to="/">
+                    <Image aria-label="Logo" src={""} boxSize="40px" />
+                </Link>
             </HStack>
-            <SearchInput
-                styles={{
-                    display: {
-                        base: "none",
-                        md: "block",
-                    },
-                }}
-            />
+            {!shouldHideSearchInput && <SearchInput />}
             <HStack spacing={5}>
                 <HStack spacing={1}>
-                    <Hide above="md">
+                    {shouldHideSearchInput && (
                         <IconButton
                             icon={AiOutlineSearch}
                             label="Search"
                             onClick={() => setSearchModeOn()}
                         />
-                    </Hide>
+                    )}
                     {isLoading || !profile ? null : (
                         <>
                             <IconButton

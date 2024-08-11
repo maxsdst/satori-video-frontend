@@ -20,11 +20,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useFirstMountState } from "react-use";
 import ResultsPopoverContent from "./ResultsPopoverContent";
 
-interface Props {
-    styles?: ChakraProps;
-}
-
-function SearchInput({ styles }: Props) {
+function SearchInput() {
     const location = useLocation();
     const [searchParams] = useSearchParams();
     const locationSearchQuery =
@@ -70,8 +66,8 @@ function SearchInput({ styles }: Props) {
 
     return (
         <chakra.form
+            aria-label="Search"
             maxWidth="600px"
-            {...styles}
             onSubmit={(event) => {
                 event.preventDefault();
                 closeResults();

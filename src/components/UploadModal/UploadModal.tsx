@@ -56,6 +56,7 @@ function UploadModal({
             >
                 <ModalOverlay />
                 <ModalContent
+                    data-testid="upload-modal"
                     top={verticalOffset}
                     margin={0}
                     height={modalHeight}

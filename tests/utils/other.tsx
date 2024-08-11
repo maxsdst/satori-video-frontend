@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import * as chakraUi from "@chakra-ui/react";
 import { RenderResult, act, fireEvent, render } from "@testing-library/react";
 import { HttpStatusCode } from "axios";
+import { Window } from "happy-dom";
 import { HttpResponse, http } from "msw";
 import { ReactNode } from "react";
 import * as reactDeviceDetect from "react-device-detect";
@@ -88,6 +90,31 @@ export const simulateError = (
     );
 };
 
+export async function simulateScreenSize(
+    size: "sm" | "md" | "lg" | "xl" | "2xl",
+    callback: () => void | Promise<void>
+) {
+    const originalValue = window.innerWidth;
+
+    const width = convertToPx(
+        chakraUi.theme.breakpoints[size],
+        document.documentElement
+    );
+
+    try {
+        act(() => {
+            (window as unknown as Window).happyDOM.setViewport({ width });
+        });
+        await callback();
+    } finally {
+        act(() => {
+            (window as unknown as Window).happyDOM.setViewport({
+                width: originalValue,
+            });
+        });
+    }
+}
+
 export async function simulateMobileDevice(
     callback: () => void | Promise<void>
 ) {
@@ -162,4 +189,12 @@ export function replaceQueryParam(url: string, name: string, value: string) {
 
 export function sleep(ms: number) {
     return act(() => new Promise((r) => setTimeout(r, ms)));
+}
+
+function convertToPx(value: string, element: HTMLElement): number {
+    const child = document.createElement("div");
+    child.style.width = value;
+    element.appendChild(child);
+    const width = getComputedStyle(child).getPropertyValue("width");
+    return parseInt(width.replace("px", ""));
 }
