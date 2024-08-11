@@ -4,7 +4,7 @@ import Video from "../../entities/Video";
 import { LocationState } from "../../pages/VideoPage";
 import Item from "./Item";
 
-interface VideoLinkState {
+export interface VideoLinkState {
     videoSource?: LocationState["videoSource"];
     query?: LocationState["query"];
 }

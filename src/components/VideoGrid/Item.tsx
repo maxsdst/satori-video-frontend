@@ -43,7 +43,11 @@ function Item({
     } = useDisclosure();
 
     return (
-        <VStack maxWidth="600px" alignItems="start">
+        <VStack
+            data-testid="video-grid-item"
+            maxWidth="600px"
+            alignItems="start"
+        >
             <Box
                 as={Link}
                 to={"/videos/" + video.id}
@@ -52,7 +56,11 @@ function Item({
                 state={videoLinkState}
             >
                 <AspectRatio width="100%" ratio={3 / 4}>
-                    <Image objectFit="cover" src={video.thumbnail} />
+                    <Image
+                        aria-label="Video thumbnail"
+                        objectFit="cover"
+                        src={video.thumbnail}
+                    />
                 </AspectRatio>
                 {actionMenuList && (
                     <Menu isOpen={isActionMenuOpen} onClose={closeActionMenu}>
@@ -88,7 +96,7 @@ function Item({
                         justifyContent="space-between"
                         padding={3}
                     >
-                        <HStack spacing={1}>
+                        <HStack aria-label="Number of views" spacing={1}>
                             <Icon as={PiPlay} boxSize={4} />
                             <Text fontSize="md">
                                 {formatNumber(video.view_count)}
@@ -104,6 +112,7 @@ function Item({
                     state={videoLinkState}
                 >
                     <Text
+                        aria-label="Video title"
                         fontSize="md"
                         noOfLines={1}
                         fontWeight="medium"
@@ -120,15 +129,18 @@ function Item({
                         <Link to={"/users/" + video.profile.user.username}>
                             <HStack>
                                 <Avatar
+                                    aria-label="Author's avatar"
                                     size="xs"
                                     src={video.profile.avatar || undefined}
                                 />
-                                <Text>{video.profile.user.username}</Text>
+                                <Text aria-label="Author's username">
+                                    {video.profile.user.username}
+                                </Text>
                             </HStack>
                         </Link>
                     )}
                     {showLikes && (
-                        <HStack spacing={1}>
+                        <HStack aria-label="Number of likes" spacing={1}>
                             <Icon as={AiOutlineHeart} boxSize={4} />
                             <Text fontSize="md">
                                 {formatNumber(video.like_count)}
