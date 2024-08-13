@@ -33,7 +33,7 @@ function SideNav({ isFullscreen, onClose }: Props) {
             backgroundColor="var(--chakra-colors-chakra-body-bg);"
         >
             <SideNavButton icon={AiOutlineHome} link="/" onClick={close}>
-                For You
+                For you
             </SideNavButton>
             <SideNavButton icon={AiOutlineFire} link="/popular" onClick={close}>
                 Popular
