@@ -2,12 +2,14 @@ import { HttpStatusCode } from "axios";
 import { HttpHandler, HttpResponse, http } from "msw";
 import { db, getOwnProfile } from "../db";
 import { BASE_URL } from "./constants";
+import { paginateResults } from "./HandlerGenerator";
 
 const handlers: HttpHandler[] = [
     http.get(BASE_URL + "/profiles/profiles/me/", () => {
         const profile = getOwnProfile();
         return HttpResponse.json(profile);
     }),
+
     http.get(
         BASE_URL + "/profiles/profiles/retrieve_by_username/:username",
         ({ params }) => {
@@ -25,6 +27,16 @@ const handlers: HttpHandler[] = [
             return HttpResponse.json(profile);
         }
     ),
+
+    http.get(BASE_URL + "/profiles/profiles/search/", ({ request }) => {
+        const searchParams = new URL(request.url).searchParams;
+        const searchQuery = searchParams.get("query") || "";
+        const profiles = db.profile.findMany({
+            where: { full_name: { contains: searchQuery } },
+        });
+        const response = paginateResults(request, "cursor", profiles);
+        return HttpResponse.json(response);
+    }),
 ];
 
 export default handlers;

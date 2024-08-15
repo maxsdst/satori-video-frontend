@@ -1,6 +1,5 @@
 import {
     Button,
-    ChakraProps,
     Divider,
     Icon,
     Input,
@@ -70,6 +69,7 @@ function SearchInput() {
             maxWidth="600px"
             onSubmit={(event) => {
                 event.preventDefault();
+                if (!inputRef.current?.value) return;
                 closeResults();
                 if (searchQueryTimeout.current)
                     clearTimeout(searchQueryTimeout.current);
@@ -97,6 +97,7 @@ function SearchInput() {
                         <InputRightElement width={submitButtonWidth}>
                             <Divider orientation="vertical" />
                             <Button
+                                aria-label="Search"
                                 type="submit"
                                 width="100%"
                                 height="100%"
@@ -110,6 +111,7 @@ function SearchInput() {
                 </PopoverAnchor>
                 <Portal>
                     <PopoverContent
+                        aria-label="Search results"
                         width={{
                             base: "100vw",
                             sm: "100vw",

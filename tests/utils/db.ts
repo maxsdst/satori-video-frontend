@@ -11,11 +11,29 @@ import {
 
 interface CreateProfileOptions {
     username?: string;
+    fullName?: string;
 }
 
-export function createProfile({ username }: CreateProfileOptions): Profile {
+export function createProfile({
+    username,
+    fullName,
+}: CreateProfileOptions): Profile {
     const user = db.user.create({ username });
-    return db.profile.create({ user }) as Profile;
+    return db.profile.create({ user, full_name: fullName }) as Profile;
+}
+
+export function createProfiles(
+    quantity: number,
+    options: CreateProfileOptions
+): Profile[] {
+    const profiles: Profile[] = [];
+
+    for (let i = 0; i < quantity; i++) {
+        const profile = createProfile(options);
+        profiles.push(profile);
+    }
+
+    return profiles;
 }
 
 interface CreateVideoOptions {

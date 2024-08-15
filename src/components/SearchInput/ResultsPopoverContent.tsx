@@ -57,7 +57,7 @@ function ResultsPopoverContent({ searchQuery, onClose }: Props) {
     return (
         <PopoverBody as={VStack} padding={0} spacing={0} alignItems="start">
             {profiles.length > 0 && (
-                <>
+                <Box role="list" aria-label="Users" width="100%">
                     <Box width="100%" paddingX={4} paddingY={1}>
                         <Text fontWeight="semibold" opacity={0.8}>
                             Users
@@ -67,6 +67,7 @@ function ResultsPopoverContent({ searchQuery, onClose }: Props) {
                         {profiles.map((profile) => (
                             <HStack
                                 key={profile.id}
+                                role="listitem"
                                 {...itemProps}
                                 justifyContent="start"
                                 paddingY={2}
@@ -76,6 +77,7 @@ function ResultsPopoverContent({ searchQuery, onClose }: Props) {
                                 }}
                             >
                                 <Avatar
+                                    aria-label="Avatar"
                                     size="md"
                                     src={profile.avatar || undefined}
                                 />
@@ -84,10 +86,14 @@ function ResultsPopoverContent({ searchQuery, onClose }: Props) {
                                     spacing={0}
                                     fontSize="md"
                                 >
-                                    <Text fontWeight="semibold">
+                                    <Text
+                                        aria-label="Username"
+                                        fontWeight="semibold"
+                                    >
                                         {profile.user.username}
                                     </Text>
                                     <Text
+                                        aria-label="Full name"
                                         opacity={0.8}
                                         overflowWrap="anywhere"
                                         noOfLines={1}
@@ -98,9 +104,11 @@ function ResultsPopoverContent({ searchQuery, onClose }: Props) {
                             </HStack>
                         ))}
                     </VStack>
-                </>
+                </Box>
             )}
             <Box
+                role="button"
+                aria-label="View all results"
                 {...itemProps}
                 paddingY={4}
                 onClick={() => {
