@@ -23,6 +23,7 @@ function SideNav({ isFullscreen, onClose }: Props) {
 
     return (
         <VStack
+            data-testid="sidenav"
             position="fixed"
             alignItems="start"
             padding={2}

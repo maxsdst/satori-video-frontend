@@ -43,7 +43,7 @@ function TopNav({ isSidenavOpen, toggleSidenav }: Props) {
 
     if (isSearchModeOn)
         return (
-            <HStack {...styles} justifyContent="center">
+            <HStack data-testid="topnav" {...styles} justifyContent="center">
                 <IconButton
                     label="Back"
                     icon={AiOutlineArrowLeft}
@@ -54,7 +54,7 @@ function TopNav({ isSidenavOpen, toggleSidenav }: Props) {
         );
 
     return (
-        <HStack {...styles} justifyContent="space-between">
+        <HStack data-testid="topnav" {...styles} justifyContent="space-between">
             <HStack>
                 <IconButton
                     label={
@@ -73,6 +73,7 @@ function TopNav({ isSidenavOpen, toggleSidenav }: Props) {
                 <HStack spacing={1}>
                     {shouldHideSearchInput && (
                         <IconButton
+                            dataTestId="topnav-search-button"
                             icon={AiOutlineSearch}
                             label="Search"
                             onClick={() => setSearchModeOn()}

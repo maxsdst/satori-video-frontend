@@ -20,6 +20,7 @@ interface Props {
     link?: string;
     badgeText?: string;
     badgeColor?: BackgroundProps["backgroundColor"];
+    dataTestId?: string;
 }
 
 const IconButton = forwardRef(
@@ -34,6 +35,7 @@ const IconButton = forwardRef(
             link,
             badgeText,
             badgeColor,
+            dataTestId,
         }: Props,
         ref: Ref<HTMLButtonElement>
     ) => {
@@ -43,6 +45,7 @@ const IconButton = forwardRef(
 
         let button = (
             <ChakraIconButton
+                data-testid={dataTestId}
                 ref={ref}
                 position="relative"
                 icon={

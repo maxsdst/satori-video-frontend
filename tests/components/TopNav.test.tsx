@@ -356,8 +356,7 @@ function renderComponent(useAppRoutes?: boolean) {
     const getLogo = () => screen.queryByRole("img", { name: /logo/i });
 
     const getSearchForm = () => screen.queryByRole("form", { name: /search/i });
-    const getSearchButton = () =>
-        screen.queryByRole("button", { name: /search/i });
+    const getSearchButton = () => screen.queryByTestId("topnav-search-button");
     const getBackButton = () => screen.queryByRole("button", { name: /back/i });
 
     const getUploadButton = () =>
