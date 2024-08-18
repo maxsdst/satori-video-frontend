@@ -37,6 +37,14 @@ export type NotificationSubtype =
     | "like"
     | "reply";
 
+export const notificationTypeMap: {
+    [K in NotificationType]: NotificationSubtype[];
+} = {
+    profile: ["new_follower"],
+    video: ["upload_processed", "comment", "followed_profile_video"],
+    comment: ["like", "reply"],
+};
+
 export const db = factory({
     user: {
         id: primaryKey(faker.number.int),
@@ -184,7 +192,7 @@ export const db = factory({
         related_profile: oneOf("profile", { nullable: true }),
         video: oneOf("video", { nullable: true }),
         comment: oneOf("comment", { nullable: true }),
-        reply: oneOf("reply", { nullable: true }),
+        reply: oneOf("comment", { nullable: true }),
     },
 });
 

@@ -16,6 +16,7 @@ import {
     Text,
     useBreakpointValue,
     useDisclosure,
+    VStack,
 } from "@chakra-ui/react";
 import { ReactElement, useEffect, useState } from "react";
 import { AiOutlineBell } from "react-icons/ai";
@@ -86,28 +87,36 @@ function NotificationsPopover() {
                 scrollThreshold="50px"
                 style={{
                     display: "flex",
-                    flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
                     width: "100%",
-                    paddingBottom: hasNextPage ? "0.5rem" : undefined,
                 }}
             >
                 {notifications.length === 0 && (
                     <Box padding={4}>
-                        {isLoading && <Spinner />}
+                        {isLoading && <Spinner role="progressbar" />}
                         {isSuccess && (
                             <Text>Your notifications are currently empty.</Text>
                         )}
                     </Box>
                 )}
-                {notifications.map((notification) => (
-                    <NotificationItem
-                        key={notification.id}
-                        notification={notification}
-                    />
-                ))}
-                {hasNextPage && <Spinner marginTop={2} />}
+                {notifications.length > 0 && (
+                    <VStack
+                        role="list"
+                        width="100%"
+                        paddingBottom={hasNextPage ? "0.5rem" : undefined}
+                    >
+                        {notifications.map((notification) => (
+                            <NotificationItem
+                                key={notification.id}
+                                notification={notification}
+                            />
+                        ))}
+                        {hasNextPage && (
+                            <Spinner role="progressbar" marginTop={2} />
+                        )}
+                    </VStack>
+                )}
             </InfiniteScroll>
         </NotificationsPopoverContext.Provider>
     );
@@ -158,6 +167,7 @@ function NotificationsPopover() {
                     <PopoverCloseButton />
                     <PopoverHeader>Notifications</PopoverHeader>
                     <PopoverBody
+                        data-testid="notification-list-container"
                         padding={0}
                         overflowX="hidden"
                         overflowY="auto"

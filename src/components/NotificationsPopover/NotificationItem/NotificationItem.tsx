@@ -33,6 +33,7 @@ function NotificationItem({ notification }: Props) {
                         />
                     );
             }
+            break;
         case "video":
             switch (notification.subtype) {
                 case "upload_processed":
@@ -65,7 +66,6 @@ function NotificationItem({ notification }: Props) {
                             onClick={() =>
                                 navigate("/videos/" + notification.video.id, {
                                     state: {
-                                        videoSource: VideoSource.Recommended,
                                         highlightedCommentId:
                                             notification.comment.id,
                                         highlightedCommentParentId:
@@ -93,6 +93,7 @@ function NotificationItem({ notification }: Props) {
                         />
                     );
             }
+            break;
         case "comment":
             switch (notification.subtype) {
                 case "like":
@@ -105,7 +106,6 @@ function NotificationItem({ notification }: Props) {
                             onClick={() =>
                                 navigate("/videos/" + notification.video.id, {
                                     state: {
-                                        videoSource: VideoSource.Recommended,
                                         highlightedCommentId:
                                             notification.comment.id,
                                         highlightedCommentParentId:
@@ -126,7 +126,6 @@ function NotificationItem({ notification }: Props) {
                             onClick={() =>
                                 navigate("/videos/" + notification.video.id, {
                                     state: {
-                                        videoSource: VideoSource.Recommended,
                                         highlightedCommentId:
                                             notification.reply.id,
                                         highlightedCommentParentId:

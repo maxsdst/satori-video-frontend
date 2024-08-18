@@ -32,7 +32,7 @@ function ActionMenu({ notification }: Props) {
                 aria-label="Action menu"
                 onClick={(e) => e.stopPropagation()}
             />
-            <MenuList>
+            <MenuList aria-label="Actions">
                 <MenuItem
                     icon={<Icon as={AiOutlineEyeInvisible} boxSize={5} />}
                     onClick={(e) => {

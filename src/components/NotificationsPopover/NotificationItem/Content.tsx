@@ -42,6 +42,7 @@ function Content({
 
     return (
         <HStack
+            role="listitem"
             width="100%"
             paddingX={4}
             paddingY={2}
@@ -59,7 +60,11 @@ function Content({
                 {showIcon ? (
                     <Icon as={icon} boxSize={7} />
                 ) : (
-                    <Avatar size="sm" src={avatar || undefined} />
+                    <Avatar
+                        aria-label="Avatar"
+                        size="sm"
+                        src={avatar || undefined}
+                    />
                 )}
             </HStack>
             <VStack
@@ -72,6 +77,7 @@ function Content({
                     {username && (
                         <>
                             <ChakraLink
+                                aria-label="Username"
                                 as={Link}
                                 to={"/users/" + username}
                                 fontWeight="semibold"
@@ -86,7 +92,7 @@ function Content({
                     )}
                     {text}
                 </Text>
-                <Text fontSize="xs">
+                <Text aria-label="Date" fontSize="xs">
                     {formatDistanceToNowStrict(notification.creation_date)} ago
                 </Text>
             </VStack>
@@ -94,7 +100,11 @@ function Content({
                 <Box minWidth={10} marginLeft={6}>
                     {videoThumbnail && (
                         <AspectRatio minWidth={10} maxWidth={10} ratio={3 / 4}>
-                            <Image objectFit="cover" src={videoThumbnail} />
+                            <Image
+                                aria-label="Video thumbnail"
+                                objectFit="cover"
+                                src={videoThumbnail}
+                            />
                         </AspectRatio>
                     )}
                 </Box>

@@ -10,20 +10,20 @@ interface BaseNotification {
     is_seen: boolean;
 }
 
-interface ProfileNotification extends BaseNotification {
+export interface ProfileNotification extends BaseNotification {
     type: "profile";
     subtype: "new_follower";
     related_profile: Profile;
 }
 
-interface VideoNotification extends BaseNotification {
+export interface VideoNotification extends BaseNotification {
     type: "video";
     subtype: "upload_processed" | "comment" | "followed_profile_video";
     video: Video;
     comment: Comment;
 }
 
-interface CommentNotification extends BaseNotification {
+export interface CommentNotification extends BaseNotification {
     type: "comment";
     subtype: "like" | "reply";
     video: Video;

@@ -1,12 +1,17 @@
+import { faker } from "@faker-js/faker";
 import Comment from "../../src/entities/Comment";
+import Notification from "../../src/entities/Notification";
 import Profile from "../../src/entities/Profile";
 import Video from "../../src/entities/Video";
 import {
     CommentReportReason,
     EventType,
+    NotificationSubtype,
+    NotificationType,
     ReportReason,
     db,
     getOwnProfile,
+    notificationTypeMap,
 } from "../mocks/db";
 
 interface CreateProfileOptions {
@@ -110,6 +115,14 @@ export function isVideoSaved(videoId: number): boolean {
             },
         }) > 0
     );
+}
+
+interface CreateUploadOptions {
+    video?: Video;
+}
+
+export function createUpload({ video }: CreateUploadOptions) {
+    return db.upload.create({ video });
 }
 
 export function countEvents(videoId: number, type: EventType) {
@@ -273,4 +286,93 @@ export function countViews(videoId: number) {
             video: { id: { equals: videoId } },
         },
     });
+}
+
+interface CreateNotificationOptions {
+    type?: NotificationType;
+    subtype?: NotificationSubtype;
+    creationDate?: Date;
+    isSeen?: boolean;
+}
+
+export function createNotification({
+    type,
+    subtype,
+    creationDate,
+    isSeen,
+}: CreateNotificationOptions): Notification {
+    if (!type)
+        type = faker.helpers.arrayElement(
+            Object.keys(notificationTypeMap)
+        ) as NotificationType;
+    if (!subtype)
+        subtype = faker.helpers.arrayElement(notificationTypeMap[type]);
+
+    if (!notificationTypeMap[type].includes(subtype))
+        throw "Notification type mismatch";
+
+    let relatedProfile: Profile | undefined = undefined;
+    let video: Video | undefined = undefined;
+    let comment: Comment | undefined = undefined;
+    let reply: Comment | undefined = undefined;
+
+    switch (type) {
+        case "profile":
+            switch (subtype) {
+                case "new_follower":
+                    relatedProfile = createProfile({});
+                    break;
+            }
+            break;
+        case "video":
+            video = createVideo({});
+            switch (subtype) {
+                case "upload_processed":
+                    createUpload({ video });
+                    break;
+                case "comment":
+                    comment = createComment({ video });
+                    break;
+                case "followed_profile_video":
+                    break;
+            }
+            break;
+        case "comment":
+            video = createVideo({});
+            comment = createComment({ video });
+            switch (subtype) {
+                case "like":
+                    break;
+                case "reply":
+                    reply = createComment({ parent: comment });
+                    break;
+            }
+            break;
+    }
+
+    return db.notification.create({
+        profile: getOwnProfile().id,
+        type,
+        subtype,
+        creation_date: creationDate,
+        is_seen: isSeen,
+        related_profile: relatedProfile,
+        video,
+        comment,
+        reply,
+    }) as Notification;
+}
+
+export function createNotifications(
+    quantity: number,
+    options: CreateNotificationOptions
+): Notification[] {
+    const notifications: Notification[] = [];
+
+    for (let i = 0; i < quantity; i++) {
+        const notification = createNotification(options);
+        notifications.push(notification);
+    }
+
+    return notifications;
 }

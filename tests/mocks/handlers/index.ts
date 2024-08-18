@@ -9,6 +9,7 @@ import notifications from "./notifications";
 import profiles from "./profiles";
 import reports from "./reports";
 import savedVideos from "./savedVideos";
+import uploads from "./uploads";
 import videos from "./videos";
 import views from "./views";
 
@@ -16,6 +17,7 @@ const handlers: HttpHandler[] = [
     ...auth,
     ...profiles,
     ...videos,
+    ...uploads,
     ...views,
     ...likes,
     ...reports,
