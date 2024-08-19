@@ -26,7 +26,11 @@ const handlers: HttpHandler[] = [
         };
     }),
 
-    generator.list("limit_offset"),
+    generator.list("limit_offset", () => {
+        return {
+            profile: { equals: getOwnProfile().id },
+        };
+    }),
 
     http.post(
         BASE_URL + "/videos/saved_videos/remove_video_from_saved/",

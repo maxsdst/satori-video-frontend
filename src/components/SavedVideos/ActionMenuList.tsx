@@ -15,7 +15,7 @@ function ActionMenuList({ video }: Props) {
     const toast = useToast();
 
     return (
-        <MenuList>
+        <MenuList aria-label="Actions">
             <MenuItem
                 icon={<Icon as={AiOutlineDelete} boxSize={5} />}
                 onClick={(e) => {
