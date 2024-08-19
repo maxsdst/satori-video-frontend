@@ -32,7 +32,7 @@ function FollowingPage() {
     useEffectOnce(() => {
         if (data) {
             remove();
-            refetch();
+            void refetch();
         }
     });
 
@@ -66,7 +66,9 @@ function FollowingPage() {
                             query,
                         }}
                     />
-                    {(hasNextPage || isLoading) && <Spinner marginTop={4} />}
+                    {(hasNextPage || isLoading) && (
+                        <Spinner role="progressbar" marginTop={4} />
+                    )}
                 </InfiniteScroll>
             </VStack>
         </MainContentArea>
