@@ -2,6 +2,7 @@ import {
     AspectRatio,
     Avatar,
     Box,
+    GridItem,
     HStack,
     Icon,
     IconButton,
@@ -43,7 +44,8 @@ function Item({
     } = useDisclosure();
 
     return (
-        <VStack
+        <GridItem
+            as={VStack}
             data-testid="video-grid-item"
             maxWidth="600px"
             alignItems="start"
@@ -149,7 +151,7 @@ function Item({
                     )}
                 </HStack>
             )}
-        </VStack>
+        </GridItem>
     );
 }
 

@@ -168,15 +168,18 @@ export function simulateTooLongText() {
     );
 }
 
-export async function simulateScrollToEnd(element: HTMLElement) {
-    Object.defineProperties(element, {
+export async function simulateScrollToEnd(element?: HTMLElement) {
+    const target = element || document.documentElement;
+    const eventTarget = element || window;
+
+    Object.defineProperties(target, {
         scrollHeight: { value: 1000 },
         clientHeight: { value: 300 },
         scrollTop: { value: 700 },
     });
 
     await act(async () => {
-        fireEvent(element, new Event("scroll"));
+        fireEvent(eventTarget, new Event("scroll"));
         await new Promise((r) => setTimeout(r, 0));
     });
 }
