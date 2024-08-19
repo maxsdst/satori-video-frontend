@@ -23,7 +23,7 @@ function History() {
     useEffectOnce(() => {
         if (data) {
             remove();
-            refetch();
+            void refetch();
         }
     });
 
@@ -71,12 +71,17 @@ function History() {
                 <VStack alignItems="start" width="100%" spacing={12}>
                     {history.map(([date, videos], index) => (
                         <VStack
+                            data-testid="history-section"
                             key={index}
                             alignItems="start"
                             width="100%"
                             spacing={4}
                         >
-                            <Text fontSize="2xl" fontWeight="semibold">
+                            <Text
+                                aria-label="Date"
+                                fontSize="2xl"
+                                fontWeight="semibold"
+                            >
                                 {formatRelativeDateWithoutTime(
                                     new Date(date),
                                     new Date()

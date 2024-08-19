@@ -288,6 +288,15 @@ export function countViews(videoId: number) {
     });
 }
 
+export function countHistoryEntries(videoId: number) {
+    return db.historyEntry.count({
+        where: {
+            video: { id: { equals: videoId } },
+            profile: { equals: getOwnProfile().id },
+        },
+    });
+}
+
 interface CreateNotificationOptions {
     type?: NotificationType;
     subtype?: NotificationSubtype;
