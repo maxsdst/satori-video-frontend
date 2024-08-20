@@ -9,9 +9,11 @@ interface Props {
 
 function ProfileList({ profiles }: Props) {
     return (
-        <VStack width="100%" alignItems="start">
+        <VStack role="list" aria-label="Users" width="100%" alignItems="start">
             {profiles.map((profile) => (
                 <HStack
+                    key={profile.id}
+                    role="listitem"
                     as={Link}
                     to={"/users/" + profile.user.username}
                     width="100%"
@@ -24,17 +26,32 @@ function ProfileList({ profiles }: Props) {
                         backgroundColor: "whiteAlpha.200",
                     }}
                 >
-                    <Avatar size="lg" src={profile.avatar || undefined} />
+                    <Avatar
+                        aria-label="Avatar"
+                        size="lg"
+                        src={profile.avatar || undefined}
+                    />
                     <VStack alignItems="start" spacing={0} width="100%">
-                        <Text fontWeight="bold" fontSize="md">
+                        <Text
+                            aria-label="Username"
+                            fontWeight="bold"
+                            fontSize="md"
+                        >
                             {profile.user.username}
                         </Text>
                         <HStack spacing={2} fontSize="sm" width="100%">
-                            <Text overflowWrap="anywhere" noOfLines={1}>
+                            <Text
+                                aria-label="Full name"
+                                overflowWrap="anywhere"
+                                noOfLines={1}
+                            >
                                 {profile.full_name}
                             </Text>
                             <Text>·</Text>
-                            <Text opacity={0.8}>
+                            <Text
+                                aria-label="Number of followers"
+                                opacity={0.8}
+                            >
                                 <span
                                     style={{
                                         fontWeight: "600",
@@ -47,6 +64,7 @@ function ProfileList({ profiles }: Props) {
                         </HStack>
                         {profile.description && (
                             <Text
+                                aria-label="Description"
                                 noOfLines={1}
                                 fontSize="sm"
                                 marginTop={1}
