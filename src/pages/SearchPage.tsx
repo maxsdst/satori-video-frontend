@@ -8,6 +8,7 @@ import {
     Tabs,
     Text,
 } from "@chakra-ui/react";
+import { useMemo, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSearchParams } from "react-router-dom";
 import { useEffectOnce } from "react-use";
@@ -45,7 +46,7 @@ function SearchPage() {
     useEffectOnce(() => {
         if (videoSearchResults) {
             remove();
-            refetch();
+            void refetch();
         }
     });
 
@@ -64,46 +65,79 @@ function SearchPage() {
         {}
     );
 
+    const [tabIndex, setTabIndex] = useState(0);
+
+    const videos = useMemo(() => {
+        return videoSearchResults
+            ? getAllResultsFromInfiniteQueryData(videoSearchResults)
+            : [];
+    }, [videoSearchResults]);
+
+    const profiles = useMemo(() => {
+        return profileSearchResults
+            ? getAllResultsFromInfiniteQueryData(profileSearchResults)
+            : [];
+    }, [profileSearchResults]);
+
+    const { fetchNext, hasNextPage, dataLength } = useMemo(() => {
+        if (tabIndex === 0)
+            return {
+                fetchNext: () => void fetchNextPageVideos(),
+                hasNextPage: !!hasNextPageVideos,
+                dataLength: videos.length,
+            };
+        else
+            return {
+                fetchNext: () => void fetchNextPageProfiles(),
+                hasNextPage: !!hasNextPageProfiles,
+                dataLength: profiles.length,
+            };
+    }, [
+        tabIndex,
+        fetchNextPageVideos,
+        hasNextPageVideos,
+        videos,
+        fetchNextPageProfiles,
+        hasNextPageProfiles,
+        profiles,
+    ]);
+
     if (errorVideos) throw errorVideos;
     if (errorProfiles) throw errorProfiles;
 
-    const videos = videoSearchResults
-        ? getAllResultsFromInfiniteQueryData(videoSearchResults)
-        : [];
-
-    const profiles = profileSearchResults
-        ? getAllResultsFromInfiniteQueryData(profileSearchResults)
-        : [];
-
     return (
         <MainContentArea isContentCentered={false}>
-            <Tabs width="100%">
-                <TabList marginBottom={4}>
-                    <Tab width="100%" maxWidth="200px">
-                        Videos
-                    </Tab>
-                    <Tab width="100%" maxWidth="200px">
-                        Users
-                    </Tab>
-                </TabList>
-                <TabPanels>
-                    <TabPanel width="100%" padding={0}>
-                        {isSuccessVideos && videos.length === 0 && (
-                            <Flex
-                                width="100%"
-                                justifyContent="center"
-                                alignItems="center"
-                            >
-                                <Text>No videos found</Text>
-                            </Flex>
-                        )}
-                        <InfiniteScroll
-                            next={fetchNextPageVideos}
-                            hasMore={!!hasNextPageVideos}
-                            loader={null}
-                            dataLength={videos.length}
-                            scrollThreshold="50px"
-                        >
+            <InfiniteScroll
+                next={fetchNext}
+                hasMore={hasNextPage}
+                loader={null}
+                dataLength={dataLength}
+                scrollThreshold="50px"
+            >
+                <Tabs
+                    tabIndex={tabIndex}
+                    onChange={(index) => setTabIndex(index)}
+                    width="100%"
+                >
+                    <TabList marginBottom={4}>
+                        <Tab width="100%" maxWidth="200px">
+                            Videos
+                        </Tab>
+                        <Tab width="100%" maxWidth="200px">
+                            Users
+                        </Tab>
+                    </TabList>
+                    <TabPanels>
+                        <TabPanel width="100%" padding={0}>
+                            {isSuccessVideos && videos.length === 0 && (
+                                <Flex
+                                    width="100%"
+                                    justifyContent="center"
+                                    alignItems="center"
+                                >
+                                    <Text>No videos found</Text>
+                                </Flex>
+                            )}
                             <VideoGrid
                                 videos={videos}
                                 showUsers={true}
@@ -114,35 +148,27 @@ function SearchPage() {
                                 }}
                             />
                             {(hasNextPageVideos || isLoadingVideos) && (
-                                <Spinner marginTop={4} />
+                                <Spinner role="progressbar" marginTop={4} />
                             )}
-                        </InfiniteScroll>
-                    </TabPanel>
-                    <TabPanel width="100%" padding={0}>
-                        {isSuccessProfiles && profiles.length === 0 && (
-                            <Flex
-                                width="100%"
-                                justifyContent="center"
-                                alignItems="center"
-                            >
-                                <Text>No users found</Text>
-                            </Flex>
-                        )}
-                        <InfiniteScroll
-                            next={fetchNextPageProfiles}
-                            hasMore={!!hasNextPageProfiles}
-                            loader={null}
-                            dataLength={profiles.length}
-                            scrollThreshold="50px"
-                        >
+                        </TabPanel>
+                        <TabPanel width="100%" padding={0}>
+                            {isSuccessProfiles && profiles.length === 0 && (
+                                <Flex
+                                    width="100%"
+                                    justifyContent="center"
+                                    alignItems="center"
+                                >
+                                    <Text>No users found</Text>
+                                </Flex>
+                            )}
                             <ProfileList profiles={profiles} />
                             {(hasNextPageProfiles || isLoadingProfiles) && (
-                                <Spinner marginTop={4} />
+                                <Spinner role="progressbar" marginTop={4} />
                             )}
-                        </InfiniteScroll>
-                    </TabPanel>
-                </TabPanels>
-            </Tabs>
+                        </TabPanel>
+                    </TabPanels>
+                </Tabs>
+            </InfiniteScroll>
         </MainContentArea>
     );
 }

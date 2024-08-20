@@ -701,10 +701,9 @@ describe("VideoPage", () => {
 
         mockPlayersOffsetTop();
 
-        const { getLocation } = navigateTo(
-            `/videos/${videoId}`,
-            locationState ?? defaultLocationState
-        );
+        const { getLocation } = navigateTo(`/videos/${videoId}`, {
+            state: locationState ?? defaultLocationState,
+        });
 
         const getSpinner = () => screen.queryByRole("progressbar");
         const waitForDataToLoad = () => waitForElementToBeRemoved(getSpinner);

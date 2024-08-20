@@ -5,7 +5,7 @@ import * as chakraUi from "@chakra-ui/react";
 import { RenderResult, act, fireEvent, render } from "@testing-library/react";
 import { HttpStatusCode } from "axios";
 import { Window } from "happy-dom";
-import { HttpResponse, http } from "msw";
+import { HttpResponse, delay, http } from "msw";
 import { ReactNode } from "react";
 import * as reactDeviceDetect from "react-device-detect";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
@@ -49,9 +49,21 @@ export function renderWithRouter(ui: ReactNode, useAppRoutes?: boolean) {
     };
 }
 
-export const navigateTo = (path: string, state?: any) => {
+interface NavigateToOptions {
+    searchParams?: Record<string, string>;
+    state?: any;
+}
+
+export const navigateTo = (
+    path: string,
+    { searchParams, state }: NavigateToOptions = {}
+) => {
+    const search = searchParams
+        ? "?" + new URLSearchParams(searchParams).toString()
+        : undefined;
+
     const router = createMemoryRouter(appRoutes, {
-        initialEntries: [{ pathname: path, state }],
+        initialEntries: [{ pathname: path, state, search }],
     });
 
     render(<RouterProvider router={router} />, { wrapper: AllProviders });
@@ -70,6 +82,15 @@ export function simulateUnauthenticated() {
         )
     );
 }
+
+export const simulateDelay = (endpoint: string) => {
+    server.use(
+        http.get(endpoint, async () => {
+            await delay("infinite");
+            return new HttpResponse();
+        })
+    );
+};
 
 interface SimulateErrorOptions {
     body?: Record<string, any>;

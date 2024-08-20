@@ -51,6 +51,7 @@ interface CreateVideoOptions {
     isLiked?: boolean;
     commentCount?: number;
     isSaved?: boolean;
+    titlePrefix?: string;
 }
 
 export function createVideo({
@@ -63,8 +64,10 @@ export function createVideo({
     isLiked,
     commentCount,
     isSaved,
+    titlePrefix,
 }: CreateVideoOptions): Video {
     if (!profile) profile = createProfile({});
+    if (titlePrefix) title = titlePrefix + faker.lorem.sentence();
 
     return db.video.create({
         profile,
