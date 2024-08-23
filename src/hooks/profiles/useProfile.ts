@@ -5,10 +5,15 @@ import {
     retrieveByUsername,
 } from "../../services/profileService";
 
-function useProfile(username: string) {
+interface UseProfileOptions {
+    enabled?: boolean;
+}
+
+function useProfile(username: string, { enabled }: UseProfileOptions = {}) {
     return useQuery<Profile, Error>({
         queryKey: [PROFILES_CACHE_KEY, username],
         queryFn: () => retrieveByUsername(username),
+        enabled,
     });
 }
 

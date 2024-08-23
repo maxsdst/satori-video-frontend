@@ -15,11 +15,11 @@ interface Props {
 
 function Textarea({ label, textareaProps, isInvalid, errorMessage }: Props) {
     return (
-        <FormControl isInvalid={isInvalid}>
+        <FormControl aria-label={label} isInvalid={isInvalid}>
             <FormLabel>{label}</FormLabel>
             <ChakraTextarea {...textareaProps} />
             {errorMessage && (
-                <FormErrorMessage>{errorMessage}</FormErrorMessage>
+                <FormErrorMessage role="alert">{errorMessage}</FormErrorMessage>
             )}
         </FormControl>
     );

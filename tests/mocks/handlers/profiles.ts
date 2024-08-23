@@ -10,6 +10,20 @@ const handlers: HttpHandler[] = [
         return HttpResponse.json(profile);
     }),
 
+    http.patch(BASE_URL + "/profiles/profiles/me/", async ({ request }) => {
+        const data = await request.formData();
+        const fullName = data.get("full_name") as string;
+        const description = data.get("description") as string;
+        const avatar = (data.get("avatar") as File)?.name;
+
+        const profile = db.profile.update({
+            where: { id: { equals: getOwnProfile().id } },
+            data: { full_name: fullName, description, avatar },
+        });
+
+        return HttpResponse.json(profile);
+    }),
+
     http.get(
         BASE_URL + "/profiles/profiles/retrieve_by_username/:username",
         ({ params }) => {

@@ -199,28 +199,28 @@ export const db = factory({
 export const CORRECT_PASSWORD = "test1234";
 export const INCORRECT_PASSWORD = "1234test";
 
-let ownProfile: Profile | undefined = undefined;
-let ownProfileUser: User | undefined = undefined;
+let ownProfileId: number | undefined = undefined;
+let ownProfileUserId: number | undefined = undefined;
 
 export function getOwnProfile(): Profile {
-    if (!ownProfile) {
-        ownProfileUser = db.user.create();
-        ownProfile = db.profile.create({
-            user: ownProfileUser,
-            is_following: false,
-        }) as Profile;
+    if (!ownProfileId) {
+        const user = db.user.create();
+        ownProfileUserId = user.id;
+        ownProfileId = db.profile.create({ user, is_following: false }).id;
     }
 
-    return ownProfile;
+    return db.profile.findFirst({
+        where: { id: { equals: ownProfileId } },
+    }) as Profile;
 }
 
 export function deleteOwnProfile() {
-    if (ownProfile)
-        db.profile.delete({ where: { id: { equals: ownProfile.id } } });
-    if (ownProfileUser)
-        db.user.delete({ where: { id: { equals: ownProfileUser.id } } });
-    ownProfile = undefined;
-    ownProfileUser = undefined;
+    if (ownProfileId)
+        db.profile.delete({ where: { id: { equals: ownProfileId } } });
+    if (ownProfileUserId)
+        db.user.delete({ where: { id: { equals: ownProfileUserId } } });
+    ownProfileId = undefined;
+    ownProfileUserId = undefined;
 }
 
 let recommendedVideos: Video[] = [];

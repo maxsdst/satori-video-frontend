@@ -18,7 +18,6 @@ import {
     PROFILE_DESCRIPTION_MAX_LENGTH,
     PROFILE_FULL_NAME_MAX_LENGTH,
 } from "../../constants";
-import Profile from "../../entities/Profile";
 import Input from "../../forms/Input";
 import Textarea from "../../forms/Textarea";
 import useOwnProfile from "../../hooks/profiles/useOwnProfile";
@@ -65,12 +64,11 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 interface Props {
-    profile: Profile;
     isOpen: boolean;
     onClose: () => void;
 }
 
-function EditProfileModal({ profile, isOpen, onClose }: Props) {
+function EditProfileModal({ isOpen, onClose }: Props) {
     const {
         register,
         handleSubmit,
@@ -93,8 +91,12 @@ function EditProfileModal({ profile, isOpen, onClose }: Props) {
         },
     });
 
-    const ownProfileQuery = useOwnProfile();
-    const profileQuery = useProfile(profile.user.username);
+    const ownProfile = useOwnProfile();
+    const profile = useProfile(ownProfile.data?.user.username as string, {
+        enabled: !!ownProfile.data?.user.username,
+    });
+
+    if (ownProfile.isLoading) return null;
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -106,8 +108,8 @@ function EditProfileModal({ profile, isOpen, onClose }: Props) {
                             { ...data, avatar: data.avatar[0] },
                             {
                                 onSuccess: () => {
-                                    ownProfileQuery.refetch();
-                                    profileQuery.refetch();
+                                    void ownProfile.refetch();
+                                    void profile.refetch();
                                     onClose();
                                 },
                             }
@@ -119,7 +121,7 @@ function EditProfileModal({ profile, isOpen, onClose }: Props) {
                     <ModalBody>
                         <VStack alignItems="start" spacing={4}>
                             <AvatarInput
-                                avatar={profile.avatar || undefined}
+                                avatar={ownProfile.data?.avatar || undefined}
                                 inputProps={register("avatar")}
                                 isInvalid={!!errors.avatar}
                                 errorMessage={errors.avatar?.message as string}
@@ -128,7 +130,7 @@ function EditProfileModal({ profile, isOpen, onClose }: Props) {
                                 type="text"
                                 label="Full name"
                                 inputProps={{
-                                    defaultValue: profile.full_name,
+                                    defaultValue: ownProfile.data?.full_name,
                                     ...register("full_name"),
                                 }}
                                 isInvalid={!!errors.full_name}
@@ -137,7 +139,7 @@ function EditProfileModal({ profile, isOpen, onClose }: Props) {
                             <Textarea
                                 label="Description"
                                 textareaProps={{
-                                    defaultValue: profile.description,
+                                    defaultValue: ownProfile.data?.description,
                                     rows: 6,
                                     ...register("description"),
                                 }}

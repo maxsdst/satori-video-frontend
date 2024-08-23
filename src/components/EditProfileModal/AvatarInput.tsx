@@ -1,5 +1,6 @@
 import {
     Avatar,
+    Box,
     Flex,
     FormControl,
     FormErrorMessage,
@@ -27,22 +28,25 @@ function AvatarInput({
     const [avatar, setAvatar] = useState(originalAvatar);
 
     return (
-        <FormControl isInvalid={isInvalid}>
+        <FormControl aria-label="Upload avatar" isInvalid={isInvalid}>
             <Tooltip label="Upload avatar">
-                <Avatar size="2xl" src={avatar}>
+                <Box position="relative" width="fit-content">
+                    <Avatar size="2xl" src={avatar} />
                     <Flex
                         as="label"
                         backgroundColor="rgb(0, 0, 0, 0.4)"
                         width="100%"
                         height="100%"
-                        borderRadius="inherit"
+                        borderRadius="50%"
                         position="absolute"
+                        top={0}
                         justifyContent="center"
                         alignItems="center"
                         _hover={{ cursor: "pointer" }}
                     >
                         <chakra.input
                             {...inputProps}
+                            data-testid="avatar-input"
                             type="file"
                             display="none"
                             onInput={(e: any) => {
@@ -54,10 +58,10 @@ function AvatarInput({
                         />
                         <Icon as={AiOutlineCamera} boxSize={12} />
                     </Flex>
-                </Avatar>
+                </Box>
             </Tooltip>
             {errorMessage && (
-                <FormErrorMessage>{errorMessage}</FormErrorMessage>
+                <FormErrorMessage role="alert">{errorMessage}</FormErrorMessage>
             )}
         </FormControl>
     );

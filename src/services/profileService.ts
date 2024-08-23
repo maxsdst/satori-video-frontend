@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AxiosError, HttpStatusCode } from "axios";
 import Profile from "../entities/Profile";
 import ApiClient, {
@@ -33,10 +34,19 @@ export function getOwnProfile() {
     });
 }
 
-export function updateOwnProfile(data: any) {
-    return ownProfileApiClient.patch(undefined, data, {
-        headers: { "Content-Type": "multipart/form-data" },
-    });
+interface UpdateOwnProfileData {
+    full_name?: string;
+    description?: string;
+    avatar?: File;
+}
+
+export function updateOwnProfile(data: UpdateOwnProfileData) {
+    const form = new FormData();
+    let key: keyof UpdateOwnProfileData;
+    for (key in data) {
+        if (data[key] !== undefined) form.append(key, data[key]!);
+    }
+    return ownProfileApiClient.patch(undefined, form);
 }
 
 export function retrieveByUsername(username: string) {

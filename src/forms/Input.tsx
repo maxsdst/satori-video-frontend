@@ -25,7 +25,7 @@ function Input({
     placeholder,
 }: Props) {
     return (
-        <FormControl isInvalid={isInvalid}>
+        <FormControl aria-label={label} isInvalid={isInvalid}>
             {label && <FormLabel>{label}</FormLabel>}
             <ChakraInput
                 type={type}
@@ -33,7 +33,7 @@ function Input({
                 {...inputProps}
             />
             {errorMessage && (
-                <FormErrorMessage>{errorMessage}</FormErrorMessage>
+                <FormErrorMessage role="alert">{errorMessage}</FormErrorMessage>
             )}
         </FormControl>
     );

@@ -100,7 +100,7 @@ interface SimulateErrorOptions {
 export const simulateError = (
     endpoint: string,
     method: "post" | "get" | "patch" | "delete",
-    { body, statusCode }: SimulateErrorOptions
+    { body, statusCode }: SimulateErrorOptions = {}
 ) => {
     server.use(
         http[method](endpoint, () =>
