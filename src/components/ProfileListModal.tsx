@@ -49,7 +49,11 @@ function ProfileListModal({
             >
                 <ModalHeader>{header}</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody paddingX={4} ref={(ref) => setScrollableTarget(ref)}>
+                <ModalBody
+                    data-testid="user-list-container"
+                    paddingX={4}
+                    ref={(ref) => setScrollableTarget(ref)}
+                >
                     {scrollableTarget && (
                         <InfiniteScroll
                             next={onFetchMore}
@@ -60,47 +64,56 @@ function ProfileListModal({
                                 scrollableTarget as unknown as ReactElement
                             }
                             scrollThreshold="50px"
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                width: "100%",
-                                paddingBottom: "0.5rem",
-                            }}
+                            style={{ width: "100%" }}
                         >
-                            {profiles.map((profile) => (
-                                <HStack
-                                    as={Link}
-                                    to={"/users/" + profile.user.username}
-                                    width="100%"
-                                    padding={2}
-                                    alignItems="start"
-                                    spacing={4}
-                                    cursor="pointer"
-                                    _hover={{
-                                        backgroundColor: "whiteAlpha.200",
-                                    }}
-                                    onClick={onClose}
-                                >
-                                    <Avatar
-                                        size="md"
-                                        src={profile.avatar || undefined}
-                                    />
-                                    <VStack alignItems="start" spacing={0}>
-                                        <Text fontWeight="bold" fontSize="md">
-                                            {profile.user.username}
-                                        </Text>
-                                        <Text
-                                            fontSize="md"
-                                            overflowWrap="anywhere"
-                                            noOfLines={1}
-                                        >
-                                            {profile.full_name}
-                                        </Text>
-                                    </VStack>
-                                </HStack>
-                            ))}
-                            {hasMore && <Spinner marginTop={2} />}
+                            <VStack
+                                role="list"
+                                aria-label="Users"
+                                width="100%"
+                                paddingBottom="0.5rem"
+                            >
+                                {profiles.map((profile) => (
+                                    <HStack
+                                        key={profile.id}
+                                        role="listitem"
+                                        as={Link}
+                                        to={"/users/" + profile.user.username}
+                                        width="100%"
+                                        padding={2}
+                                        alignItems="start"
+                                        spacing={4}
+                                        cursor="pointer"
+                                        _hover={{
+                                            backgroundColor: "whiteAlpha.200",
+                                        }}
+                                        onClick={onClose}
+                                    >
+                                        <Avatar
+                                            aria-label="Avatar"
+                                            size="md"
+                                            src={profile.avatar || undefined}
+                                        />
+                                        <VStack alignItems="start" spacing={0}>
+                                            <Text
+                                                aria-label="Username"
+                                                fontWeight="bold"
+                                                fontSize="md"
+                                            >
+                                                {profile.user.username}
+                                            </Text>
+                                            <Text
+                                                aria-label="Full name"
+                                                fontSize="md"
+                                                overflowWrap="anywhere"
+                                                noOfLines={1}
+                                            >
+                                                {profile.full_name}
+                                            </Text>
+                                        </VStack>
+                                    </HStack>
+                                ))}
+                                {hasMore && <Spinner marginTop={2} />}
+                            </VStack>
                         </InfiniteScroll>
                     )}
                 </ModalBody>
