@@ -6,6 +6,7 @@ import {
     TabPanels,
     Tabs,
 } from "@chakra-ui/react";
+import { useMemo, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useEffectOnce } from "react-use";
 import { VIDEO_SEQUENCE_PAGE_SIZE } from "../constants";
@@ -20,101 +21,103 @@ interface Props {
 }
 
 function UserVideosSection({ profileId }: Props) {
-    const query: VideoQuery = {
+    const queryVideos: VideoQuery = {
         profileId,
         pagination: { type: "limit_offset", limit: VIDEO_SEQUENCE_PAGE_SIZE },
         ordering: { field: "upload_date", direction: "DESC" },
     };
-    const {
-        data,
-        isLoading,
-        error,
-        fetchNextPage,
-        hasNextPage,
-        remove,
-        refetch,
-    } = useVideos(query, { staleTime: Infinity });
+    const videos = useVideos(queryVideos, { staleTime: Infinity });
 
     const queryLikes: LikesQuery = {
         profileId,
         pagination: { type: "cursor", pageSize: VIDEO_SEQUENCE_PAGE_SIZE },
     };
-    const {
-        data: dataLikes,
-        isLoading: isLoadingLikes,
-        error: errorLikes,
-        fetchNextPage: fetchNextPageLikes,
-        hasNextPage: hasNextPageLikes,
-        remove: removeLikes,
-        refetch: refetchLikes,
-    } = useLikes(queryLikes, { staleTime: Infinity });
+    const likes = useLikes(queryLikes, { staleTime: Infinity });
 
     useEffectOnce(() => {
-        if (data) {
-            remove();
-            refetch();
+        if (videos.data) {
+            videos.remove();
+            void videos.refetch();
         }
-        if (dataLikes) {
-            removeLikes();
-            refetchLikes();
+        if (likes.data) {
+            likes.remove();
+            void likes.refetch();
         }
     });
 
-    if (error) throw error;
-    if (errorLikes) throw errorLikes;
+    const [tabIndex, setTabIndex] = useState(0);
 
-    const videos = data ? getAllResultsFromInfiniteQueryData(data) : [];
-    const likedVideos = dataLikes
-        ? getAllResultsFromInfiniteQueryData(dataLikes).map(
-              (item) => item.video
-          )
-        : [];
+    const allVideos = useMemo(() => {
+        return videos.data
+            ? getAllResultsFromInfiniteQueryData(videos.data)
+            : [];
+    }, [videos.data]);
+
+    const allLikedVideos = useMemo(() => {
+        return likes.data
+            ? getAllResultsFromInfiniteQueryData(likes.data).map(
+                  (item) => item.video
+              )
+            : [];
+    }, [likes.data]);
+
+    const { fetchNext, hasNextPage, dataLength } = useMemo(() => {
+        if (tabIndex === 0)
+            return {
+                fetchNext: () => void videos.fetchNextPage(),
+                hasNextPage: !!videos.hasNextPage,
+                dataLength: allVideos.length,
+            };
+        else
+            return {
+                fetchNext: () => void likes.fetchNextPage(),
+                hasNextPage: !!likes.hasNextPage,
+                dataLength: allLikedVideos.length,
+            };
+    }, [tabIndex, videos, allVideos, likes, allLikedVideos]);
+
+    if (videos.error) throw videos.error;
+    if (likes.error) throw likes.error;
 
     return (
-        <Tabs isLazy width="100%">
-            <TabList>
-                <Tab width="100%" maxWidth="200px">
-                    Videos
-                </Tab>
-                <Tab width="100%" maxWidth="200px">
-                    Liked
-                </Tab>
-            </TabList>
-            <TabPanels>
-                <TabPanel padding={0} marginTop={4}>
-                    <InfiniteScroll
-                        next={fetchNextPage}
-                        hasMore={!!hasNextPage}
-                        loader={null}
-                        dataLength={videos.length}
-                        scrollThreshold="50px"
-                        style={{ overflowX: "hidden" }}
-                    >
+        <InfiniteScroll
+            next={fetchNext}
+            hasMore={hasNextPage}
+            loader={null}
+            dataLength={dataLength}
+            scrollThreshold="50px"
+        >
+            <Tabs
+                tabIndex={tabIndex}
+                onChange={(index) => setTabIndex(index)}
+                width="100%"
+            >
+                <TabList>
+                    <Tab width="100%" maxWidth="200px">
+                        Videos
+                    </Tab>
+                    <Tab width="100%" maxWidth="200px">
+                        Liked
+                    </Tab>
+                </TabList>
+                <TabPanels>
+                    <TabPanel padding={0} marginTop={4} overflowX="hidden">
                         <VideoGrid
-                            videos={videos}
+                            videos={allVideos}
                             showUsers={false}
                             showLikes={false}
                             videoLinkState={{
                                 videoSource: VideoSource.Videos,
-                                query,
+                                query: queryVideos,
                             }}
                         />
-                        {(hasNextPage || isLoading) && (
-                            <Spinner marginTop={4} />
+                        {(hasNextPage || videos.isLoading) && (
+                            <Spinner role="progressbar" marginTop={4} />
                         )}
-                    </InfiniteScroll>
-                </TabPanel>
-                <TabPanel padding={0} marginTop={4}>
-                    <InfiniteScroll
-                        next={fetchNextPageLikes}
-                        hasMore={!!hasNextPageLikes}
-                        loader={null}
-                        dataLength={likedVideos.length}
-                        scrollThreshold="50px"
-                        style={{ overflowX: "hidden" }}
-                    >
+                    </TabPanel>
+                    <TabPanel padding={0} marginTop={4} overflowX="hidden">
                         <VideoGrid
-                            videos={likedVideos}
+                            videos={allLikedVideos}
                             showUsers={true}
                             showLikes={false}
                             videoLinkState={{
@@ -122,13 +125,13 @@ function UserVideosSection({ profileId }: Props) {
                                 query: queryLikes,
                             }}
                         />
-                        {(hasNextPageLikes || isLoadingLikes) && (
-                            <Spinner marginTop={4} />
+                        {(likes.hasNextPage || likes.isLoading) && (
+                            <Spinner role="progressbar" marginTop={4} />
                         )}
-                    </InfiniteScroll>
-                </TabPanel>
-            </TabPanels>
-        </Tabs>
+                    </TabPanel>
+                </TabPanels>
+            </Tabs>
+        </InfiniteScroll>
     );
 }
 

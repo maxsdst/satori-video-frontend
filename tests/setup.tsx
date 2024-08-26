@@ -5,6 +5,8 @@ import { PropertySymbol } from "happy-dom";
 import {
     db,
     deleteOwnProfile,
+    resetFollowedProfiles,
+    resetFollowers,
     setFollowingVideos,
     setLatestVideos,
     setPopularVideos,
@@ -23,6 +25,8 @@ afterAll(() => server.close());
 afterEach(() => drop(db));
 afterEach(() => {
     deleteOwnProfile();
+    resetFollowedProfiles();
+    resetFollowers();
     setRecommendedVideos([]);
     setPopularVideos([]);
     setLatestVideos([]);

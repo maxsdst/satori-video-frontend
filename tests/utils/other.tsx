@@ -83,9 +83,12 @@ export function simulateUnauthenticated() {
     );
 }
 
-export const simulateDelay = (endpoint: string) => {
+export const simulateDelay = (
+    endpoint: string,
+    method: "post" | "get" | "patch" | "delete"
+) => {
     server.use(
-        http.get(endpoint, async () => {
+        http[method](endpoint, async () => {
             await delay("infinite");
             return new HttpResponse();
         })

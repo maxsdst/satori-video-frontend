@@ -253,9 +253,10 @@ describe("NotificationItem", () => {
                 () => expect(getEditVideoModal()).toBeInTheDocument(),
                 { timeout: 10000 }
             );
-            const titleInput = within(getEditVideoModal()!).getByLabelText(
-                /title/i
-            );
+            const titleGroup = within(getEditVideoModal()!).getByRole("group", {
+                name: /title/i,
+            });
+            const titleInput = within(titleGroup).getByRole("textbox");
             expect(titleInput).toHaveValue(notification.video.title);
         });
 

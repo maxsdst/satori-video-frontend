@@ -9,7 +9,8 @@ function ProfilePage() {
     const { username } = useParams();
 
     const { data: profile, isLoading, error } = useProfile(username!);
-    if (isLoading) return <Spinner />;
+    if (isLoading)
+        return <Spinner role="progressbar" aria-label="Loading profile" />;
     if (error) throw error;
 
     return (

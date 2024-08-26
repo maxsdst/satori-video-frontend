@@ -2,7 +2,6 @@
 import { faker } from "@faker-js/faker";
 import { factory, nullable, oneOf, primaryKey } from "@mswjs/data";
 import Profile from "../../src/entities/Profile";
-import User from "../../src/entities/User";
 import Video from "../../src/entities/Video";
 
 export type ReportReason =
@@ -221,6 +220,34 @@ export function deleteOwnProfile() {
         db.user.delete({ where: { id: { equals: ownProfileUserId } } });
     ownProfileId = undefined;
     ownProfileUserId = undefined;
+}
+
+let followedMap: Map<number, Profile[]> = new Map();
+
+export function getFollowedProfiles(profileId: number) {
+    return followedMap.get(profileId) ?? [];
+}
+
+export function setFollowedProfiles(profileId: number, followed: Profile[]) {
+    followedMap.set(profileId, followed);
+}
+
+export function resetFollowedProfiles() {
+    followedMap = new Map();
+}
+
+let followersMap: Map<number, Profile[]> = new Map();
+
+export function getFollowers(profileId: number) {
+    return followersMap.get(profileId) ?? [];
+}
+
+export function setFollowers(profileId: number, followers: Profile[]) {
+    followersMap.set(profileId, followers);
+}
+
+export function resetFollowers() {
+    followersMap = new Map();
 }
 
 let recommendedVideos: Video[] = [];

@@ -121,11 +121,15 @@ function renderComponent(props: Props, useAppRoutes?: boolean) {
 
     const getLoginForm = () => {
         const form = screen.queryByRole("form", { name: /login/i })!;
+        const usernameGroup = within(form).queryByRole("group", {
+            name: /username/i,
+        })!;
+        const passwordGroup = within(form).queryByRole("group", {
+            name: /password/i,
+        })!;
         return {
-            usernameInput: within(form).queryByRole("textbox", {
-                name: /username/i,
-            }),
-            passwordInput: within(form).queryByLabelText(/password/i),
+            usernameInput: within(usernameGroup).queryByRole("textbox"),
+            passwordInput: within(passwordGroup).queryByLabelText(/password/i),
             submitButton: within(form).queryByRole("button", {
                 name: /log in/i,
             }),

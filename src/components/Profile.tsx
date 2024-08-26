@@ -95,19 +95,32 @@ function Profile({ profile }: Props) {
     return (
         <>
             <VStack
+                data-testid="profile"
                 alignItems="start"
                 width="100%"
                 maxWidth="800px"
                 spacing={5}
             >
                 <HStack width="100%" spacing={5}>
-                    <Avatar size="2xl" src={profile.avatar || undefined} />
+                    <Avatar
+                        aria-label="Avatar"
+                        size="2xl"
+                        src={profile.avatar || undefined}
+                    />
                     <VStack alignItems="start" spacing={4}>
                         <VStack alignItems="start" spacing={1} width="100%">
-                            <Heading size="md" overflowWrap="anywhere">
+                            <Heading
+                                aria-label="Full name"
+                                size="md"
+                                overflowWrap="anywhere"
+                            >
                                 {profile.full_name}
                             </Heading>
-                            <Text fontSize="md" overflowWrap="anywhere">
+                            <Text
+                                aria-label="Username"
+                                fontSize="md"
+                                overflowWrap="anywhere"
+                            >
                                 @{profile.user.username}
                             </Text>
                         </VStack>
@@ -143,12 +156,17 @@ function Profile({ profile }: Props) {
                     </VStack>
                 </HStack>
                 {profile.description && (
-                    <Text overflowWrap="anywhere" whiteSpace="pre-line">
+                    <Text
+                        aria-label="Description"
+                        overflowWrap="anywhere"
+                        whiteSpace="pre-line"
+                    >
                         {profile.description}
                     </Text>
                 )}
                 <HStack spacing={5} fontSize="sm">
                     <Box
+                        aria-label="Number of followed users"
                         _hover={{
                             cursor: "pointer",
                             textDecoration: "underline",
@@ -161,6 +179,7 @@ function Profile({ profile }: Props) {
                         </Text>
                     </Box>
                     <Box
+                        aria-label="Number of followers"
                         _hover={{
                             cursor: "pointer",
                             textDecoration: "underline",
@@ -176,7 +195,6 @@ function Profile({ profile }: Props) {
             </VStack>
             {isOwnProfile && (
                 <EditProfileModal
-                    profile={profile}
                     isOpen={isEditModalOpen}
                     onClose={closeEditModal}
                 />
@@ -192,7 +210,7 @@ function Profile({ profile }: Props) {
             )}
             <ProfileListModal
                 profiles={followingProfiles}
-                hasMore={following.hasNextPage!!}
+                hasMore={!!following.hasNextPage}
                 onFetchMore={following.fetchNextPage}
                 header="Following"
                 isOpen={isFollowingModalOpen}
@@ -200,7 +218,7 @@ function Profile({ profile }: Props) {
             />
             <ProfileListModal
                 profiles={followersProfiles}
-                hasMore={followers.hasNextPage!!}
+                hasMore={!!followers.hasNextPage}
                 onFetchMore={followers.fetchNextPage}
                 header="Followers"
                 isOpen={isFollowersModalOpen}

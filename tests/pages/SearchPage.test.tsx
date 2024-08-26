@@ -178,7 +178,7 @@ describe("SearchPage", () => {
 
     describe("users tab", () => {
         it("should show spinner while loading", async () => {
-            simulateDelay(BASE_URL + "/profiles/profiles/search/");
+            simulateDelay(BASE_URL + "/profiles/profiles/search/", "get");
             const { switchToUsersTab, getUsersTabPanel } = navigateToPage("a");
             await switchToUsersTab();
 

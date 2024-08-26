@@ -10,6 +10,7 @@ import {
     NotificationType,
     ReportReason,
     db,
+    getFollowers,
     getOwnProfile,
     notificationTypeMap,
 } from "../mocks/db";
@@ -39,6 +40,11 @@ export function createProfiles(
     }
 
     return profiles;
+}
+
+export function isFollowing(profileId: number) {
+    const followers = getFollowers(profileId);
+    return followers.some((follower) => follower.id === getOwnProfile().id);
 }
 
 interface CreateVideoOptions {
@@ -94,6 +100,17 @@ export function createVideos(
     }
 
     return videos;
+}
+
+export function sortVideos(videos: Video[], ordering: "newest_first") {
+    switch (ordering) {
+        case "newest_first": {
+            videos.sort(
+                (a, b) => b.upload_date.getTime() - a.upload_date.getTime()
+            );
+            return;
+        }
+    }
 }
 
 export function isVideoLiked(videoId: number): boolean {
@@ -209,7 +226,7 @@ export function createComments(
 
 export function sortComments(
     comments: Comment[],
-    ordering: "popularity" | "newest_first" | "oldest_first"
+    ordering: "popularity" | "oldest_first"
 ) {
     switch (ordering) {
         case "popularity": {
@@ -219,12 +236,6 @@ export function sortComments(
         case "oldest_first": {
             comments.sort(
                 (a, b) => a.creation_date.getTime() - b.creation_date.getTime()
-            );
-            return;
-        }
-        case "newest_first": {
-            comments.sort(
-                (a, b) => b.creation_date.getTime() - a.creation_date.getTime()
             );
             return;
         }
