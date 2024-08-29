@@ -19,6 +19,7 @@ function Header<T>({ header, children }: Props<T>) {
 
     return (
         <HStack
+            role="button"
             width="fit-content"
             height={8}
             _hover={isSortable ? { cursor: "pointer" } : undefined}

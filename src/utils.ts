@@ -42,10 +42,6 @@ export function convertDateToString(date: Date) {
     )} ${date.getDate()}, ${date.getFullYear()}`;
 }
 
-export function insertIf<T>(condition: boolean, element: T): T[] {
-    return condition ? [element] : [];
-}
-
 export function formatNumber(number: number): string {
     if (number < 1_000) return number.toString();
 

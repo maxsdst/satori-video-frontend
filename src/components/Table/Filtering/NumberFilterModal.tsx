@@ -59,15 +59,17 @@ function NumberFilterModal({ option, isOpen, onClose, onApplyFilter }: Props) {
                 >
                     <ModalBody paddingY={0}>
                         <HStack alignItems="start">
-                            <Select {...register("lookupType")}>
-                                <option value="gte" selected>
-                                    {">="}
-                                </option>
+                            <Select
+                                {...register("lookupType")}
+                                defaultValue="gte"
+                            >
+                                <option value="gte">{">="}</option>
                                 <option value="lte">{"<="}</option>
                             </Select>
                             <Input
                                 type="number"
                                 inputProps={{
+                                    defaultValue: 0,
                                     ...register("value", {
                                         setValueAs: (value) => Number(value),
                                     }),

@@ -8,7 +8,6 @@ import {
     VStack,
 } from "@chakra-ui/react";
 import {
-    ColumnSort,
     SortingState,
     flexRender,
     getCoreRowModel,
@@ -18,7 +17,6 @@ import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { Filter, Ordering, Pagination } from "../../services/BaseQuery";
 import { MAIN_CONTENT_AREA_PADDING } from "../../styleConstants";
-import { insertIf } from "../../utils";
 import LimitOffsetPagination from "../LimitOffsetPagination";
 import Cell from "./Cell";
 import Filtering, { FilteringOption } from "./Filtering";
@@ -58,12 +56,16 @@ function Table<T>({
     data,
     totalItems,
 }: Props<T>) {
-    const [sorting, setSorting] = useState<SortingState>([
-        ...insertIf<ColumnSort>(!!defaultOrdering, {
-            id: defaultOrdering!.field,
-            desc: defaultOrdering!.direction === "DESC",
-        }),
-    ]);
+    const initialSorting = defaultOrdering
+        ? [
+              {
+                  id: defaultOrdering.field,
+                  desc: defaultOrdering.direction === "DESC",
+              },
+          ]
+        : [];
+
+    const [sorting, setSorting] = useState<SortingState>(initialSorting);
 
     useEffect(() => {
         if (sorting.length > 0)

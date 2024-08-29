@@ -1,6 +1,5 @@
 import {
     Box,
-    Button,
     HStack,
     Icon,
     Input,
@@ -8,6 +7,7 @@ import {
     InputLeftElement,
     List,
     ListItem,
+    ListItemProps,
     Popover,
     PopoverAnchor,
     PopoverBody,
@@ -98,6 +98,18 @@ function Filtering({ options, mainField, onChange }: Props) {
         (option) => option.field === mainField
     );
 
+    const itemProps: ListItemProps = {
+        width: "100%",
+        paddingX: 4,
+        paddingY: 2,
+        cursor: "pointer",
+        _hover: { backgroundColor: "whiteAlpha.200" },
+        fontWeight: "semibold",
+        noOfLines: 1,
+    };
+
+    const mainOptionText = `${mainOption.name} contains "${input}"`;
+
     return (
         <>
             <Popover
@@ -125,7 +137,11 @@ function Filtering({ options, mainField, onChange }: Props) {
                             />
                         </InputGroup>
                     </PopoverAnchor>
-                    <HStack flexWrap="wrap">
+                    <HStack
+                        aria-label="Applied filters"
+                        role="list"
+                        flexWrap="wrap"
+                    >
                         {appliedFilters.map((filter) => {
                             const optionName = options.find(
                                 (option) => option.field === filter.field
@@ -134,6 +150,7 @@ function Filtering({ options, mainField, onChange }: Props) {
                             return (
                                 <Box
                                     key={filter.field}
+                                    role="listitem"
                                     backgroundColor="gray.700"
                                     paddingLeft={4}
                                     paddingRight={1}
@@ -174,6 +191,7 @@ function Filtering({ options, mainField, onChange }: Props) {
                     </HStack>
                 </VStack>
                 <PopoverContent
+                    aria-label="Filtering options"
                     ref={popoverRef}
                     width="fit-content"
                     minWidth="xs"
@@ -182,49 +200,40 @@ function Filtering({ options, mainField, onChange }: Props) {
                     <PopoverBody paddingX={0} paddingY={2}>
                         <List>
                             {input && isMainOptionAvailable && (
-                                <ListItem>
-                                    <Button
-                                        variant="ghost"
-                                        width="100%"
-                                        borderRadius="0"
-                                        noOfLines={1}
-                                        display="inline-block"
-                                        textAlign="left"
-                                        onClick={() => {
-                                            dispatch({
-                                                type: "ADD_FILTER",
-                                                filter: {
-                                                    field: mainOption.field,
-                                                    type: "char",
-                                                    lookupType: "icontains",
-                                                    value: input,
-                                                },
-                                            });
-                                            if (inputRef.current)
-                                                inputRef.current.value = "";
-                                            setInput("");
-                                            closeAutocomplete();
-                                        }}
-                                    >
-                                        {mainOption.name} contains "{input}"
-                                    </Button>
+                                <ListItem
+                                    aria-label={mainOptionText}
+                                    {...itemProps}
+                                    onClick={() => {
+                                        dispatch({
+                                            type: "ADD_FILTER",
+                                            filter: {
+                                                field: mainOption.field,
+                                                type: "char",
+                                                lookupType: "icontains",
+                                                value: input,
+                                            },
+                                        });
+                                        if (inputRef.current)
+                                            inputRef.current.value = "";
+                                        setInput("");
+                                        closeAutocomplete();
+                                    }}
+                                >
+                                    {mainOptionText}
                                 </ListItem>
                             )}
                             {filteredOptions.map((option) => (
-                                <ListItem key={option.field}>
-                                    <Button
-                                        variant="ghost"
-                                        width="100%"
-                                        borderRadius="0"
-                                        justifyContent="left"
-                                        onClick={() => {
-                                            setSelectedOption(option);
-                                            closeAutocomplete();
-                                            openFilterModal();
-                                        }}
-                                    >
-                                        {option.name}
-                                    </Button>
+                                <ListItem
+                                    aria-label={option.name}
+                                    key={option.field}
+                                    {...itemProps}
+                                    onClick={() => {
+                                        setSelectedOption(option);
+                                        closeAutocomplete();
+                                        openFilterModal();
+                                    }}
+                                >
+                                    {option.name}
                                 </ListItem>
                             ))}
                         </List>

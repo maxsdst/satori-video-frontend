@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import Pagination from "@choc-ui/paginator";
 import { useEffect, useReducer } from "react";
 import paginationReducer from "./paginationReducer";
@@ -34,34 +35,38 @@ function LimitOffsetPagination({
     }, [pagination.limit, pagination.offset]);
 
     return (
-        <Pagination
-            defaultCurrent={1}
-            current={pagination.currentPage}
-            pageSizeOptions={pageSizeOptions}
-            defaultPageSize={defaultPageSize}
-            pageSize={pagination.limit}
-            showSizeChanger={true}
-            total={pagination.totalItems}
-            onChange={(currentPage) =>
-                dispatch({
-                    type: "SET_CURRENT_PAGE",
-                    page: currentPage ?? 1,
-                })
-            }
-            onShowSizeChange={(currentPage, size) =>
-                dispatch({
-                    type: "SET_PAGE_SIZE",
-                    page: currentPage ?? 1,
-                    pageSize: size ?? defaultPageSize,
-                })
-            }
-            colorScheme="blue"
-            baseStyles={{ backgroundColor: "gray.700" }}
-            paginationProps={{
-                display: "flex",
-            }}
-            responsive={{ activePage: true, pageSize: true }}
-        />
+        <Box data-testid="paginator">
+            <Pagination
+                defaultCurrent={1}
+                current={pagination.currentPage}
+                pageSizeOptions={pageSizeOptions}
+                defaultPageSize={defaultPageSize}
+                pageSize={pagination.limit}
+                showSizeChanger={true}
+                total={pagination.totalItems}
+                onChange={(currentPage) =>
+                    dispatch({
+                        type: "SET_CURRENT_PAGE",
+                        page: currentPage ?? 1,
+                    })
+                }
+                onShowSizeChange={(currentPage, size) => {
+                    size =
+                        size !== undefined
+                            ? parseInt(size as unknown as string)
+                            : undefined;
+                    dispatch({
+                        type: "SET_PAGE_SIZE",
+                        page: currentPage ?? 1,
+                        pageSize: size ?? defaultPageSize,
+                    });
+                }}
+                colorScheme="blue"
+                baseStyles={{ backgroundColor: "gray.700" }}
+                paginationProps={{ display: "flex" }}
+                responsive={{ activePage: true, pageSize: true }}
+            />
+        </Box>
     );
 }
 
