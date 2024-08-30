@@ -1,4 +1,6 @@
 import { faker } from "@faker-js/faker";
+import { OrderBy } from "@mswjs/data/lib/query/queryTypes";
+import { sortResults } from "@mswjs/data/lib/query/sortResults";
 import Comment from "../../src/entities/Comment";
 import Notification from "../../src/entities/Notification";
 import Profile from "../../src/entities/Profile";
@@ -102,15 +104,15 @@ export function createVideos(
     return videos;
 }
 
-export function sortVideos(videos: Video[], ordering: "newest_first") {
-    switch (ordering) {
-        case "newest_first": {
-            videos.sort(
-                (a, b) => b.upload_date.getTime() - a.upload_date.getTime()
-            );
-            return;
-        }
-    }
+export function sortVideos(
+    videos: Video[],
+    field: keyof Video,
+    direction: "asc" | "desc"
+) {
+    sortResults<Video>(
+        { [field]: direction } as unknown as OrderBy<Video>,
+        videos
+    );
 }
 
 export function isVideoLiked(videoId: number): boolean {

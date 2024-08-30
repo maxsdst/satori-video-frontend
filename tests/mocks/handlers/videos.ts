@@ -48,12 +48,29 @@ const handlers: HttpHandler[] = [
 
     generator.retrieve(),
 
+    generator.destroy(),
+
     generator.list("limit_offset", (queryParams) => {
         const profileId = queryParams.get("profile");
+        const titleContains = queryParams.get("title__icontains");
+        const descriptionContains = queryParams.get("description__icontains");
+        const viewCountGte = queryParams.get("view_count__gte");
+        const viewCountLte = queryParams.get("view_count__lte");
         return {
             profile: profileId
                 ? { id: { equals: parseInt(profileId) } }
                 : undefined,
+            title: titleContains ? { contains: titleContains } : undefined,
+            description: descriptionContains
+                ? { contains: descriptionContains }
+                : undefined,
+            view_count:
+                viewCountGte || viewCountLte
+                    ? {
+                          ...(viewCountGte && { gte: parseInt(viewCountGte) }),
+                          ...(viewCountLte && { lte: parseInt(viewCountLte) }),
+                      }
+                    : undefined,
         };
     }),
 ];

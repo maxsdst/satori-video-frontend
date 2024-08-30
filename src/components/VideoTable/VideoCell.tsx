@@ -41,6 +41,7 @@ function VideoCell({ video, onVideoMutated }: Props) {
                 <Box>
                     <AspectRatio ratio={3 / 4} width="60px">
                         <Img
+                            aria-label="Thumbnail"
                             src={video.thumbnail}
                             objectFit="cover"
                             _hover={{ cursor: "pointer" }}
@@ -57,6 +58,7 @@ function VideoCell({ video, onVideoMutated }: Props) {
                     lineHeight="normal"
                 >
                     <Text
+                        aria-label="Title"
                         _hover={{
                             cursor: "pointer",
                             textDecoration: "underline",
@@ -70,6 +72,7 @@ function VideoCell({ video, onVideoMutated }: Props) {
                         {video.title}
                     </Text>
                     <Text
+                        aria-label="Description"
                         className="videotable-description"
                         color={video.description ? "gray.400" : "gray.500"}
                         noOfLines={2}

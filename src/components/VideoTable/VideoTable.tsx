@@ -59,7 +59,8 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
 
     useImperativeHandle(ref, () => ({ refetchVideos }));
 
-    if (isOwnProfileLoading || areVideosLoading) return <Spinner />;
+    if (isOwnProfileLoading || areVideosLoading)
+        return <Spinner role="progressbar" />;
     if (ownProfileError) throw ownProfileError;
     if (videosError) throw videosError;
 
@@ -70,7 +71,7 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
             cell: (video) => (
                 <VideoCell
                     video={video}
-                    onVideoMutated={() => refetchVideos()}
+                    onVideoMutated={() => void refetchVideos()}
                 />
             ),
             enableOrdering: true,
