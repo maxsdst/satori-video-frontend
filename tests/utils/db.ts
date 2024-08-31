@@ -1,9 +1,11 @@
 import { faker } from "@faker-js/faker";
+import { AnyObject } from "@mswjs/data/lib/glossary";
 import { OrderBy } from "@mswjs/data/lib/query/queryTypes";
 import { sortResults } from "@mswjs/data/lib/query/sortResults";
 import Comment from "../../src/entities/Comment";
 import Notification from "../../src/entities/Notification";
 import Profile from "../../src/entities/Profile";
+import Upload from "../../src/entities/Upload";
 import Video from "../../src/entities/Video";
 import {
     CommentReportReason,
@@ -104,17 +106,6 @@ export function createVideos(
     return videos;
 }
 
-export function sortVideos(
-    videos: Video[],
-    field: keyof Video,
-    direction: "asc" | "desc"
-) {
-    sortResults<Video>(
-        { [field]: direction } as unknown as OrderBy<Video>,
-        videos
-    );
-}
-
 export function isVideoLiked(videoId: number): boolean {
     const ownProfile = getOwnProfile();
     return (
@@ -140,11 +131,39 @@ export function isVideoSaved(videoId: number): boolean {
 }
 
 interface CreateUploadOptions {
+    creationDate?: Date;
+    filename?: string;
     video?: Video;
+    isDone?: boolean;
 }
 
-export function createUpload({ video }: CreateUploadOptions) {
-    return db.upload.create({ video });
+export function createUpload({
+    creationDate,
+    filename,
+    video,
+    isDone,
+}: CreateUploadOptions): Upload {
+    return db.upload.create({
+        profile: getOwnProfile().id,
+        creation_date: creationDate,
+        filename,
+        video,
+        is_done: isDone,
+    }) as Upload;
+}
+
+export function createUploads(
+    quantity: number,
+    options: CreateUploadOptions
+): Upload[] {
+    const uploads: Upload[] = [];
+
+    for (let i = 0; i < quantity; i++) {
+        const upload = createUpload(options);
+        uploads.push(upload);
+    }
+
+    return uploads;
 }
 
 export function countEvents(videoId: number, type: EventType) {
@@ -400,4 +419,12 @@ export function createNotifications(
     }
 
     return notifications;
+}
+
+export function sort<T extends AnyObject>(
+    items: T[],
+    field: keyof T,
+    direction: "asc" | "desc"
+) {
+    sortResults<T>({ [field]: direction } as OrderBy<T>, items);
 }

@@ -36,7 +36,7 @@ const UploadTable = forwardRef(({}, ref: Ref<UploadTableHandle>) => {
 
     useImperativeHandle(ref, () => ({ refetchUploads: refetch }));
 
-    if (isLoading) return <Spinner />;
+    if (isLoading) return <Spinner role="progressbar" />;
     if (error) throw error;
 
     const columnDefs: ColumnDef<Upload>[] = [
@@ -44,7 +44,10 @@ const UploadTable = forwardRef(({}, ref: Ref<UploadTableHandle>) => {
             field: "filename",
             header: "File",
             cell: (upload) => (
-                <FileCell upload={upload} onVideoMutated={refetch} />
+                <FileCell
+                    upload={upload}
+                    onVideoMutated={() => void refetch()}
+                />
             ),
             enableOrdering: true,
         },
@@ -59,9 +62,17 @@ const UploadTable = forwardRef(({}, ref: Ref<UploadTableHandle>) => {
             header: "Processed",
             cell: (upload) =>
                 upload.is_done ? (
-                    <Icon as={AiOutlineCheckCircle} boxSize={6} color="green" />
+                    <Icon
+                        role="status"
+                        aria-label="Processed"
+                        as={AiOutlineCheckCircle}
+                        boxSize={6}
+                        color="green"
+                    />
                 ) : (
                     <Icon
+                        role="status"
+                        aria-label="Processing"
                         as={AiOutlineClockCircle}
                         boxSize={6}
                         color="yellow.400"

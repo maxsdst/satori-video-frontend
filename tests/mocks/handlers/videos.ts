@@ -49,7 +49,11 @@ const handlers: HttpHandler[] = [
     generator.retrieve(),
 
     generator.update(
-        ({ title, description }: { title: string; description: string }) => {
+        (
+            { title, description }: { title: string; description: string },
+            id
+        ) => {
+            db.upload.deleteMany({ where: { video: { id: { equals: id } } } });
             return { title, description };
         }
     ),

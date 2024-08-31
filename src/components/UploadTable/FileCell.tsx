@@ -26,6 +26,7 @@ function FileCell({ upload, onVideoMutated }: Props) {
         <>
             <HStack lineHeight="normal">
                 <Text
+                    aria-label="Filename"
                     _hover={
                         upload.is_done
                             ? {

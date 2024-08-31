@@ -5,12 +5,7 @@ import VideoTable from "../../src/components/VideoTable";
 import Video from "../../src/entities/Video";
 import { Filter } from "../../src/services/BaseQuery";
 import { getOwnProfile } from "../mocks/db";
-import {
-    createVideo,
-    createVideos,
-    renderWithRouter,
-    sortVideos,
-} from "../utils";
+import { createVideo, createVideos, renderWithRouter, sort } from "../utils";
 
 describe("VideoTable", () => {
     const DEFAULT_PAGE_SIZE = 10;
@@ -47,7 +42,7 @@ describe("VideoTable", () => {
         describe("video cell", () => {
             it("should render the cell correctly", async () => {
                 const videos = createVideos(3, { profile: getOwnProfile() });
-                sortVideos(videos, "upload_date", "desc");
+                sort(videos, "upload_date", "desc");
                 const {
                     waitForDataToLoad,
                     getTable,
@@ -186,7 +181,7 @@ describe("VideoTable", () => {
         describe("views cell", () => {
             it("should render the cell correctly", async () => {
                 const videos = createVideos(3, { profile: getOwnProfile() });
-                sortVideos(videos, "upload_date", "desc");
+                sort(videos, "upload_date", "desc");
                 const { waitForDataToLoad, getTable, getCells } =
                     renderComponent();
                 await waitForDataToLoad();
@@ -204,7 +199,7 @@ describe("VideoTable", () => {
         describe("likes cell", () => {
             it("should render the cell correctly", async () => {
                 const videos = createVideos(3, { profile: getOwnProfile() });
-                sortVideos(videos, "upload_date", "desc");
+                sort(videos, "upload_date", "desc");
                 const { waitForDataToLoad, getTable, getCells } =
                     renderComponent();
                 await waitForDataToLoad();
@@ -310,7 +305,7 @@ describe("VideoTable", () => {
             "should filter videos when the $name filter is applied",
             async ({ name, filter, arrange, filterVideos }) => {
                 const videos = arrange();
-                sortVideos(videos, "upload_date", "desc");
+                sort(videos, "upload_date", "desc");
                 const { waitForDataToLoad, applyFilter, getTable } =
                     renderComponent();
                 await waitForDataToLoad();
@@ -347,7 +342,7 @@ describe("VideoTable", () => {
                     title: `abc ${text}`,
                 }),
             ];
-            sortVideos(videos, "upload_date", "desc");
+            sort(videos, "upload_date", "desc");
             const {
                 waitForDataToLoad,
                 getFilteringInput,
@@ -381,7 +376,7 @@ describe("VideoTable", () => {
     describe("ordering", () => {
         it("should order videos by title when the video column header is clicked", async () => {
             const videos = createVideos(5, { profile: getOwnProfile() });
-            sortVideos(videos, "upload_date", "desc");
+            sort(videos, "upload_date", "desc");
             const { waitForDataToLoad, getTable, clickHeader } =
                 renderComponent();
             await waitForDataToLoad();
@@ -392,7 +387,7 @@ describe("VideoTable", () => {
             );
 
             await clickHeader(0);
-            sortVideos(videos, "title", "asc");
+            sort(videos, "title", "asc");
             await waitFor(
                 () => {
                     rows = getTable().rows;
@@ -405,7 +400,7 @@ describe("VideoTable", () => {
             );
 
             await clickHeader(0);
-            sortVideos(videos, "title", "desc");
+            sort(videos, "title", "desc");
             await waitFor(
                 () => {
                     rows = getTable().rows;
@@ -420,7 +415,7 @@ describe("VideoTable", () => {
 
         it("should order videos by upload date when the upload date column header is clicked", async () => {
             const videos = createVideos(5, { profile: getOwnProfile() });
-            sortVideos(videos, "upload_date", "desc");
+            sort(videos, "upload_date", "desc");
             const { waitForDataToLoad, getTable, clickHeader } =
                 renderComponent();
             await waitForDataToLoad();
@@ -431,7 +426,7 @@ describe("VideoTable", () => {
             );
 
             await clickHeader(1);
-            sortVideos(videos, "upload_date", "asc");
+            sort(videos, "upload_date", "asc");
             await waitFor(
                 () => {
                     rows = getTable().rows;
@@ -444,7 +439,7 @@ describe("VideoTable", () => {
             );
 
             await clickHeader(1);
-            sortVideos(videos, "upload_date", "desc");
+            sort(videos, "upload_date", "desc");
             await waitFor(
                 () => {
                     rows = getTable().rows;
@@ -459,7 +454,7 @@ describe("VideoTable", () => {
 
         it("should order videos by view count when the views column header is clicked", async () => {
             const videos = createVideos(5, { profile: getOwnProfile() });
-            sortVideos(videos, "upload_date", "desc");
+            sort(videos, "upload_date", "desc");
             const { waitForDataToLoad, getTable, clickHeader } =
                 renderComponent();
             await waitForDataToLoad();
@@ -470,7 +465,7 @@ describe("VideoTable", () => {
             );
 
             await clickHeader(2);
-            sortVideos(videos, "view_count", "desc");
+            sort(videos, "view_count", "desc");
             await waitFor(
                 () => {
                     rows = getTable().rows;
@@ -483,7 +478,7 @@ describe("VideoTable", () => {
             );
 
             await clickHeader(2);
-            sortVideos(videos, "view_count", "asc");
+            sort(videos, "view_count", "asc");
             await waitFor(
                 () => {
                     rows = getTable().rows;
@@ -498,7 +493,7 @@ describe("VideoTable", () => {
 
         it("should order videos by like count when the likes column header is clicked", async () => {
             const videos = createVideos(5, { profile: getOwnProfile() });
-            sortVideos(videos, "upload_date", "desc");
+            sort(videos, "upload_date", "desc");
             const { waitForDataToLoad, getTable, clickHeader } =
                 renderComponent();
             await waitForDataToLoad();
@@ -509,7 +504,7 @@ describe("VideoTable", () => {
             );
 
             await clickHeader(3);
-            sortVideos(videos, "like_count", "desc");
+            sort(videos, "like_count", "desc");
             await waitFor(
                 () => {
                     rows = getTable().rows;
@@ -522,7 +517,7 @@ describe("VideoTable", () => {
             );
 
             await clickHeader(3);
-            sortVideos(videos, "like_count", "asc");
+            sort(videos, "like_count", "asc");
             await waitFor(
                 () => {
                     rows = getTable().rows;
@@ -541,7 +536,7 @@ describe("VideoTable", () => {
             const videos = createVideos(DEFAULT_PAGE_SIZE * 3, {
                 profile: getOwnProfile(),
             });
-            sortVideos(videos, "upload_date", "desc");
+            sort(videos, "upload_date", "desc");
             const { waitForDataToLoad, getTable, nextPage } = renderComponent();
             await waitForDataToLoad();
             let rows = getTable().rows;
@@ -572,7 +567,7 @@ describe("VideoTable", () => {
             const videos = createVideos(DEFAULT_PAGE_SIZE * 2, {
                 profile: getOwnProfile(),
             });
-            sortVideos(videos, "upload_date", "desc");
+            sort(videos, "upload_date", "desc");
             const { waitForDataToLoad, getTable, nextPage, previousPage } =
                 renderComponent();
             await waitForDataToLoad();
@@ -596,7 +591,7 @@ describe("VideoTable", () => {
 
         it("should change page size when page size is selected", async () => {
             const videos = createVideos(50, { profile: getOwnProfile() });
-            sortVideos(videos, "upload_date", "desc");
+            sort(videos, "upload_date", "desc");
             const { waitForDataToLoad, getTable, changePageSize } =
                 renderComponent();
             await waitForDataToLoad();
@@ -636,7 +631,7 @@ describe("VideoTable", () => {
     describe("deleting video", () => {
         it("should refresh table after video is deleted", async () => {
             const videos = createVideos(3, { profile: getOwnProfile() });
-            sortVideos(videos, "upload_date", "desc");
+            sort(videos, "upload_date", "desc");
             const { waitForDataToLoad, getTable, deleteVideo } =
                 renderComponent();
             await waitForDataToLoad();

@@ -19,7 +19,7 @@ import {
     simulateDelay,
     simulateScrollToEnd,
     simulateUnauthenticated,
-    sortVideos,
+    sort,
 } from "../utils";
 
 describe("ProfilePage", () => {
@@ -494,7 +494,7 @@ describe("ProfilePage", () => {
             it("should render video grid with user's videos ordered by newest first", async () => {
                 createVideos(3, {}); // other videos
                 const videos = createVideos(3, { profile });
-                sortVideos(videos, "upload_date", "desc");
+                sort(videos, "upload_date", "desc");
                 const { waitForDataToLoad, getVideosTabPanel } = navigateToPage(
                     profile.user.username
                 );
@@ -510,7 +510,7 @@ describe("ProfilePage", () => {
             it("should redirect to the video page with user's videos when an item is clicked", async () => {
                 createVideos(3, {}); // other videos
                 const videos = createVideos(3, { profile });
-                sortVideos(videos, "upload_date", "desc");
+                sort(videos, "upload_date", "desc");
                 const {
                     getLocation,
                     waitForDataToLoad,
@@ -537,7 +537,7 @@ describe("ProfilePage", () => {
                 const videos = createVideos(VIDEO_SEQUENCE_PAGE_SIZE * 3, {
                     profile,
                 });
-                sortVideos(videos, "upload_date", "desc");
+                sort(videos, "upload_date", "desc");
                 const { waitForDataToLoad, getVideosTabPanel, scrollPage } =
                     navigateToPage(profile.user.username);
                 await waitForDataToLoad();

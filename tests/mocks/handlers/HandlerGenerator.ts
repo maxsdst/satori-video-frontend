@@ -53,14 +53,17 @@ export default class HandlerGenerator<
     }
 
     update<TData>(
-        handleData: (data: TData) => InitialValues<Dictionary, ModelName>
+        handleData: (
+            data: TData,
+            id: number
+        ) => InitialValues<Dictionary, ModelName>
     ) {
         return http.patch(
             `${this.endpoint}/:id`,
             async ({ request, params }) => {
                 const id = Number(params["id"]);
                 const data = (await request.json()) as TData;
-                const definition = handleData(data);
+                const definition = handleData(data, id);
 
                 const updatedEntity = this.model.update({
                     strict: true,
