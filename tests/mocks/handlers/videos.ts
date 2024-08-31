@@ -48,6 +48,12 @@ const handlers: HttpHandler[] = [
 
     generator.retrieve(),
 
+    generator.update(
+        ({ title, description }: { title: string; description: string }) => {
+            return { title, description };
+        }
+    ),
+
     generator.destroy(),
 
     generator.list("limit_offset", (queryParams) => {

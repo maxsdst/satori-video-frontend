@@ -162,6 +162,7 @@ function EditVideoModal({ video, isOpen, onClose, onVideoEdited }: Props) {
                             <VStack spacing={0} alignItems="start">
                                 <Text fontSize="sm">Video link</Text>
                                 <ChakraLink
+                                    aria-label="Video link"
                                     as={Link}
                                     to={videoLink}
                                     color="blue.200"
