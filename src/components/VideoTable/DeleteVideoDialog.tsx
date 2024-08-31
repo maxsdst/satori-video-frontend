@@ -49,14 +49,14 @@ function DeleteVideoDialog({ video, isOpen, onClose, onVideoDeleted }: Props) {
                             {deleteVideo.error && (
                                 <Alert status="error">
                                     <AlertIcon />
-                                    {deleteVideo.error.response?.data.detail ||
-                                        deleteVideo.error.message}
+                                    Something went wrong
                                 </Alert>
                             )}
                             <HStack alignItems="start" spacing={0}>
                                 <Box>
                                     <AspectRatio ratio={3 / 4} width="100px">
                                         <Img
+                                            aria-label="Thumbnail"
                                             src={video.thumbnail}
                                             objectFit="cover"
                                         />
@@ -70,6 +70,7 @@ function DeleteVideoDialog({ video, isOpen, onClose, onVideoDeleted }: Props) {
                                     spacing={0}
                                 >
                                     <Text
+                                        aria-label="Title"
                                         noOfLines={1}
                                         whiteSpace="normal"
                                         width="100%"
@@ -77,11 +78,17 @@ function DeleteVideoDialog({ video, isOpen, onClose, onVideoDeleted }: Props) {
                                     >
                                         {video.title}
                                     </Text>
-                                    <Text color="gray.400">
+                                    <Text
+                                        aria-label="Upload date"
+                                        color="gray.400"
+                                    >
                                         Uploaded{" "}
                                         {convertDateToString(video.upload_date)}
                                     </Text>
-                                    <Text color="gray.400">
+                                    <Text
+                                        aria-label="Number of views"
+                                        color="gray.400"
+                                    >
                                         {formatNumber(video.view_count)} views
                                     </Text>
                                 </VStack>
