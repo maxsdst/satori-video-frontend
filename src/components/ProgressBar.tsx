@@ -16,6 +16,7 @@ function ProgressBar({ isIndeterminate, label, percentCompleted }: Props) {
                 )}
             </HStack>
             <Progress
+                aria-label={label}
                 hasStripe
                 isIndeterminate={isIndeterminate}
                 value={percentCompleted}

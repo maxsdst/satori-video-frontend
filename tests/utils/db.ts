@@ -166,6 +166,10 @@ export function createUploads(
     return uploads;
 }
 
+export function countUploads(filename: string) {
+    return db.upload.count({ where: { filename: { equals: filename } } });
+}
+
 export function countEvents(videoId: number, type: EventType) {
     return db.event.count({
         where: {

@@ -29,7 +29,7 @@ function useCreateUpload({
                     onUploadProgress?.(Math.round((e.loaded * 100) / e.total)),
             }),
         onError: (error) => {
-            if (error.response?.data) onError(error.response.data);
+            if (error.response?.data) onError?.(error.response.data);
         },
     });
 }

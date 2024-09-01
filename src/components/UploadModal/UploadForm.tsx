@@ -83,15 +83,13 @@ function UploadForm({
         onUploadProgress,
     });
 
-    if (createUpload.error) throw createUpload.error;
-
     return (
-        <form style={{ height: "100%" }}>
+        <form aria-label="Select file" style={{ height: "100%" }}>
             <FileUploader
                 hoverTitle=" "
                 handleChange={(file: File) => {
                     setValue("file", file);
-                    trigger("file");
+                    void trigger("file");
                 }}
                 disabled={isDisabled}
             >
@@ -109,12 +107,17 @@ function UploadForm({
                             <Icon as={AiOutlineUpload} boxSize={16} />
                             <Text>Drag and drop video file to upload</Text>
                             {errors.file && (
-                                <FormErrorMessage fontSize="sm">
+                                <FormErrorMessage role="alert" fontSize="sm">
                                     {errors.file.message}
                                 </FormErrorMessage>
                             )}
                         </VStack>
-                        <Button isDisabled={isDisabled}>Select files</Button>
+                        <Button
+                            aria-label="Select file"
+                            isDisabled={isDisabled}
+                        >
+                            Select file
+                        </Button>
                     </VStack>
                 </FormControl>
             </FileUploader>
