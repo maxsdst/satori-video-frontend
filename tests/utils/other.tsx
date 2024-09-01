@@ -55,7 +55,7 @@ interface NavigateToOptions {
 }
 
 export const navigateTo = (
-    path: string,
+    pathname: string,
     { searchParams, state }: NavigateToOptions = {}
 ) => {
     const search = searchParams
@@ -63,7 +63,7 @@ export const navigateTo = (
         : undefined;
 
     const router = createMemoryRouter(appRoutes, {
-        initialEntries: [{ pathname: path, state, search }],
+        initialEntries: [{ pathname, state, search }],
     });
 
     render(<RouterProvider router={router} />, { wrapper: AllProviders });

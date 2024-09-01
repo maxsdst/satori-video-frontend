@@ -41,6 +41,7 @@ interface Props<T> {
     onPaginationChange: (pagination: Pagination) => void;
     data: T[];
     totalItems: number;
+    dataTestId?: string;
 }
 
 function Table<T>({
@@ -55,6 +56,7 @@ function Table<T>({
     onPaginationChange,
     data,
     totalItems,
+    dataTestId,
 }: Props<T>) {
     const initialSorting = defaultOrdering
         ? [
@@ -99,6 +101,7 @@ function Table<T>({
 
     return (
         <VStack
+            data-testid={dataTestId}
             width="100%"
             maxWidth={`calc(100vw - ${MAIN_CONTENT_AREA_PADDING} * 2)`}
             spacing={4}

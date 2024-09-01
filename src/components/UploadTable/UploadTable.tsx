@@ -89,6 +89,7 @@ const UploadTable = forwardRef(({}, ref: Ref<UploadTableHandle>) => {
 
     return (
         <Table
+            dataTestId="upload-table"
             columnDefs={columnDefs}
             filteringOptions={filteringOptions}
             mainFilteringField="filename"

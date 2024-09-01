@@ -19,8 +19,8 @@ interface Props {
 
 function MyVideosPage({ tabName }: Props) {
     const tabs = [
-        { name: "videos", path: "/my_videos" },
-        { name: "uploads", path: "/uploads" },
+        { name: "videos", pathname: "/my_videos" },
+        { name: "uploads", pathname: "/uploads" },
     ];
 
     const [params] = useSearchParams();
@@ -54,7 +54,7 @@ function MyVideosPage({ tabName }: Props) {
                     isLazy
                     width="100%"
                     index={tabs.findIndex((tab) => tab.name === tabName)}
-                    onChange={(index) => navigate(tabs[index].path)}
+                    onChange={(index) => navigate(tabs[index].pathname)}
                 >
                     <TabList marginBottom={4}>
                         <Tab width="100%" maxWidth="200px">

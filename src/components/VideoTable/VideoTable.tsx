@@ -121,6 +121,7 @@ const VideoTable = forwardRef(({}, ref: Ref<VideoTableHandle>) => {
 
     return (
         <Table
+            dataTestId="video-table"
             columnDefs={columnDefs}
             filteringOptions={filteringOptions}
             mainFilteringField="title"
