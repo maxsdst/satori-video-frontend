@@ -1,5 +1,6 @@
 import { Alert, AlertIcon, Button, VStack } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -7,18 +8,23 @@ import Input from "../../forms/Input";
 import useLogin from "../hooks/useLogin";
 
 const schema = z.object({
-    username: z.string().nonempty("Username or email is required."),
+    username: z.string().nonempty("Username is required."),
     password: z.string().nonempty("Password is required."),
 });
 
 type FormData = z.infer<typeof schema>;
 
+interface LocationState {
+    next?: string;
+}
+
 function LoginForm() {
     const location = useLocation();
-    const next =
-        location.state && typeof location.state.next === "string"
-            ? location.state.next
-            : "/";
+    const locationState = useMemo<LocationState>(() => {
+        return location.state ? (location.state as LocationState) : {};
+    }, [location.state]);
+
+    const next = locationState?.next || "/";
 
     const navigate = useNavigate();
 
@@ -34,7 +40,7 @@ function LoginForm() {
 
     return (
         <form
-            aria-label="Login form"
+            aria-label="Log in"
             onSubmit={handleSubmit((data) =>
                 login.mutate(data, {
                     onSuccess: () => navigate(next),
@@ -51,7 +57,7 @@ function LoginForm() {
                 )}
                 <Input
                     type="text"
-                    label="Username or email"
+                    label="Username"
                     inputProps={register("username")}
                     isInvalid={!!errors.username}
                     errorMessage={errors.username?.message}

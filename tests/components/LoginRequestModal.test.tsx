@@ -120,7 +120,7 @@ function renderComponent(props: Props, useAppRoutes?: boolean) {
         within(getModal()!).queryByRole("button", { name: /sign in/i });
 
     const getLoginForm = () => {
-        const form = screen.queryByRole("form", { name: /login/i })!;
+        const form = screen.queryByRole("form", { name: /log in/i })!;
         const usernameGroup = within(form).queryByRole("group", {
             name: /username/i,
         })!;

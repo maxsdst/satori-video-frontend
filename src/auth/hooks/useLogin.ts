@@ -25,14 +25,12 @@ function useLogin() {
 
     return useMutation<JwtTokenPair, AxiosError<ErrorData>, LoginData>({
         mutationFn: apiClient.post,
-        onMutate: () => {
-            void queryClient.invalidateQueries([OWN_PROFILE_CACHE_KEY]);
-        },
         onSuccess: (data) => {
             setAuthTokens({
                 refreshToken: data.refresh,
                 accessToken: data.access,
             });
+            void queryClient.refetchQueries([OWN_PROFILE_CACHE_KEY]);
         },
     });
 }
