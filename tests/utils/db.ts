@@ -51,6 +51,12 @@ export function isFollowing(profileId: number) {
     return followers.some((follower) => follower.id === getOwnProfile().id);
 }
 
+export function getProfileByUsername(username: string): Profile | null {
+    return db.profile.findFirst({
+        where: { user: { username: { equals: username } } },
+    }) as Profile | null;
+}
+
 interface CreateVideoOptions {
     profile?: Profile;
     uploadDate?: Date;

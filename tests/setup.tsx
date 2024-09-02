@@ -12,6 +12,7 @@ import {
     setPopularVideos,
     setRecommendedVideos,
 } from "./mocks/db";
+import { setDidLogIn } from "./mocks/handlers/auth";
 import { server } from "./mocks/server";
 
 afterEach(() => {
@@ -31,6 +32,7 @@ afterEach(() => {
     setPopularVideos([]);
     setLatestVideos([]);
     setFollowingVideos([]);
+    setDidLogIn(false);
 });
 
 vi.mock("react-player/lazy", () => {

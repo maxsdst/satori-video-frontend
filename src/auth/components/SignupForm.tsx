@@ -45,6 +45,7 @@ function SignupForm() {
 
     return (
         <form
+            aria-label="Sign up"
             onSubmit={handleSubmit((data) =>
                 signup.mutate(data, {
                     onSuccess: () => {

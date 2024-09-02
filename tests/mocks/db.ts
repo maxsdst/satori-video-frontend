@@ -213,6 +213,11 @@ export function getOwnProfile(): Profile {
     }) as Profile;
 }
 
+export function setOwnProfile(profile: Profile) {
+    ownProfileId = profile.id;
+    ownProfileUserId = profile.user.id;
+}
+
 export function deleteOwnProfile() {
     if (ownProfileId)
         db.profile.delete({ where: { id: { equals: ownProfileId } } });

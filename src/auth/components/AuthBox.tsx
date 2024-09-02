@@ -20,13 +20,25 @@ function AuthBox({ mode }: Props) {
             <Divider orientation="horizontal" paddingY={2} />
             <HStack justifyContent="start" marginTop={4}>
                 {mode !== "login" && (
-                    <Button variant="link" colorScheme="blue">
-                        <Link to="/login">Log in</Link>
+                    <Button
+                        role="button"
+                        as={Link}
+                        to="/login"
+                        variant="link"
+                        colorScheme="blue"
+                    >
+                        Log in
                     </Button>
                 )}
                 {mode !== "signup" && (
-                    <Button variant="link" colorScheme="blue">
-                        <Link to="/signup">Sign up</Link>
+                    <Button
+                        role="button"
+                        as={Link}
+                        to="/signup"
+                        variant="link"
+                        colorScheme="blue"
+                    >
+                        Sign up
                     </Button>
                 )}
             </HStack>
