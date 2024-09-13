@@ -1,0 +1,10 @@
+services:
+  frontend:
+    build:
+      context: ./
+      dockerfile: Dockerfile.prod
+    ports:
+      - 80:8080
+    volumes:
+      - ./.env.local:/app/.env.local:ro
+    restart: always

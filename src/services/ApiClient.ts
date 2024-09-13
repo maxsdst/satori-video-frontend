@@ -7,7 +7,8 @@ import {
 } from "axios-jwt";
 import BaseQuery, { Filter, Ordering, Pagination } from "./BaseQuery";
 
-const BASE_URL = "http://localhost:8000/api";
+const BASE_URL =
+    (import.meta.env.VITE_API_URL as string) || "http://localhost:8000/api";
 
 const axiosInstance = axios.create({ baseURL: BASE_URL });
 
