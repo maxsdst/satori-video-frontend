@@ -14,7 +14,11 @@ import useCreateEvent, { EventType } from "../../hooks/events/useCreateEvent";
 import useTitle from "../../hooks/useTitle";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 import useCreateView from "../../hooks/views/useCreateView";
-import { MAIN_CONTENT_AREA_PADDING, TOPNAV_HEIGHT } from "../../styleConstants";
+import {
+    MAIN_CONTENT_AREA_PADDING,
+    PLAYER_DROP_SHADOW,
+    TOPNAV_HEIGHT,
+} from "../../styleConstants";
 import { isInPortraitMode, isTouchDevice } from "../../utils";
 import Player, { PlayerHandle } from "../Player";
 import VerticalSlider, { VerticalSliderHandle } from "../VerticalSlider";
@@ -144,12 +148,13 @@ const VideoSequence = forwardRef(
                 >
                     <Link to="/">
                         <Image
-                            src={""}
+                            src="/logo.svg"
                             boxSize={10}
                             position="absolute"
                             top={2}
                             left={2}
                             zIndex={1}
+                            filter={`invert(100%); ${PLAYER_DROP_SHADOW}`}
                         />
                     </Link>
                     <VerticalSlider

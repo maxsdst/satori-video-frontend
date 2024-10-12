@@ -65,7 +65,12 @@ function TopNav({ isSidenavOpen, toggleSidenav }: Props) {
                     onClick={() => toggleSidenav()}
                 />
                 <Link to="/">
-                    <Image aria-label="Logo" src={""} boxSize="40px" />
+                    <Image
+                        aria-label="Logo"
+                        src="/logo.svg"
+                        boxSize="40px"
+                        filter="invert(100%); drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.5));"
+                    />
                 </Link>
             </HStack>
             {!shouldHideSearchInput && <SearchInput />}
