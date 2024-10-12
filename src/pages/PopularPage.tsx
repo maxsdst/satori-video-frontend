@@ -4,6 +4,7 @@ import { useEffectOnce } from "react-use";
 import MainContentArea from "../components/MainContentArea";
 import VideoGrid from "../components/VideoGrid";
 import { VIDEO_SEQUENCE_PAGE_SIZE } from "../constants";
+import useTitle from "../hooks/useTitle";
 import usePopularVideos, {
     PopularVideosQuery,
 } from "../hooks/videos/usePopularVideos";
@@ -11,6 +12,8 @@ import { getAllResultsFromInfiniteQueryData } from "../utils";
 import { VideoSource } from "./VideoPage";
 
 function PopularPage() {
+    useTitle("Popular");
+
     const query: PopularVideosQuery = {
         pagination: { type: "cursor", pageSize: VIDEO_SEQUENCE_PAGE_SIZE },
     };

@@ -17,6 +17,7 @@ import ProfileList from "../components/ProfileList";
 import VideoGrid from "../components/VideoGrid";
 import { VIDEO_SEQUENCE_PAGE_SIZE } from "../constants";
 import useProfileSearch from "../hooks/profiles/useProfileSearch";
+import useTitle from "../hooks/useTitle";
 import useVideoSearch, {
     VideoSearchQuery,
 } from "../hooks/videos/useVideoSearch";
@@ -26,6 +27,8 @@ import { VideoSource } from "./VideoPage";
 function SearchPage() {
     const [searchParams] = useSearchParams();
     const searchQuery = searchParams.get("query") || "";
+
+    useTitle(searchQuery);
 
     const query: VideoSearchQuery = {
         searchQuery,

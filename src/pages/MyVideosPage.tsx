@@ -12,12 +12,15 @@ import MainContentArea from "../components/MainContentArea";
 import UploadModal from "../components/UploadModal";
 import UploadTable, { UploadTableHandle } from "../components/UploadTable";
 import VideoTable, { VideoTableHandle } from "../components/VideoTable";
+import useTitle from "../hooks/useTitle";
 
 interface Props {
     tabName: "videos" | "uploads";
 }
 
 function MyVideosPage({ tabName }: Props) {
+    useTitle(tabName == "videos" ? "My videos" : "Uploads");
+
     const tabs = [
         { name: "videos", pathname: "/my_videos" },
         { name: "uploads", pathname: "/uploads" },

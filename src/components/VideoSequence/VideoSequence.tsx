@@ -11,6 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { VIEW_DURATION_THRESHOLD_SECONDS } from "../../constants";
 import Video from "../../entities/Video";
 import useCreateEvent, { EventType } from "../../hooks/events/useCreateEvent";
+import useTitle from "../../hooks/useTitle";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 import useCreateView from "../../hooks/views/useCreateView";
 import { MAIN_CONTENT_AREA_PADDING, TOPNAV_HEIGHT } from "../../styleConstants";
@@ -49,6 +50,8 @@ const VideoSequence = forwardRef(
         const fetchThresholdSlidesFromEnd = 2;
 
         const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+
+        useTitle(videos[currentVideoIndex].title);
 
         const navigate = useNavigate();
 

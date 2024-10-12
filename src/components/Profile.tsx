@@ -15,6 +15,7 @@ import useFollowers from "../hooks/profiles/useFollowers";
 import useFollowing from "../hooks/profiles/useFollowing";
 import useOwnProfile from "../hooks/profiles/useOwnProfile";
 import useUnfollow from "../hooks/profiles/useUnfollow";
+import useTitle from "../hooks/useTitle";
 import { formatNumber, getAllResultsFromInfiniteQueryData } from "../utils";
 import EditProfileModal from "./EditProfileModal";
 import LoginRequestModal from "./LoginRequestModal";
@@ -25,6 +26,8 @@ interface Props {
 }
 
 function Profile({ profile }: Props) {
+    useTitle(`${profile.full_name} (@${profile.user.username})`);
+
     const username = profile.user.username;
 
     const {

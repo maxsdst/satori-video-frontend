@@ -4,6 +4,7 @@ import { useEffectOnce } from "react-use";
 import MainContentArea from "../components/MainContentArea";
 import VideoGrid from "../components/VideoGrid";
 import { VIDEO_SEQUENCE_PAGE_SIZE } from "../constants";
+import useResetTitle from "../hooks/useResetTitle";
 import useRecommendedVideos, {
     RecommendedVideosQuery,
 } from "../hooks/videos/useRecommendedVideos";
@@ -11,6 +12,8 @@ import { getAllResultsFromInfiniteQueryData } from "../utils";
 import { VideoSource } from "./VideoPage";
 
 function HomePage() {
+    useResetTitle();
+
     const query: RecommendedVideosQuery = {
         pagination: { type: "cursor", pageSize: VIDEO_SEQUENCE_PAGE_SIZE },
     };

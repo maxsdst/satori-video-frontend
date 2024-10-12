@@ -4,6 +4,7 @@ import { useEffectOnce } from "react-use";
 import MainContentArea from "../components/MainContentArea";
 import VideoGrid from "../components/VideoGrid";
 import { VIDEO_SEQUENCE_PAGE_SIZE } from "../constants";
+import useTitle from "../hooks/useTitle";
 import useFollowingVideos, {
     FollowingVideosQuery,
 } from "../hooks/videos/useFollowingVideos";
@@ -11,6 +12,8 @@ import { getAllResultsFromInfiniteQueryData } from "../utils";
 import { VideoSource } from "./VideoPage";
 
 function FollowingPage() {
+    useTitle("Following");
+
     const query: FollowingVideosQuery = {
         pagination: {
             type: "cursor",
