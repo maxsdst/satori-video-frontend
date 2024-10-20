@@ -8,7 +8,7 @@ import {
 import BaseQuery, { Filter, Ordering, Pagination } from "./BaseQuery";
 
 const BASE_URL =
-    (import.meta.env.VITE_API_URL as string) || "http://localhost:8000/api";
+    (import.meta.env.VITE_API_URL as string) || "http://localhost:8000";
 
 const axiosInstance = axios.create({ baseURL: BASE_URL });
 

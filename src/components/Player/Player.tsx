@@ -149,6 +149,7 @@ const Player = forwardRef(
         if (isLoading || !video)
             return (
                 <Skeleton
+                    data-testid="player"
                     width={width}
                     height={height}
                     minHeight={minHeight}

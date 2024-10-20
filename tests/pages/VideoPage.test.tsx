@@ -706,7 +706,8 @@ describe("VideoPage", () => {
         });
 
         const getSpinner = () => screen.queryByRole("progressbar");
-        const waitForDataToLoad = () => waitForElementToBeRemoved(getSpinner);
+        const waitForDataToLoad = () =>
+            waitForElementToBeRemoved(getSpinner, { timeout: 3000 });
 
         const getSlidesContainer = () =>
             screen.queryByTestId("slides-container");

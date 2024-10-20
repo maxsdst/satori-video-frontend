@@ -1,6 +1,7 @@
 import { AbsoluteCenter, Flex, Spinner } from "@chakra-ui/react";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useUpdateEffect } from "react-use";
 import VideoSequence, {
     VideoSequenceHandle,
 } from "../../components/VideoSequence";
@@ -60,9 +61,7 @@ function VideoPage() {
     );
     const [query, setQuery] = useState(locationState.query);
     const [initialVideoIndex, setInitialVideoIndex] = useState(
-        locationState.videoSource &&
-            locationState.query &&
-            locationState.initialVideoIndex
+        locationState.videoSource && locationState.initialVideoIndex
             ? locationState.initialVideoIndex
             : 0
     );
@@ -205,14 +204,18 @@ function VideoPage() {
         setInitialVideoId(videoId);
         setVideoSource(locationState.videoSource || VideoSource.Recommended);
         setQuery(locationState.query);
-        setInitialVideoIndex(locationState.initialVideoIndex || 0);
+        setInitialVideoIndex(
+            locationState.videoSource && locationState.initialVideoIndex
+                ? locationState.initialVideoIndex
+                : 0
+        );
         setHighlightedCommentId(locationState.highlightedCommentId);
         setHighlightedCommentParentId(locationState.highlightedCommentParentId);
         setVideoQueryEnabled(!locationState.videoSource);
         videoSequence.current?.reset();
     }
 
-    useLayoutEffect(() => {
+    useUpdateEffect(() => {
         if (locationState.videoSource || locationState.highlightedCommentId)
             reset();
     }, [locationState.videoSource, locationState.highlightedCommentId]);
